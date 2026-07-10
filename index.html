@@ -6,18 +6,22 @@
 <title>Sklad účtů</title>
 <style>
   :root{
-    --bg:#07070d;
-    --panel:rgba(255,255,255,0.045);
-    --panel-solid:#12121c;
-    --border:rgba(255,255,255,0.09);
-    --text:#f2f2f7;
-    --muted:#9898ad;
-    --muted2:#6d6d85;
-    --accent:#8b5cf6;
-    --accent2:#22d3ee;
-    --good:#22c55e;
-    --bad:#f43f5e;
-    --radius:16px;
+    --bg:#f4f7fc;
+    --panel:#ffffff;
+    --panel-solid:#ffffff;
+    --border:#dde5f0;
+    --text:#0f1f38;
+    --muted:#5b6b85;
+    --muted2:#8b99b0;
+    --accent:#2563eb;
+    --accent-dark:#1d4ed8;
+    --accent2:#0ea5e9;
+    --good:#16a34a;
+    --bad:#e11d48;
+    --radius:14px;
+    --shadow-sm:0 1px 2px rgba(15,31,56,0.05);
+    --shadow-md:0 4px 16px rgba(15,31,56,0.07);
+    --shadow-lg:0 12px 40px rgba(15,31,56,0.12);
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
@@ -29,32 +33,16 @@
     overflow-x:hidden;
   }
 
-  /* --- ambient glow blobs --- */
-  .blob{
-    position:fixed;
-    border-radius:50%;
-    filter:blur(90px);
-    opacity:0.35;
-    z-index:0;
-    pointer-events:none;
-  }
-  .blob1{width:520px;height:520px;background:#7c3aed;top:-180px;left:-140px;animation:float1 22s ease-in-out infinite;}
-  .blob2{width:480px;height:480px;background:#22d3ee;bottom:-200px;right:-160px;animation:float2 26s ease-in-out infinite;}
-  .blob3{width:380px;height:380px;background:#ec4899;top:40%;left:50%;animation:float3 30s ease-in-out infinite;opacity:0.22;}
-  @keyframes float1{0%,100%{transform:translate(0,0);}50%{transform:translate(60px,80px);}}
-  @keyframes float2{0%,100%{transform:translate(0,0);}50%{transform:translate(-70px,-50px);}}
-  @keyframes float3{0%,100%{transform:translate(-50%,-50%) scale(1);}50%{transform:translate(-40%,-55%) scale(1.15);}}
-
   .wrap{position:relative;z-index:1;max-width:1400px;margin:0 auto;padding:28px 28px 60px;}
 
   /* header */
   header{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:26px;}
   .brand{display:flex;align-items:center;gap:14px;}
   .brand .logo{
-    width:46px;height:46px;border-radius:14px;
+    width:46px;height:46px;border-radius:13px;
     background:linear-gradient(135deg,var(--accent),var(--accent2));
     display:flex;align-items:center;justify-content:center;font-size:22px;
-    box-shadow:0 0 24px rgba(139,92,246,0.55);
+    box-shadow:0 4px 14px rgba(37,99,235,0.3);
   }
   .brand h1{font-size:22px;margin:0;font-weight:700;letter-spacing:.2px;}
   .brand p{margin:2px 0 0;color:var(--muted);font-size:13px;}
@@ -62,43 +50,50 @@
   .actions{display:flex;gap:10px;flex-wrap:wrap;}
   button{font-family:inherit;cursor:pointer;border:none;}
   .btn{
-    padding:10px 16px;border-radius:12px;font-size:13.5px;font-weight:600;
+    padding:10px 16px;border-radius:10px;font-size:13.5px;font-weight:600;
     background:var(--panel);color:var(--text);border:1px solid var(--border);
     transition:.15s ease;display:inline-flex;align-items:center;gap:8px;
+    box-shadow:var(--shadow-sm);
   }
-  .btn:hover{background:rgba(255,255,255,0.08);transform:translateY(-1px);}
+  .btn:hover{background:#f0f5ff;border-color:#c3d4f2;transform:translateY(-1px);}
   .btn-primary{
-    background:linear-gradient(135deg,var(--accent),#6d28d9);
-    box-shadow:0 0 20px rgba(139,92,246,0.45);
-    border:1px solid rgba(139,92,246,0.6);
+    background:linear-gradient(135deg,var(--accent),var(--accent-dark));
+    color:#fff;border:1px solid var(--accent-dark);
+    box-shadow:0 3px 10px rgba(37,99,235,0.28);
   }
-  .btn-primary:hover{box-shadow:0 0 28px rgba(139,92,246,0.65);}
+  .btn-primary:hover{background:linear-gradient(135deg,#3b76f0,var(--accent));box-shadow:0 5px 16px rgba(37,99,235,0.35);}
   .btn-accent2{
-    background:linear-gradient(135deg,var(--accent2),#0891b2);
-    box-shadow:0 0 20px rgba(34,211,238,0.4);
-    border:1px solid rgba(34,211,238,0.55);
+    background:linear-gradient(135deg,var(--accent2),#0284c7);
+    color:#fff;border:1px solid #0284c7;
+    box-shadow:0 3px 10px rgba(14,165,233,0.25);
   }
-  .btn-danger{background:rgba(244,63,94,0.12);border:1px solid rgba(244,63,94,0.35);color:#fda4af;}
-  .btn-danger:hover{background:rgba(244,63,94,0.2);}
-  .btn-ghost{background:transparent;border:1px solid var(--border);}
+  .btn-danger{background:#fef1f4;border:1px solid #f7c4d1;color:var(--bad);}
+  .btn-danger:hover{background:#fde3ea;}
+  .btn-ghost{background:transparent;border:1px solid var(--border);box-shadow:none;}
 
   /* stats */
-  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:26px;}
-  @media(max-width:900px){.stats{grid-template-columns:repeat(2,1fr);}}
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:16px;}
+  @media(max-width:900px){.stats{grid-template-columns:repeat(3,1fr);}}
+  @media(max-width:560px){.stats{grid-template-columns:1fr;}}
+  .chart-card{margin-bottom:26px;padding-bottom:14px;}
+  .chart-bars{display:flex;align-items:flex-end;gap:8px;height:96px;margin-top:14px;}
+  .cb-col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:4px;height:100%;min-width:0;}
+  .cb-val{font-size:11px;font-weight:700;color:var(--accent-dark);line-height:1;min-height:11px;}
+  .cb-bar{width:100%;max-width:38px;border-radius:6px 6px 3px 3px;background:linear-gradient(180deg,#3b82f6,#2563eb);transition:.2s;min-height:3px;}
+  .cb-bar.zero{background:#e4ebf5;}
+  .cb-col:hover .cb-bar:not(.zero){background:linear-gradient(180deg,#60a5fa,#3b82f6);}
+  .cb-lbl{font-size:10.5px;color:var(--muted2);font-weight:600;white-space:nowrap;}
   .stat-card{
     background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);
-    padding:18px 20px;position:relative;overflow:hidden;backdrop-filter:blur(16px);
-  }
-  .stat-card::before{
-    content:'';position:absolute;inset:0;opacity:.5;pointer-events:none;
-    background:radial-gradient(circle at 20% 0%, rgba(255,255,255,0.08), transparent 60%);
+    padding:18px 20px;position:relative;overflow:hidden;
+    box-shadow:var(--shadow-md);
   }
   .stat-card .label{color:var(--muted);font-size:12.5px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;}
   .stat-card .value{font-size:28px;font-weight:700;margin-top:6px;}
-  .stat-card.glow-purple .value{color:#c4b5fd;text-shadow:0 0 18px rgba(139,92,246,0.6);}
-  .stat-card.glow-cyan .value{color:#a5f3fc;text-shadow:0 0 18px rgba(34,211,238,0.55);}
-  .stat-card.glow-green .value{color:#86efac;text-shadow:0 0 18px rgba(34,197,94,0.55);}
-  .stat-card.glow-pink .value{color:#fbcfe8;text-shadow:0 0 18px rgba(236,72,153,0.55);}
+  .stat-card.glow-purple .value{color:#2563eb;}
+  .stat-card.glow-cyan .value{color:#0284c7;}
+  .stat-card.glow-green .value{color:#15803d;}
+  .stat-card.glow-pink .value{color:#0f1f38;}
 
   /* layout */
   .layout{display:grid;grid-template-columns:260px 1fr;gap:22px;align-items:start;}
@@ -106,7 +101,7 @@
 
   .panel{
     background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);
-    backdrop-filter:blur(16px);padding:18px;
+    padding:18px;box-shadow:var(--shadow-md);
     position:sticky;top:20px;
   }
   .panel h3{margin:0 0 14px;font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;font-weight:700;}
@@ -114,14 +109,15 @@
   .cat-list{display:flex;flex-direction:column;gap:6px;margin-bottom:14px;max-height:46vh;overflow-y:auto;padding-right:4px;}
   .cat-item{
     display:flex;align-items:center;justify-content:space-between;gap:8px;
-    padding:9px 11px;border-radius:10px;cursor:pointer;font-size:14px;font-weight:600;
+    padding:9px 11px;border-radius:9px;cursor:pointer;font-size:14px;font-weight:600;
     color:var(--muted);border:1px solid transparent;transition:.15s;
   }
-  .cat-item:hover{background:rgba(255,255,255,0.05);color:var(--text);}
-  .cat-item.active{background:rgba(255,255,255,0.08);color:var(--text);border-color:var(--border);}
-  .cat-item .dot{width:9px;height:9px;border-radius:50%;flex:none;box-shadow:0 0 8px currentColor;}
+  .cat-item:hover{background:#f0f5ff;color:var(--text);}
+  .cat-item.active{background:#e7efff;color:var(--accent-dark);border-color:#c9daf8;}
+  .cat-item .dot{width:9px;height:9px;border-radius:50%;flex:none;}
   .cat-item .name{display:flex;align-items:center;gap:9px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-  .cat-item .count{font-size:11.5px;color:var(--muted2);font-weight:700;background:rgba(255,255,255,0.06);padding:1px 8px;border-radius:20px;}
+  .cat-item .count{font-size:11.5px;color:var(--muted);font-weight:700;background:#edf2fa;padding:1px 8px;border-radius:20px;}
+  .cat-item.active .count{background:#d8e6ff;color:var(--accent-dark);}
   .cat-item .del{opacity:0;font-size:15px;color:var(--muted2);padding:0 4px;}
   .cat-item:hover .del{opacity:1;}
   .cat-item .del:hover{color:var(--bad);}
@@ -130,69 +126,68 @@
   .add-cat input{flex:1;min-width:0;}
 
   input,select,textarea{
-    background:rgba(255,255,255,0.05);border:1px solid var(--border);color:var(--text);
-    border-radius:10px;padding:9px 11px;font-size:13.5px;font-family:inherit;outline:none;
+    background:#fff;border:1px solid var(--border);color:var(--text);
+    border-radius:9px;padding:9px 11px;font-size:13.5px;font-family:inherit;outline:none;
   }
-  input:focus,select:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(139,92,246,0.18);}
+  input:focus,select:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(37,99,235,0.12);}
   input::placeholder,textarea::placeholder{color:var(--muted2);}
 
   /* toolbar */
   .toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:18px;}
   .toolbar input[type=text]{flex:1;min-width:180px;padding:11px 14px;}
   .toolbar select{padding:11px 14px;}
-  .seg{display:flex;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:10px;overflow:hidden;}
+  .seg{display:flex;background:#fff;border:1px solid var(--border);border-radius:9px;overflow:hidden;box-shadow:var(--shadow-sm);}
   .seg button{padding:9px 13px;background:transparent;color:var(--muted);font-size:13px;font-weight:600;}
-  .seg button.active{background:linear-gradient(135deg,var(--accent),#6d28d9);color:#fff;}
+  .seg button.active{background:linear-gradient(135deg,var(--accent),var(--accent-dark));color:#fff;}
 
   /* account grid */
   .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;}
   .card{
     position:relative;background:var(--panel-solid);border:1px solid var(--border);
     border-radius:var(--radius);padding:16px 16px 14px;overflow:hidden;
-    transition:.15s ease;
+    transition:.15s ease;box-shadow:var(--shadow-md);
   }
-  .card:hover{transform:translateY(-2px);border-color:rgba(255,255,255,0.18);}
+  .card:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg);border-color:#c9d8ef;}
   .card::before{
     content:'';position:absolute;left:0;top:0;bottom:0;width:4px;
     background:var(--cat-gradient, linear-gradient(var(--accent),var(--accent2)));
-    box-shadow:0 0 14px var(--cat-glow, rgba(139,92,246,0.6));
   }
   .card-top{display:flex;align-items:flex-start;gap:8px;margin-bottom:10px;}
   .card-title{flex:1;font-size:15.5px;font-weight:700;line-height:1.25;}
   .card-check{flex:none;padding-top:2px;display:inline-flex;}
   .card-check input{width:16px;height:16px;cursor:pointer;accent-color:var(--accent);}
-  .card.selected{border-color:rgba(139,92,246,0.65);box-shadow:0 0 0 1px rgba(139,92,246,0.5),0 0 22px rgba(139,92,246,0.35);}
+  .card.selected{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent), var(--shadow-lg);}
   .badge{
     display:inline-block;font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px;
-    background:var(--cat-gradient);color:#fff;white-space:nowrap;box-shadow:0 0 10px var(--cat-glow);
+    background:var(--cat-gradient);color:#fff;white-space:nowrap;
   }
-  .price{flex:none;font-size:15px;font-weight:800;color:#fff;white-space:nowrap;}
+  .price{flex:none;font-size:15px;font-weight:800;color:var(--accent-dark);white-space:nowrap;}
   .row{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted);margin:5px 0;}
   .row .k{width:44px;flex:none;color:var(--muted2);font-weight:600;}
-  .row .v{font-family:'Consolas',monospace;color:var(--text);background:rgba(255,255,255,0.04);
+  .row .v{font-family:'Consolas',monospace;color:var(--text);background:#f2f6fc;
     padding:3px 8px;border-radius:6px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .icon-btn{
-    background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:6px;
+    background:#f2f6fc;border:1px solid var(--border);border-radius:6px;
     width:26px;height:26px;flex:none;display:flex;align-items:center;justify-content:center;
     font-size:12px;color:var(--muted);
   }
-  .code-box{display:flex;align-items:center;gap:9px;background:rgba(255,255,255,0.05);
-    border:1px dashed var(--border);border-radius:10px;padding:10px 12px;margin:4px 0;}
-  .code-text{font-family:'Consolas',monospace;font-size:14px;letter-spacing:.4px;color:#fff;
+  .code-box{display:flex;align-items:center;gap:9px;background:#f2f6fc;
+    border:1px dashed #b9cbe6;border-radius:9px;padding:10px 12px;margin:4px 0;}
+  .code-text{font-family:'Consolas',monospace;font-size:14px;letter-spacing:.4px;color:var(--text);
     flex:1;word-break:break-all;}
-  .icon-btn:hover{color:#fff;background:rgba(255,255,255,0.14);}
+  .icon-btn:hover{color:var(--accent-dark);background:#e2ecfb;border-color:#c3d4f2;}
   .note{font-size:12.5px;color:var(--muted);margin-top:8px;font-style:italic;line-height:1.4;
     max-height:38px;overflow:hidden;}
   .card-bottom{display:flex;justify-content:space-between;align-items:center;margin-top:12px;padding-top:12px;border-top:1px solid var(--border);}
   .status-btn{padding:5px 11px;border-radius:20px;font-size:11.5px;font-weight:700;letter-spacing:.3px;}
-  .status-sklad{background:rgba(34,197,94,0.15);color:#86efac;border:1px solid rgba(34,197,94,0.4);}
-  .status-prodano{background:rgba(244,63,94,0.15);color:#fda4af;border:1px solid rgba(244,63,94,0.4);}
+  .status-sklad{background:#e8f8ee;color:#15803d;border:1px solid #b5e3c6;}
+  .status-prodano{background:#feeef2;color:#be123c;border:1px solid #f6c4d0;}
   .card-tools{display:flex;gap:6px;}
 
   .selection-bar{
     display:none;align-items:center;gap:10px;flex-wrap:wrap;
-    background:rgba(139,92,246,0.1);border:1px solid rgba(139,92,246,0.35);
-    border-radius:12px;padding:10px 14px;margin-bottom:14px;font-size:13px;font-weight:700;color:#c4b5fd;
+    background:#e7efff;border:1px solid #c9daf8;
+    border-radius:11px;padding:10px 14px;margin-bottom:14px;font-size:13px;font-weight:700;color:var(--accent-dark);
   }
   .selection-bar.show{display:flex;}
   .selection-bar .spacer{flex:1;}
@@ -205,13 +200,13 @@
 
   /* modal */
   .overlay{
-    position:fixed;inset:0;background:rgba(4,4,10,0.72);backdrop-filter:blur(6px);
+    position:fixed;inset:0;background:rgba(15,31,56,0.35);backdrop-filter:blur(4px);
     display:none;align-items:center;justify-content:center;z-index:50;padding:20px;
   }
   .overlay.show{display:flex;}
   .modal{
-    background:#0f0f18;border:1px solid var(--border);border-radius:20px;width:100%;max-width:480px;
-    padding:24px;box-shadow:0 0 60px rgba(139,92,246,0.25);max-height:88vh;overflow-y:auto;
+    background:#fff;border:1px solid var(--border);border-radius:16px;width:100%;max-width:480px;
+    padding:24px;box-shadow:var(--shadow-lg);max-height:88vh;overflow-y:auto;
   }
   .modal.wide{max-width:620px;}
   .modal h2{margin:0 0 4px;font-size:18px;}
@@ -223,34 +218,41 @@
   .modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:18px;}
   textarea.bulk{width:100%;min-height:180px;font-family:'Consolas',monospace;font-size:12.5px;resize:vertical;line-height:1.6;}
   .hint-box{
-    background:rgba(139,92,246,0.08);border:1px solid rgba(139,92,246,0.3);border-radius:10px;
-    padding:10px 12px;font-size:12px;color:#c4b5fd;margin-bottom:14px;line-height:1.5;
+    background:#eef4ff;border:1px solid #cdddf9;border-radius:9px;
+    padding:10px 12px;font-size:12px;color:#1e4fc2;margin-bottom:14px;line-height:1.5;
   }
-  .hint-box code{background:rgba(255,255,255,0.08);padding:1px 5px;border-radius:4px;}
+  .hint-box code{background:#dbe7fb;padding:1px 5px;border-radius:4px;}
   .close-x{position:absolute;top:16px;right:16px;background:transparent;color:var(--muted);font-size:20px;width:30px;height:30px;border-radius:8px;}
-  .close-x:hover{background:rgba(255,255,255,0.08);color:#fff;}
+  .close-x:hover{background:#eef2f9;color:var(--text);}
   .modal{position:relative;}
 
   .toast{
     position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);
-    background:#151522;border:1px solid var(--border);padding:11px 20px;border-radius:12px;
-    font-size:13px;font-weight:600;box-shadow:0 8px 30px rgba(0,0,0,0.4);z-index:100;
+    background:#0f1f38;color:#fff;border:1px solid #0f1f38;padding:11px 20px;border-radius:11px;
+    font-size:13px;font-weight:600;box-shadow:0 10px 30px rgba(15,31,56,0.28);z-index:100;
     opacity:0;pointer-events:none;transition:.25s ease;
   }
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 
   .file-bar{
     display:none;align-items:center;gap:10px;flex-wrap:wrap;
-    background:rgba(34,211,238,0.08);border:1px solid rgba(34,211,238,0.3);
-    border-radius:12px;padding:10px 14px;margin-bottom:22px;font-size:13px;font-weight:600;color:#a5f3fc;
+    background:#e9f6fd;border:1px solid #bfe3f7;
+    border-radius:11px;padding:10px 14px;margin-bottom:22px;font-size:13px;font-weight:600;color:#0369a1;
   }
   .file-bar.show{display:flex;}
   .file-bar .spacer{flex:1;}
-  .file-dot{width:8px;height:8px;border-radius:50%;background:var(--muted2);flex:none;box-shadow:0 0 6px currentColor;}
-  .file-dot.connected{background:var(--good);color:var(--good);}
+  .file-dot{width:8px;height:8px;border-radius:50%;background:var(--muted2);flex:none;}
+  .file-dot.connected{background:var(--good);}
+
+  .btn svg{width:15px;height:15px;flex:none;}
+  .icon-btn svg{width:13px;height:13px;}
+  .icon-btn-danger:hover{color:var(--bad);background:#fdeef2;border-color:#f6c4d0;}
+  .brand .logo svg{width:22px;height:22px;}
+  .status-btn{display:inline-flex;align-items:center;gap:6px;}
+  .s-dot{width:7px;height:7px;border-radius:50%;background:currentColor;display:inline-block;}
 
   ::-webkit-scrollbar{width:10px;height:10px;}
-  ::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.12);border-radius:10px;}
+  ::-webkit-scrollbar-thumb{background:#c6d3e5;border-radius:10px;}
   ::-webkit-scrollbar-track{background:transparent;}
 </style>
 </head>
@@ -258,33 +260,32 @@
 <style>
   #encGate{
     position:fixed;inset:0;z-index:9999;
-    background:radial-gradient(circle at 30% 20%, rgba(124,58,237,0.18), transparent 50%),
-               radial-gradient(circle at 75% 85%, rgba(34,211,238,0.14), transparent 50%), var(--bg);
+    background:radial-gradient(circle at 25% 15%, rgba(37,99,235,0.08), transparent 55%),
+               radial-gradient(circle at 80% 90%, rgba(14,165,233,0.08), transparent 55%), var(--bg);
     display:flex;align-items:center;justify-content:center;
     transition:opacity .3s ease;
   }
   #encGate.hidden{opacity:0;pointer-events:none;}
   .gate-card{
-    background:var(--panel-solid);border:1px solid var(--border);border-radius:20px;
+    background:#fff;border:1px solid var(--border);border-radius:18px;
     padding:38px 34px;width:min(92vw,380px);text-align:center;
-    box-shadow:0 0 60px rgba(139,92,246,0.25);
+    box-shadow:var(--shadow-lg);
   }
   .gate-card .glogo{
-    width:58px;height:58px;border-radius:16px;margin:0 auto 16px;
+    width:58px;height:58px;border-radius:15px;margin:0 auto 16px;
     background:linear-gradient(135deg,var(--accent),var(--accent2));
     display:flex;align-items:center;justify-content:center;font-size:26px;
-    box-shadow:0 0 28px rgba(139,92,246,0.55);
+    box-shadow:0 6px 18px rgba(37,99,235,0.3);
   }
   .gate-card h2{margin:0 0 6px;font-size:20px;}
   .gate-card p{margin:0 0 20px;color:var(--muted);font-size:13.5px;line-height:1.5;}
   #gateForm{display:flex;flex-direction:column;gap:10px;}
-  #gateChoice{display:none;flex-direction:column;gap:10px;}
   #gatePass{
-    padding:12px 14px;border-radius:12px;border:1px solid var(--border);
-    background:rgba(255,255,255,0.05);color:var(--text);font-size:14px;font-family:inherit;outline:none;
+    padding:12px 14px;border-radius:10px;border:1px solid var(--border);
+    background:#fff;color:var(--text);font-size:14px;font-family:inherit;outline:none;
     text-align:center;
   }
-  #gatePass:focus{border-color:var(--accent);}
+  #gatePass:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(37,99,235,0.12);}
   #gateMsg{margin-top:14px;font-size:13px;color:var(--muted);min-height:18px;}
   #gateMsg.err{color:var(--bad);}
 </style>
@@ -301,36 +302,23 @@
   </div>
 </div>
 
-<div class="blob blob1"></div>
-<div class="blob blob2"></div>
-<div class="blob blob3"></div>
 
 <div class="wrap">
   <header>
     <div class="brand">
-      <div class="logo">🗂️</div>
+      <div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:22px;height:22px;color:#fff;"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"/></svg></div>
       <div>
         <h1>Sklad účtů</h1>
         <p>Přehled tvých účtů na prodej</p>
       </div>
     </div>
     <div class="actions">
-      <button class="btn" id="btnExport">⬇ Export zálohy</button>
-      <button class="btn" id="btnImport">⬆ Import zálohy</button>
-      <button class="btn" id="btnExportEnc" title="Zašifruje aktuální data heslém a stáhne data.enc pro nahrání na GitHub">🔐 Export data.enc</button>
-      <input type="file" id="fileImport" accept="application/json" style="display:none">
-      <button class="btn btn-accent2" id="btnBulkOpen">📋 Hromadně přidat</button>
-      <button class="btn btn-primary" id="btnAddOpen">＋ Nový účet</button>
+      <button class="btn" id="btnExportEnc" title="Zašifruje aktuální data heslem a stáhne data.enc (ruční záloha)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Záloha</button>
+      <button class="btn btn-accent2" id="btnBulkOpen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg> Hromadně přidat</button>
+      <button class="btn btn-primary" id="btnAddOpen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg> Nový účet</button>
     </div>
   </header>
 
-  <div class="file-bar" id="fileBar">
-    <span class="file-dot" id="fileDot"></span>
-    <span id="fileStatusText">📂 Nepřipojeno — data se ukládají jen do tohoto prohlížeče</span>
-    <span class="spacer"></span>
-    <button class="btn btn-accent2" id="btnReconnectFile" style="display:none;">🔓 Znovu povolit soubor</button>
-    <button class="btn btn-ghost" id="btnConnectFile">📂 Připojit datový soubor…</button>
-  </div>
   <div class="file-bar" id="cloudBar">
     <span class="file-dot" id="cloudDot"></span>
     <span id="cloudStatusText">☁️ GitHub sync: vypnuto</span>
@@ -342,7 +330,11 @@
     <div class="stat-card glow-purple"><div class="label">Celkem účtů</div><div class="value" id="statTotal">0</div></div>
     <div class="stat-card glow-green"><div class="label">Skladem</div><div class="value" id="statSklad">0</div></div>
     <div class="stat-card glow-pink"><div class="label">Prodáno</div><div class="value" id="statProdano">0</div></div>
-    <div class="stat-card glow-cyan"><div class="label">Hodnota skladu</div><div class="value" id="statValue">0 Kč</div></div>
+  </div>
+
+  <div class="stat-card chart-card">
+    <div class="label">Přidané účty — posledních 14 dní</div>
+    <div class="chart-bars" id="chartBars"></div>
   </div>
 
   <div class="layout">
@@ -351,13 +343,13 @@
       <div class="cat-list" id="catList"></div>
       <div class="add-cat">
         <input type="text" id="newCatInput" placeholder="Nová kategorie…">
-        <button class="btn btn-ghost" id="btnAddCat">＋</button>
+        <button class="btn btn-ghost" id="btnAddCat" title="Přidat kategorii"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></button>
       </div>
     </div>
 
     <div>
       <div class="toolbar">
-        <input type="text" id="searchInput" placeholder="🔍 Hledat podle názvu, loginu, emailu…">
+        <input type="text" id="searchInput" placeholder="Hledat podle názvu, loginu, emailu…">
         <div class="seg" id="statusSeg">
           <button data-v="all" class="active">Vše</button>
           <button data-v="sklad">Skladem</button>
@@ -366,21 +358,18 @@
         <select id="sortSelect">
           <option value="new">Nejnovější</option>
           <option value="old">Nejstarší</option>
-          <option value="price_desc">Cena ↓</option>
-          <option value="price_asc">Cena ↑</option>
           <option value="name">Název A-Z</option>
         </select>
-        <button class="btn btn-ghost" id="btnCopyCodes" title="Zkopíruje kódy z aktuálního výběru">⧉ Kódy</button>
-        <button class="btn btn-ghost" id="btnExportCodes" title="Export kódů z aktuálního výběru do .txt">⬇ TXT</button>
-        <button class="btn btn-ghost" id="btnFixTypes" title="Převede účty bez loginu/hesla/emailu na typ Kód">🔧 Opravit typy</button>
-        <button class="btn btn-ghost" id="btnSelectAllToolbar" title="Vybrat všechny viditelné položky">☑ Vybrat vše</button>
+        <button class="btn btn-ghost" id="btnCopyCodes" title="Zkopíruje kódy z aktuálního výběru"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Kódy</button>
+        <button class="btn btn-ghost" id="btnExportCodes" title="Export kódů z aktuálního výběru do .txt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> TXT</button>
+        <button class="btn btn-ghost" id="btnSelectAllToolbar" title="Vybrat všechny viditelné položky"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg> Vybrat vše</button>
       </div>
 
       <div class="selection-bar" id="selectionBar">
         <span id="selectionCount">Vybráno 0</span>
         <span class="spacer"></span>
         <button class="btn btn-ghost" id="btnClearSelection">Zrušit výběr</button>
-        <button class="btn btn-danger" id="btnDeleteSelected">🗑 Smazat vybrané</button>
+        <button class="btn btn-danger" id="btnDeleteSelected"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg> Smazat vybrané</button>
       </div>
 
       <div class="grid" id="accountGrid"></div>
@@ -441,10 +430,6 @@
           <label>Kód</label>
           <input type="text" id="f_code" placeholder="např. PXKY-NF-7FQK-6J3B-K" style="font-family:'Consolas',monospace;">
         </div>
-      </div>
-      <div class="field">
-        <label>Cena (Kč)</label>
-        <input type="number" id="f_price" placeholder="0" step="1">
       </div>
       <div class="field">
         <label>Poznámka</label>
@@ -533,14 +518,14 @@ Minecraft acc | mc_user"></textarea>
 (function(){
   const STORE_KEY = 'eldorado_sklad_data_v1';
   const PALETTE = [
-    ['#7c3aed','#c026d3'],
-    ['#0ea5e9','#22d3ee'],
-    ['#f59e0b','#ef4444'],
-    ['#22c55e','#10b981'],
-    ['#ec4899','#f43f5e'],
-    ['#6366f1','#8b5cf6'],
-    ['#eab308','#f97316'],
-    ['#14b8a6','#0ea5e9'],
+    ['#2563eb','#3b82f6'],
+    ['#0284c7','#0ea5e9'],
+    ['#d97706','#f59e0b'],
+    ['#16a34a','#22c55e'],
+    ['#db2777','#ec4899'],
+    ['#4f46e5','#6366f1'],
+    ['#0d9488','#14b8a6'],
+    ['#7c3aed','#8b5cf6'],
   ];
 
   let state = load();
@@ -549,7 +534,9 @@ Minecraft acc | mc_user"></textarea>
     // data žijí jen na GitHubu — lokálně se nic nenačítá
     return { categories: [], accounts: [] };
   }
+  let saveSuppressed = false;
   function save(){
+    if(saveSuppressed) return;
     ghDirty = true;
     if(!ghCfg){ cloudStatus('nosync'); }
     scheduleGhPush();
@@ -561,7 +548,7 @@ Minecraft acc | mc_user"></textarea>
     return PALETTE[h % PALETTE.length];
   }
   function catGradient(name){
-    if(!name) return ['#52525b','#3f3f46'];
+    if(!name) return ['#94a3b8','#64748b'];
     return catColor(name);
   }
 
@@ -619,134 +606,12 @@ Minecraft acc | mc_user"></textarea>
     document.body.removeChild(ta);
   }
 
-  // ---- optional: connect a real file on disk (Chrome/Edge only) so data can travel between computers ----
-  const FS_SUPPORTED = false; // vypnuto — data jdou jen přes GitHub
-  let fileHandle = null;
-  let fileWriteTimer = null;
-
-  function idbGet(key){
-    return new Promise((resolve)=>{
-      const req = indexedDB.open('sklad-fs-db', 1);
-      req.onupgradeneeded = ()=> req.result.createObjectStore('handles');
-      req.onsuccess = ()=>{
-        const tx = req.result.transaction('handles','readonly');
-        const g = tx.objectStore('handles').get(key);
-        g.onsuccess = ()=> resolve(g.result || null);
-        g.onerror = ()=> resolve(null);
-      };
-      req.onerror = ()=> resolve(null);
-    });
-  }
-  function idbSet(key, val){
-    return new Promise((resolve)=>{
-      const req = indexedDB.open('sklad-fs-db', 1);
-      req.onupgradeneeded = ()=> req.result.createObjectStore('handles');
-      req.onsuccess = ()=>{
-        try{
-          const tx = req.result.transaction('handles','readwrite');
-          tx.objectStore('handles').put(val, key);
-          tx.oncomplete = ()=> resolve();
-          tx.onerror = ()=> resolve();
-        }catch(e){ resolve(); }
-      };
-      req.onerror = ()=> resolve();
-    });
-  }
-
-  function updateFileStatus(pendingHandle){
-    const bar = el('fileBar');
-    if(!FS_SUPPORTED){ bar.classList.remove('show'); return; }
-    bar.classList.add('show');
-    const dot = el('fileDot');
-    if(fileHandle){
-      dot.classList.add('connected');
-      el('fileStatusText').textContent = `📂 Připojeno: ${fileHandle.name} — ukládá se automaticky`;
-      el('btnReconnectFile').style.display = 'none';
-      el('btnConnectFile').textContent = '📂 Připojit jiný soubor…';
-    } else {
-      dot.classList.remove('connected');
-      if(pendingHandle){
-        el('fileStatusText').textContent = `📂 ${pendingHandle.name} — je potřeba znovu povolit přístup`;
-        el('btnReconnectFile').style.display = 'inline-flex';
-      } else {
-        el('fileStatusText').textContent = '📂 Nepřipojeno — data se ukládají jen do tohoto prohlížeče';
-        el('btnReconnectFile').style.display = 'none';
-      }
-      el('btnConnectFile').textContent = '📂 Připojit datový soubor…';
-    }
-  }
-
-  async function writeToFile(){
-    if(!fileHandle) return;
-    try{
-      const writable = await fileHandle.createWritable();
-      await writable.write(JSON.stringify(state, null, 2));
-      await writable.close();
-    }catch(e){ /* keep silent — localStorage already has the data */ }
-  }
-  function scheduleFileWrite(){
-    if(!fileHandle) return;
-    clearTimeout(fileWriteTimer);
-    fileWriteTimer = setTimeout(writeToFile, 400);
-  }
-
-  async function useFileHandle(handle){
-    fileHandle = handle;
-    try{
-      const file = await handle.getFile();
-      const text = await file.text();
-      if(text.trim()){
-        const data = JSON.parse(text);
-        if(data.accounts && data.categories){
-          state = data;
-          selectedIds.clear();
-        }
-      }
-    }catch(e){ /* empty/new/invalid file — keep current state and write it below */ }
-    await idbSet('dataFile', handle);
-    updateFileStatus();
-    renderAll();
-    await writeToFile();
-    toast(`Datový soubor připojen: ${handle.name} ✓`);
-  }
-
-  if(FS_SUPPORTED){
-    updateFileStatus();
-    el('btnConnectFile').onclick = async ()=>{
-      try{
-        const handle = await window.showSaveFilePicker({
-          suggestedName: 'sklad-data.json',
-          types: [{ description: 'Sklad dat (JSON)', accept: {'application/json': ['.json']} }]
-        });
-        await useFileHandle(handle);
-      }catch(err){ if(err.name !== 'AbortError') toast('Nepodařilo se připojit soubor'); }
-    };
-    el('btnReconnectFile').onclick = async ()=>{
-      const handle = await idbGet('dataFile');
-      if(!handle) return;
-      try{
-        const perm = await handle.requestPermission({mode:'readwrite'});
-        if(perm==='granted') await useFileHandle(handle);
-        else toast('Přístup k souboru nebyl povolen');
-      }catch(e){ toast('Nepodařilo se obnovit přístup k souboru'); }
-    };
-    (async ()=>{
-      const handle = await idbGet('dataFile');
-      if(!handle) return;
-      try{
-        const perm = await handle.queryPermission({mode:'readwrite'});
-        if(perm==='granted'){ await useFileHandle(handle); }
-        else { updateFileStatus(handle); }
-      }catch(e){ /* handle no longer valid, ignore */ }
-    })();
-  } else {
-    el('fileBar').classList.remove('show');
-  }
 
   // ---- rendering ----
   function renderAll(){
     pruneSelection();
     renderStats();
+    renderChart();
     renderCategories();
     renderCategorySelects();
     renderAccounts();
@@ -755,13 +620,34 @@ Minecraft acc | mc_user"></textarea>
 
   function renderStats(){
     const total = state.accounts.length;
-    const sklad = state.accounts.filter(a=>a.status==='sklad');
+    const sklad = state.accounts.filter(a=>a.status==='sklad').length;
     const prodano = state.accounts.filter(a=>a.status==='prodano').length;
-    const value = sklad.reduce((s,a)=>s+(Number(a.price)||0),0);
     el('statTotal').textContent = total;
-    el('statSklad').textContent = sklad.length;
+    el('statSklad').textContent = sklad;
     el('statProdano').textContent = prodano;
-    el('statValue').textContent = value.toLocaleString('cs-CZ')+' Kč';
+  }
+
+  function renderChart(){
+    const bars = el('chartBars');
+    if(!bars) return;
+    const DAY = 86400000;
+    const start = new Date(); start.setHours(0,0,0,0);
+    const days = [];
+    for(let i=13;i>=0;i--){
+      const d = new Date(start.getTime() - i*DAY);
+      days.push({t:d.getTime(), label:d.getDate()+'.'+(d.getMonth()+1)+'.', count:0});
+    }
+    state.accounts.forEach(a=>{
+      if(!a.created) return;
+      const idx = Math.floor((a.created - days[0].t)/DAY);
+      if(idx>=0 && idx<14) days[idx].count++;
+    });
+    const max = Math.max(1, ...days.map(d=>d.count));
+    bars.innerHTML = days.map(d=>`<div class="cb-col" title="${d.label} — ${d.count} \u00fa\u010dt\u016f">
+        <div class="cb-val">${d.count || ''}</div>
+        <div class="cb-bar${d.count ? '' : ' zero'}" style="height:${Math.max(3, Math.round(d.count/max*100))}%"></div>
+        <div class="cb-lbl">${d.label}</div>
+      </div>`).join('');
   }
 
   function renderCategories(){
@@ -864,7 +750,6 @@ Minecraft acc | mc_user"></textarea>
       <div class="card-top">
         <label class="card-check"><input type="checkbox" data-select="${a.id}" ${checked}></label>
         <div class="card-title">${escapeHtml(titleText)}</div>
-        <div class="price">${(Number(a.price)||0).toLocaleString('cs-CZ')} Kč</div>
       </div>
       <div class="badge">${escapeHtml(a.category||'Bez kategorie')}${a.type==='code'?' · 🎟️ kód':''}</div>
       <div style="margin-top:10px;">
@@ -873,11 +758,11 @@ Minecraft acc | mc_user"></textarea>
       ${a.note ? `<div class="note">${escapeHtml(a.note)}</div>` : ''}
       <div class="card-bottom">
         <button class="status-btn ${a.status==='sklad'?'status-sklad':'status-prodano'}" data-toggle="${a.id}">
-          ${a.status==='sklad' ? '● Skladem' : '● Prodáno'}
+          <span class="s-dot"></span>${a.status==='sklad' ? 'Skladem' : 'Prodáno'}
         </button>
         <div class="card-tools">
-          <button class="icon-btn" data-edit="${a.id}" title="Upravit">✎</button>
-          <button class="icon-btn" data-del="${a.id}" title="Smazat">🗑</button>
+          <button class="icon-btn" data-edit="${a.id}" title="Upravit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg></button>
+          <button class="icon-btn icon-btn-danger" data-del="${a.id}" title="Smazat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
         </div>
       </div>
     </div>`;
@@ -980,7 +865,7 @@ Minecraft acc | mc_user"></textarea>
   function codeBox(code){
     return `<div class="code-box">
       <span class="code-text">${escapeHtml(code)}</span>
-      <button class="icon-btn" data-copy="${escapeAttr(code)}" title="Kopírovat kód">⧉</button>
+      <button class="icon-btn" data-copy="${escapeAttr(code)}" title="Kopírovat kód"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
     </div>`;
   }
 
@@ -990,8 +875,8 @@ Minecraft acc | mc_user"></textarea>
     return `<div class="row">
       <span class="k">${label}</span>
       <span class="v" id="v_${id}">${display}</span>
-      ${secret ? `<button class="icon-btn" data-reveal="${escapeAttr(value)}" title="Zobrazit">👁</button>` : ''}
-      ${copyable ? `<button class="icon-btn" data-copy="${escapeAttr(value)}" title="Kopírovat">⧉</button>` : ''}
+      ${secret ? `<button class="icon-btn" data-reveal="${escapeAttr(value)}" title="Zobrazit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"/><circle cx="12" cy="12" r="3"/></svg></button>` : ''}
+      ${copyable ? `<button class="icon-btn" data-copy="${escapeAttr(value)}" title="Kopírovat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>` : ''}
     </div>`;
   }
 
@@ -1051,7 +936,6 @@ Minecraft acc | mc_user"></textarea>
     el('f_pass').value = acc.pass||'';
     el('f_email').value = acc.email||'';
     el('f_code').value = acc.code||'';
-    el('f_price').value = acc.price;
     el('f_note').value = acc.note;
     updateFormTypeUI();
     openOverlay('overlayAccount');
@@ -1074,7 +958,7 @@ Minecraft acc | mc_user"></textarea>
       pass: isCode ? '' : el('f_pass').value.trim(),
       email: isCode ? '' : el('f_email').value.trim(),
       code: isCode ? code : '',
-      price: parseFloat(el('f_price').value)||0,
+      price: 0,
       note: el('f_note').value.trim(),
     };
     if(editingId){
@@ -1213,15 +1097,6 @@ Minecraft acc | mc_user"></textarea>
     if(searchTerm) parts.push(`hledání: "${searchTerm}"`);
     return parts.join(', ');
   }
-  el('btnFixTypes').onclick = ()=>{
-    const candidates = state.accounts.filter(a=>a.type!=='code' && !a.login && !a.pass && !a.email && a.title);
-    if(candidates.length===0){ toast('Nenalezeny žádné položky k opravě'); return; }
-    showConfirm(`Nalezeno ${candidates.length} položek bez loginu/hesla/emailu (vypadají jako kódy uložené jako účty). Převést je na typ "Kód"?`, ()=>{
-      candidates.forEach(a=>{ a.type='code'; a.code = a.code || a.title; });
-      renderAll();
-      toast(`Opraveno ${candidates.length} položek ✓`);
-    }, 'Převést');
-  };
   el('btnCopyCodes').onclick = ()=>{
     const codes = getFiltered().filter(a=>a.type==='code').map(a=>a.code).filter(Boolean);
     if(codes.length===0){ toast(`Žádné kódy (${filterSummary()})`); return; }
@@ -1239,39 +1114,6 @@ Minecraft acc | mc_user"></textarea>
     toast(`Exportováno ${codes.length} kódů ✓`);
   };
 
-  // ---- export / import ----
-  el('btnExport').onclick = ()=>{
-    const blob = new Blob([JSON.stringify(state,null,2)], {type:'application/json'});
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    const d = new Date();
-    const stamp = d.toISOString().slice(0,10);
-    a.href = url; a.download = `sklad-uctu-zaloha-${stamp}.json`;
-    a.click();
-    URL.revokeObjectURL(url);
-    toast('Záloha stažena ✓');
-  };
-  el('btnImport').onclick = ()=> el('fileImport').click();
-  el('fileImport').addEventListener('change', e=>{
-    const file = e.target.files[0];
-    if(!file) return;
-    const reader = new FileReader();
-    reader.onload = ()=>{
-      try{
-        const data = JSON.parse(reader.result);
-        if(!data.accounts || !data.categories) throw new Error('bad format');
-        showConfirm('Import přepíše aktuální data ve skladu. Pokračovat?', ()=>{
-          state = data;
-          activeCategory='all';
-          selectedIds.clear();
-          renderAll();
-          toast('Data importována ✓');
-        }, 'Importovat');
-      }catch(err){ toast('Neplatný soubor zálohy'); }
-      e.target.value='';
-    };
-    reader.readAsText(file);
-  });
 
   // ===== šifrovaná data pro GitHub Pages =====
   const ENC_FILE = 'data.enc';
@@ -1456,7 +1298,8 @@ Minecraft acc | mc_user"></textarea>
     state = payload.state; selectedIds.clear();
     // úklid po starších verzích, které ukládaly data lokálně
     try{ localStorage.removeItem(STORE_KEY); localStorage.removeItem('sklad_sync_hash'); }catch(e){}
-    renderAll(); hideGate();
+    saveSuppressed = true; renderAll(); saveSuppressed = false;
+    hideGate();
   }
 
   el('gateUnlock').onclick = ()=>{
@@ -1483,7 +1326,7 @@ Minecraft acc | mc_user"></textarea>
     toast('data.enc staženo — nahraj ho do GitHub repa ✓');
   };
 
-  renderAll();
+  saveSuppressed = true; renderAll(); saveSuppressed = false;
 })();
 </script>
 </body>
