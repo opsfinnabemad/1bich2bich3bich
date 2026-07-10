@@ -1,0 +1,1499 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sklad účtů</title>
+<style>
+  :root{
+    --bg:#07070d;
+    --panel:rgba(255,255,255,0.045);
+    --panel-solid:#12121c;
+    --border:rgba(255,255,255,0.09);
+    --text:#f2f2f7;
+    --muted:#9898ad;
+    --muted2:#6d6d85;
+    --accent:#8b5cf6;
+    --accent2:#22d3ee;
+    --good:#22c55e;
+    --bad:#f43f5e;
+    --radius:16px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Segoe UI',system-ui,-apple-system,Roboto,sans-serif;
+    min-height:100vh;
+    overflow-x:hidden;
+  }
+
+  /* --- ambient glow blobs --- */
+  .blob{
+    position:fixed;
+    border-radius:50%;
+    filter:blur(90px);
+    opacity:0.35;
+    z-index:0;
+    pointer-events:none;
+  }
+  .blob1{width:520px;height:520px;background:#7c3aed;top:-180px;left:-140px;animation:float1 22s ease-in-out infinite;}
+  .blob2{width:480px;height:480px;background:#22d3ee;bottom:-200px;right:-160px;animation:float2 26s ease-in-out infinite;}
+  .blob3{width:380px;height:380px;background:#ec4899;top:40%;left:50%;animation:float3 30s ease-in-out infinite;opacity:0.22;}
+  @keyframes float1{0%,100%{transform:translate(0,0);}50%{transform:translate(60px,80px);}}
+  @keyframes float2{0%,100%{transform:translate(0,0);}50%{transform:translate(-70px,-50px);}}
+  @keyframes float3{0%,100%{transform:translate(-50%,-50%) scale(1);}50%{transform:translate(-40%,-55%) scale(1.15);}}
+
+  .wrap{position:relative;z-index:1;max-width:1400px;margin:0 auto;padding:28px 28px 60px;}
+
+  /* header */
+  header{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:26px;}
+  .brand{display:flex;align-items:center;gap:14px;}
+  .brand .logo{
+    width:46px;height:46px;border-radius:14px;
+    background:linear-gradient(135deg,var(--accent),var(--accent2));
+    display:flex;align-items:center;justify-content:center;font-size:22px;
+    box-shadow:0 0 24px rgba(139,92,246,0.55);
+  }
+  .brand h1{font-size:22px;margin:0;font-weight:700;letter-spacing:.2px;}
+  .brand p{margin:2px 0 0;color:var(--muted);font-size:13px;}
+
+  .actions{display:flex;gap:10px;flex-wrap:wrap;}
+  button{font-family:inherit;cursor:pointer;border:none;}
+  .btn{
+    padding:10px 16px;border-radius:12px;font-size:13.5px;font-weight:600;
+    background:var(--panel);color:var(--text);border:1px solid var(--border);
+    transition:.15s ease;display:inline-flex;align-items:center;gap:8px;
+  }
+  .btn:hover{background:rgba(255,255,255,0.08);transform:translateY(-1px);}
+  .btn-primary{
+    background:linear-gradient(135deg,var(--accent),#6d28d9);
+    box-shadow:0 0 20px rgba(139,92,246,0.45);
+    border:1px solid rgba(139,92,246,0.6);
+  }
+  .btn-primary:hover{box-shadow:0 0 28px rgba(139,92,246,0.65);}
+  .btn-accent2{
+    background:linear-gradient(135deg,var(--accent2),#0891b2);
+    box-shadow:0 0 20px rgba(34,211,238,0.4);
+    border:1px solid rgba(34,211,238,0.55);
+  }
+  .btn-danger{background:rgba(244,63,94,0.12);border:1px solid rgba(244,63,94,0.35);color:#fda4af;}
+  .btn-danger:hover{background:rgba(244,63,94,0.2);}
+  .btn-ghost{background:transparent;border:1px solid var(--border);}
+
+  /* stats */
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:26px;}
+  @media(max-width:900px){.stats{grid-template-columns:repeat(2,1fr);}}
+  .stat-card{
+    background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);
+    padding:18px 20px;position:relative;overflow:hidden;backdrop-filter:blur(16px);
+  }
+  .stat-card::before{
+    content:'';position:absolute;inset:0;opacity:.5;pointer-events:none;
+    background:radial-gradient(circle at 20% 0%, rgba(255,255,255,0.08), transparent 60%);
+  }
+  .stat-card .label{color:var(--muted);font-size:12.5px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;}
+  .stat-card .value{font-size:28px;font-weight:700;margin-top:6px;}
+  .stat-card.glow-purple .value{color:#c4b5fd;text-shadow:0 0 18px rgba(139,92,246,0.6);}
+  .stat-card.glow-cyan .value{color:#a5f3fc;text-shadow:0 0 18px rgba(34,211,238,0.55);}
+  .stat-card.glow-green .value{color:#86efac;text-shadow:0 0 18px rgba(34,197,94,0.55);}
+  .stat-card.glow-pink .value{color:#fbcfe8;text-shadow:0 0 18px rgba(236,72,153,0.55);}
+
+  /* layout */
+  .layout{display:grid;grid-template-columns:260px 1fr;gap:22px;align-items:start;}
+  @media(max-width:820px){.layout{grid-template-columns:1fr;}}
+
+  .panel{
+    background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);
+    backdrop-filter:blur(16px);padding:18px;
+    position:sticky;top:20px;
+  }
+  .panel h3{margin:0 0 14px;font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;font-weight:700;}
+
+  .cat-list{display:flex;flex-direction:column;gap:6px;margin-bottom:14px;max-height:46vh;overflow-y:auto;padding-right:4px;}
+  .cat-item{
+    display:flex;align-items:center;justify-content:space-between;gap:8px;
+    padding:9px 11px;border-radius:10px;cursor:pointer;font-size:14px;font-weight:600;
+    color:var(--muted);border:1px solid transparent;transition:.15s;
+  }
+  .cat-item:hover{background:rgba(255,255,255,0.05);color:var(--text);}
+  .cat-item.active{background:rgba(255,255,255,0.08);color:var(--text);border-color:var(--border);}
+  .cat-item .dot{width:9px;height:9px;border-radius:50%;flex:none;box-shadow:0 0 8px currentColor;}
+  .cat-item .name{display:flex;align-items:center;gap:9px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .cat-item .count{font-size:11.5px;color:var(--muted2);font-weight:700;background:rgba(255,255,255,0.06);padding:1px 8px;border-radius:20px;}
+  .cat-item .del{opacity:0;font-size:15px;color:var(--muted2);padding:0 4px;}
+  .cat-item:hover .del{opacity:1;}
+  .cat-item .del:hover{color:var(--bad);}
+
+  .add-cat{display:flex;gap:8px;}
+  .add-cat input{flex:1;min-width:0;}
+
+  input,select,textarea{
+    background:rgba(255,255,255,0.05);border:1px solid var(--border);color:var(--text);
+    border-radius:10px;padding:9px 11px;font-size:13.5px;font-family:inherit;outline:none;
+  }
+  input:focus,select:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(139,92,246,0.18);}
+  input::placeholder,textarea::placeholder{color:var(--muted2);}
+
+  /* toolbar */
+  .toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:18px;}
+  .toolbar input[type=text]{flex:1;min-width:180px;padding:11px 14px;}
+  .toolbar select{padding:11px 14px;}
+  .seg{display:flex;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:10px;overflow:hidden;}
+  .seg button{padding:9px 13px;background:transparent;color:var(--muted);font-size:13px;font-weight:600;}
+  .seg button.active{background:linear-gradient(135deg,var(--accent),#6d28d9);color:#fff;}
+
+  /* account grid */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;}
+  .card{
+    position:relative;background:var(--panel-solid);border:1px solid var(--border);
+    border-radius:var(--radius);padding:16px 16px 14px;overflow:hidden;
+    transition:.15s ease;
+  }
+  .card:hover{transform:translateY(-2px);border-color:rgba(255,255,255,0.18);}
+  .card::before{
+    content:'';position:absolute;left:0;top:0;bottom:0;width:4px;
+    background:var(--cat-gradient, linear-gradient(var(--accent),var(--accent2)));
+    box-shadow:0 0 14px var(--cat-glow, rgba(139,92,246,0.6));
+  }
+  .card-top{display:flex;align-items:flex-start;gap:8px;margin-bottom:10px;}
+  .card-title{flex:1;font-size:15.5px;font-weight:700;line-height:1.25;}
+  .card-check{flex:none;padding-top:2px;display:inline-flex;}
+  .card-check input{width:16px;height:16px;cursor:pointer;accent-color:var(--accent);}
+  .card.selected{border-color:rgba(139,92,246,0.65);box-shadow:0 0 0 1px rgba(139,92,246,0.5),0 0 22px rgba(139,92,246,0.35);}
+  .badge{
+    display:inline-block;font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px;
+    background:var(--cat-gradient);color:#fff;white-space:nowrap;box-shadow:0 0 10px var(--cat-glow);
+  }
+  .price{flex:none;font-size:15px;font-weight:800;color:#fff;white-space:nowrap;}
+  .row{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted);margin:5px 0;}
+  .row .k{width:44px;flex:none;color:var(--muted2);font-weight:600;}
+  .row .v{font-family:'Consolas',monospace;color:var(--text);background:rgba(255,255,255,0.04);
+    padding:3px 8px;border-radius:6px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .icon-btn{
+    background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:6px;
+    width:26px;height:26px;flex:none;display:flex;align-items:center;justify-content:center;
+    font-size:12px;color:var(--muted);
+  }
+  .code-box{display:flex;align-items:center;gap:9px;background:rgba(255,255,255,0.05);
+    border:1px dashed var(--border);border-radius:10px;padding:10px 12px;margin:4px 0;}
+  .code-text{font-family:'Consolas',monospace;font-size:14px;letter-spacing:.4px;color:#fff;
+    flex:1;word-break:break-all;}
+  .icon-btn:hover{color:#fff;background:rgba(255,255,255,0.14);}
+  .note{font-size:12.5px;color:var(--muted);margin-top:8px;font-style:italic;line-height:1.4;
+    max-height:38px;overflow:hidden;}
+  .card-bottom{display:flex;justify-content:space-between;align-items:center;margin-top:12px;padding-top:12px;border-top:1px solid var(--border);}
+  .status-btn{padding:5px 11px;border-radius:20px;font-size:11.5px;font-weight:700;letter-spacing:.3px;}
+  .status-sklad{background:rgba(34,197,94,0.15);color:#86efac;border:1px solid rgba(34,197,94,0.4);}
+  .status-prodano{background:rgba(244,63,94,0.15);color:#fda4af;border:1px solid rgba(244,63,94,0.4);}
+  .card-tools{display:flex;gap:6px;}
+
+  .selection-bar{
+    display:none;align-items:center;gap:10px;flex-wrap:wrap;
+    background:rgba(139,92,246,0.1);border:1px solid rgba(139,92,246,0.35);
+    border-radius:12px;padding:10px 14px;margin-bottom:14px;font-size:13px;font-weight:700;color:#c4b5fd;
+  }
+  .selection-bar.show{display:flex;}
+  .selection-bar .spacer{flex:1;}
+
+  .empty{
+    grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--muted);
+  }
+  .empty .big{font-size:42px;margin-bottom:10px;}
+  .empty b{color:var(--text);}
+
+  /* modal */
+  .overlay{
+    position:fixed;inset:0;background:rgba(4,4,10,0.72);backdrop-filter:blur(6px);
+    display:none;align-items:center;justify-content:center;z-index:50;padding:20px;
+  }
+  .overlay.show{display:flex;}
+  .modal{
+    background:#0f0f18;border:1px solid var(--border);border-radius:20px;width:100%;max-width:480px;
+    padding:24px;box-shadow:0 0 60px rgba(139,92,246,0.25);max-height:88vh;overflow-y:auto;
+  }
+  .modal.wide{max-width:620px;}
+  .modal h2{margin:0 0 4px;font-size:18px;}
+  .modal .sub{color:var(--muted);font-size:12.5px;margin-bottom:18px;}
+  .field{margin-bottom:13px;display:flex;flex-direction:column;gap:6px;}
+  .field label{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;}
+  .field input,.field select,.field textarea{width:100%;}
+  .field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:18px;}
+  textarea.bulk{width:100%;min-height:180px;font-family:'Consolas',monospace;font-size:12.5px;resize:vertical;line-height:1.6;}
+  .hint-box{
+    background:rgba(139,92,246,0.08);border:1px solid rgba(139,92,246,0.3);border-radius:10px;
+    padding:10px 12px;font-size:12px;color:#c4b5fd;margin-bottom:14px;line-height:1.5;
+  }
+  .hint-box code{background:rgba(255,255,255,0.08);padding:1px 5px;border-radius:4px;}
+  .close-x{position:absolute;top:16px;right:16px;background:transparent;color:var(--muted);font-size:20px;width:30px;height:30px;border-radius:8px;}
+  .close-x:hover{background:rgba(255,255,255,0.08);color:#fff;}
+  .modal{position:relative;}
+
+  .toast{
+    position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);
+    background:#151522;border:1px solid var(--border);padding:11px 20px;border-radius:12px;
+    font-size:13px;font-weight:600;box-shadow:0 8px 30px rgba(0,0,0,0.4);z-index:100;
+    opacity:0;pointer-events:none;transition:.25s ease;
+  }
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+  .file-bar{
+    display:none;align-items:center;gap:10px;flex-wrap:wrap;
+    background:rgba(34,211,238,0.08);border:1px solid rgba(34,211,238,0.3);
+    border-radius:12px;padding:10px 14px;margin-bottom:22px;font-size:13px;font-weight:600;color:#a5f3fc;
+  }
+  .file-bar.show{display:flex;}
+  .file-bar .spacer{flex:1;}
+  .file-dot{width:8px;height:8px;border-radius:50%;background:var(--muted2);flex:none;box-shadow:0 0 6px currentColor;}
+  .file-dot.connected{background:var(--good);color:var(--good);}
+
+  ::-webkit-scrollbar{width:10px;height:10px;}
+  ::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.12);border-radius:10px;}
+  ::-webkit-scrollbar-track{background:transparent;}
+</style>
+</head>
+<body>
+<style>
+  #encGate{
+    position:fixed;inset:0;z-index:9999;
+    background:radial-gradient(circle at 30% 20%, rgba(124,58,237,0.18), transparent 50%),
+               radial-gradient(circle at 75% 85%, rgba(34,211,238,0.14), transparent 50%), var(--bg);
+    display:flex;align-items:center;justify-content:center;
+    transition:opacity .3s ease;
+  }
+  #encGate.hidden{opacity:0;pointer-events:none;}
+  .gate-card{
+    background:var(--panel-solid);border:1px solid var(--border);border-radius:20px;
+    padding:38px 34px;width:min(92vw,380px);text-align:center;
+    box-shadow:0 0 60px rgba(139,92,246,0.25);
+  }
+  .gate-card .glogo{
+    width:58px;height:58px;border-radius:16px;margin:0 auto 16px;
+    background:linear-gradient(135deg,var(--accent),var(--accent2));
+    display:flex;align-items:center;justify-content:center;font-size:26px;
+    box-shadow:0 0 28px rgba(139,92,246,0.55);
+  }
+  .gate-card h2{margin:0 0 6px;font-size:20px;}
+  .gate-card p{margin:0 0 20px;color:var(--muted);font-size:13.5px;line-height:1.5;}
+  #gateForm{display:flex;flex-direction:column;gap:10px;}
+  #gateChoice{display:none;flex-direction:column;gap:10px;}
+  #gatePass{
+    padding:12px 14px;border-radius:12px;border:1px solid var(--border);
+    background:rgba(255,255,255,0.05);color:var(--text);font-size:14px;font-family:inherit;outline:none;
+    text-align:center;
+  }
+  #gatePass:focus{border-color:var(--accent);}
+  #gateMsg{margin-top:14px;font-size:13px;color:var(--muted);min-height:18px;}
+  #gateMsg.err{color:var(--bad);}
+</style>
+<div id="encGate">
+  <div class="gate-card">
+    <div class="glogo">&#128274;</div>
+    <h2>Sklad účtů</h2>
+    <p>Zadej heslo pro odešifrování dat</p>
+    <div id="gateForm">
+      <input type="password" id="gatePass" placeholder="Heslo" autocomplete="current-password">
+      <button class="btn btn-primary" id="gateUnlock" style="justify-content:center">Odemknout</button>
+    </div>
+    <div id="gateChoice">
+      <p style="margin-bottom:6px">V tomto prohlížeči už máš lokální data, která se liší od dat na GitHubu.</p>
+      <button class="btn btn-primary" id="btnUseRemote" style="justify-content:center">☁️ Načíst data z GitHubu</button>
+      <button class="btn" id="btnUseLocal" style="justify-content:center">💾 Ponechat lokální data</button>
+    </div>
+    <div id="gateMsg"></div>
+  </div>
+</div>
+
+<div class="blob blob1"></div>
+<div class="blob blob2"></div>
+<div class="blob blob3"></div>
+
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <div class="logo">🗂️</div>
+      <div>
+        <h1>Sklad účtů</h1>
+        <p>Přehled tvých účtů na prodej</p>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="btn" id="btnExport">⬇ Export zálohy</button>
+      <button class="btn" id="btnImport">⬆ Import zálohy</button>
+      <button class="btn" id="btnExportEnc" title="Zašifruje aktuální data heslém a stáhne data.enc pro nahrání na GitHub">🔐 Export data.enc</button>
+      <input type="file" id="fileImport" accept="application/json" style="display:none">
+      <button class="btn btn-accent2" id="btnBulkOpen">📋 Hromadně přidat</button>
+      <button class="btn btn-primary" id="btnAddOpen">＋ Nový účet</button>
+    </div>
+  </header>
+
+  <div class="file-bar" id="fileBar">
+    <span class="file-dot" id="fileDot"></span>
+    <span id="fileStatusText">📂 Nepřipojeno — data se ukládají jen do tohoto prohlížeče</span>
+    <span class="spacer"></span>
+    <button class="btn btn-accent2" id="btnReconnectFile" style="display:none;">🔓 Znovu povolit soubor</button>
+    <button class="btn btn-ghost" id="btnConnectFile">📂 Připojit datový soubor…</button>
+  </div>
+  <div class="file-bar" id="cloudBar">
+    <span class="file-dot" id="cloudDot"></span>
+    <span id="cloudStatusText">☁️ GitHub sync: vypnuto</span>
+    <span class="spacer"></span>
+    <button class="btn btn-ghost" id="btnCloudSetup">☁️ Nastavit GitHub sync…</button>
+  </div>
+
+  <div class="stats">
+    <div class="stat-card glow-purple"><div class="label">Celkem účtů</div><div class="value" id="statTotal">0</div></div>
+    <div class="stat-card glow-green"><div class="label">Skladem</div><div class="value" id="statSklad">0</div></div>
+    <div class="stat-card glow-pink"><div class="label">Prodáno</div><div class="value" id="statProdano">0</div></div>
+    <div class="stat-card glow-cyan"><div class="label">Hodnota skladu</div><div class="value" id="statValue">0 Kč</div></div>
+  </div>
+
+  <div class="layout">
+    <div class="panel">
+      <h3>Kategorie</h3>
+      <div class="cat-list" id="catList"></div>
+      <div class="add-cat">
+        <input type="text" id="newCatInput" placeholder="Nová kategorie…">
+        <button class="btn btn-ghost" id="btnAddCat">＋</button>
+      </div>
+    </div>
+
+    <div>
+      <div class="toolbar">
+        <input type="text" id="searchInput" placeholder="🔍 Hledat podle názvu, loginu, emailu…">
+        <div class="seg" id="statusSeg">
+          <button data-v="all" class="active">Vše</button>
+          <button data-v="sklad">Skladem</button>
+          <button data-v="prodano">Prodáno</button>
+        </div>
+        <select id="sortSelect">
+          <option value="new">Nejnovější</option>
+          <option value="old">Nejstarší</option>
+          <option value="price_desc">Cena ↓</option>
+          <option value="price_asc">Cena ↑</option>
+          <option value="name">Název A-Z</option>
+        </select>
+        <button class="btn btn-ghost" id="btnCopyCodes" title="Zkopíruje kódy z aktuálního výběru">⧉ Kódy</button>
+        <button class="btn btn-ghost" id="btnExportCodes" title="Export kódů z aktuálního výběru do .txt">⬇ TXT</button>
+        <button class="btn btn-ghost" id="btnFixTypes" title="Převede účty bez loginu/hesla/emailu na typ Kód">🔧 Opravit typy</button>
+        <button class="btn btn-ghost" id="btnSelectAllToolbar" title="Vybrat všechny viditelné položky">☑ Vybrat vše</button>
+      </div>
+
+      <div class="selection-bar" id="selectionBar">
+        <span id="selectionCount">Vybráno 0</span>
+        <span class="spacer"></span>
+        <button class="btn btn-ghost" id="btnClearSelection">Zrušit výběr</button>
+        <button class="btn btn-danger" id="btnDeleteSelected">🗑 Smazat vybrané</button>
+      </div>
+
+      <div class="grid" id="accountGrid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- single account modal -->
+<div class="overlay" id="overlayAccount">
+  <div class="modal">
+    <button class="close-x" data-close>✕</button>
+    <h2 id="accModalTitle">Nový účet</h2>
+    <div class="sub">Vyplň údaje o účtu na prodej</div>
+    <div id="accNoCatHint" class="hint-box" style="display:none;">Nejdřív vytvoř alespoň jednu kategorii v levém panelu.</div>
+    <form id="accForm">
+      <div class="field">
+        <label>Typ položky</label>
+        <div class="seg" id="typeSeg" style="width:100%;">
+          <button type="button" data-v="account" class="active" style="flex:1;">🔑 Účet</button>
+          <button type="button" data-v="code" style="flex:1;">🎟️ Kód</button>
+        </div>
+      </div>
+      <div class="field">
+        <label id="f_title_label">Název účtu</label>
+        <input type="text" id="f_title" placeholder="např. Fortnite - Save the World, lvl 130">
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>Kategorie</label>
+          <select id="f_category" required></select>
+        </div>
+        <div class="field">
+          <label>Stav</label>
+          <select id="f_status">
+            <option value="sklad">Skladem</option>
+            <option value="prodano">Prodáno</option>
+          </select>
+        </div>
+      </div>
+      <div id="accountFields">
+        <div class="field-row">
+          <div class="field">
+            <label>Login</label>
+            <input type="text" id="f_login" placeholder="uživatelské jméno">
+          </div>
+          <div class="field">
+            <label>Heslo</label>
+            <input type="text" id="f_pass" placeholder="heslo">
+          </div>
+        </div>
+        <div class="field">
+          <label>Email</label>
+          <input type="text" id="f_email" placeholder="email k účtu">
+        </div>
+      </div>
+      <div id="codeFields" style="display:none;">
+        <div class="field">
+          <label>Kód</label>
+          <input type="text" id="f_code" placeholder="např. PXKY-NF-7FQK-6J3B-K" style="font-family:'Consolas',monospace;">
+        </div>
+      </div>
+      <div class="field">
+        <label>Cena (Kč)</label>
+        <input type="number" id="f_price" placeholder="0" step="1">
+      </div>
+      <div class="field">
+        <label>Poznámka</label>
+        <textarea id="f_note" rows="2" placeholder="skiny, level, extra info…"></textarea>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-ghost" data-close>Zrušit</button>
+        <button type="submit" class="btn btn-primary" id="accSubmitBtn">Uložit účet</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- bulk add modal -->
+<div class="overlay" id="overlayBulk">
+  <div class="modal wide">
+    <button class="close-x" data-close>✕</button>
+    <h2>Hromadné přidání</h2>
+    <div class="sub">Vlož víc položek najednou, každou na nový řádek</div>
+    <div id="bulkNoCatHint" class="hint-box" style="display:none;">Nejdřív vytvoř alespoň jednu kategorii v levém panelu.</div>
+    <div class="field">
+      <label>Typ položek</label>
+      <div class="seg" id="bulkTypeSeg" style="width:100%;">
+        <button type="button" data-v="account" class="active" style="flex:1;">🔑 Účty (login/heslo)</button>
+        <button type="button" data-v="code" style="flex:1;">🎟️ Kódy</button>
+      </div>
+    </div>
+    <div class="field">
+      <label>Kategorie pro všechny vložené položky</label>
+      <select id="bulk_category"></select>
+    </div>
+    <div class="hint-box" id="bulkHintAccount">
+      Formát řádku (odděleno svislítkem <code>|</code>):<br>
+      <code>Název | Login | Heslo | Email | Cena | Poznámka</code><br>
+      Login, heslo, email, cena a poznámka jsou nepovinné.
+    </div>
+    <div class="hint-box" id="bulkHintCode" style="display:none;">
+      Jeden kód na řádek, klidně rovnou zkopírované z generátoru:<br>
+      <code>KÓD</code> nebo <code>KÓD | Cena | Poznámka</code> — cena a poznámka jsou nepovinné.
+    </div>
+    <div class="field">
+      <textarea class="bulk" id="bulkText" placeholder="Fortnite acc lvl 100 | john123 | tajneheslo | john@mail.com | 350 | má battle pass
+Valorant acc Radiant | val_pro | heslo2 | val@mail.com | 900
+Minecraft acc | mc_user"></textarea>
+    </div>
+    <div class="modal-actions">
+      <button type="button" class="btn btn-ghost" data-close>Zrušit</button>
+      <button type="button" class="btn btn-accent2" id="btnBulkSubmit">Přidat všechny účty</button>
+    </div>
+  </div>
+</div>
+
+<!-- confirm modal -->
+<div class="overlay" id="overlayGitHub">
+  <div class="modal" style="max-width:460px;">
+    <h2>☁️ GitHub auto-sync</h2>
+    <div class="sub" style="margin-bottom:16px;">Každá změna se zašifruje tvým heslem a automaticky commitne jako <b>data.enc</b> do repa. Token zůstává jen v tomto prohlížeči (zašifrovaný).</div>
+    <div class="field-row">
+      <div class="field"><label>GitHub uživatel</label><input type="text" id="ghOwner" placeholder="tvuj-ucet"></div>
+      <div class="field"><label>Repozitář</label><input type="text" id="ghRepo" placeholder="sklad"></div>
+    </div>
+    <div class="field"><label>Branch</label><input type="text" id="ghBranch" value="main"></div>
+    <div class="field"><label>Fine-grained token (Contents: Read &amp; write)</label><input type="password" id="ghToken" placeholder="github_pat_..."></div>
+    <div class="modal-actions">
+      <button type="button" class="btn btn-ghost" id="ghCancelBtn">Zavřít</button>
+      <button type="button" class="btn btn-danger" id="ghDisconnectBtn" style="display:none;">Vypnout sync</button>
+      <button type="button" class="btn btn-primary" id="ghSaveBtn">Uložit a otestovat</button>
+    </div>
+    <div class="sub" id="ghMsg" style="margin-top:12px;min-height:16px;"></div>
+  </div>
+</div>
+<div class="overlay" id="overlayConfirm">
+  <div class="modal" style="max-width:420px;">
+    <h2 id="confirmTitle">Potvrdit akci</h2>
+    <div class="sub" id="confirmMessage" style="margin-bottom:18px;"></div>
+    <div class="modal-actions">
+      <button type="button" class="btn btn-ghost" id="confirmCancelBtn">Zrušit</button>
+      <button type="button" class="btn btn-danger" id="confirmOkBtn">Potvrdit</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  const STORE_KEY = 'eldorado_sklad_data_v1';
+  const PALETTE = [
+    ['#7c3aed','#c026d3'],
+    ['#0ea5e9','#22d3ee'],
+    ['#f59e0b','#ef4444'],
+    ['#22c55e','#10b981'],
+    ['#ec4899','#f43f5e'],
+    ['#6366f1','#8b5cf6'],
+    ['#eab308','#f97316'],
+    ['#14b8a6','#0ea5e9'],
+  ];
+
+  let state = load();
+
+  function load(){
+    try{
+      const raw = localStorage.getItem(STORE_KEY);
+      if(raw) return JSON.parse(raw);
+    }catch(e){}
+    return { categories: [], accounts: [] };
+  }
+  function save(){
+    localStorage.setItem(STORE_KEY, JSON.stringify(state));
+    scheduleFileWrite();
+    scheduleGhPush();
+  }
+  function uid(){ return 'a'+Date.now().toString(36)+Math.random().toString(36).slice(2,8); }
+
+  function catColor(name){
+    let h=0; for(let i=0;i<name.length;i++) h = (h*31 + name.charCodeAt(i)) >>> 0;
+    return PALETTE[h % PALETTE.length];
+  }
+  function catGradient(name){
+    if(!name) return ['#52525b','#3f3f46'];
+    return catColor(name);
+  }
+
+  // ---- ui state ----
+  let activeCategory = 'all';
+  let statusFilter = 'all';
+  let searchTerm = '';
+  let sortBy = 'new';
+  let editingId = null;
+  let selectedIds = new Set();
+
+  const el = id => document.getElementById(id);
+
+  function debounce(fn, wait){
+    let t;
+    return (...args)=>{ clearTimeout(t); t = setTimeout(()=>fn(...args), wait); };
+  }
+
+  // ---- custom confirm (native confirm() can get silently auto-suppressed by the browser) ----
+  let confirmCallback = null;
+  function showConfirm(message, onConfirm, okText){
+    el('confirmMessage').textContent = message;
+    el('confirmOkBtn').textContent = okText || 'Potvrdit';
+    confirmCallback = onConfirm;
+    openOverlay('overlayConfirm');
+  }
+  el('confirmCancelBtn').onclick = ()=>{ confirmCallback = null; closeOverlay('overlayConfirm'); };
+  el('confirmOkBtn').onclick = ()=>{
+    const cb = confirmCallback;
+    confirmCallback = null;
+    closeOverlay('overlayConfirm');
+    if(cb) cb();
+  };
+
+  function toast(msg){
+    const t = el('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(t._h);
+    t._h = setTimeout(()=>t.classList.remove('show'), 2200);
+  }
+
+  function copyText(text, btn, msg){
+    if(!text){ toast('Nic ke zkopírování'); return; }
+    const done = ()=>{ toast(msg || 'Zkopírováno ✓'); if(btn){ const o=btn.textContent; btn.textContent='✓'; setTimeout(()=>btn.textContent=o,900);} };
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(done).catch(()=>fallbackCopy(text,done));
+    } else fallbackCopy(text,done);
+  }
+  function fallbackCopy(text, cb){
+    const ta = document.createElement('textarea');
+    ta.value = text; ta.style.position='fixed'; ta.style.opacity='0';
+    document.body.appendChild(ta); ta.select();
+    try{ document.execCommand('copy'); cb(); }catch(e){ toast('Zkopírování selhalo'); }
+    document.body.removeChild(ta);
+  }
+
+  // ---- optional: connect a real file on disk (Chrome/Edge only) so data can travel between computers ----
+  const FS_SUPPORTED = 'showSaveFilePicker' in window;
+  let fileHandle = null;
+  let fileWriteTimer = null;
+
+  function idbGet(key){
+    return new Promise((resolve)=>{
+      const req = indexedDB.open('sklad-fs-db', 1);
+      req.onupgradeneeded = ()=> req.result.createObjectStore('handles');
+      req.onsuccess = ()=>{
+        const tx = req.result.transaction('handles','readonly');
+        const g = tx.objectStore('handles').get(key);
+        g.onsuccess = ()=> resolve(g.result || null);
+        g.onerror = ()=> resolve(null);
+      };
+      req.onerror = ()=> resolve(null);
+    });
+  }
+  function idbSet(key, val){
+    return new Promise((resolve)=>{
+      const req = indexedDB.open('sklad-fs-db', 1);
+      req.onupgradeneeded = ()=> req.result.createObjectStore('handles');
+      req.onsuccess = ()=>{
+        try{
+          const tx = req.result.transaction('handles','readwrite');
+          tx.objectStore('handles').put(val, key);
+          tx.oncomplete = ()=> resolve();
+          tx.onerror = ()=> resolve();
+        }catch(e){ resolve(); }
+      };
+      req.onerror = ()=> resolve();
+    });
+  }
+
+  function updateFileStatus(pendingHandle){
+    const bar = el('fileBar');
+    if(!FS_SUPPORTED){ bar.classList.remove('show'); return; }
+    bar.classList.add('show');
+    const dot = el('fileDot');
+    if(fileHandle){
+      dot.classList.add('connected');
+      el('fileStatusText').textContent = `📂 Připojeno: ${fileHandle.name} — ukládá se automaticky`;
+      el('btnReconnectFile').style.display = 'none';
+      el('btnConnectFile').textContent = '📂 Připojit jiný soubor…';
+    } else {
+      dot.classList.remove('connected');
+      if(pendingHandle){
+        el('fileStatusText').textContent = `📂 ${pendingHandle.name} — je potřeba znovu povolit přístup`;
+        el('btnReconnectFile').style.display = 'inline-flex';
+      } else {
+        el('fileStatusText').textContent = '📂 Nepřipojeno — data se ukládají jen do tohoto prohlížeče';
+        el('btnReconnectFile').style.display = 'none';
+      }
+      el('btnConnectFile').textContent = '📂 Připojit datový soubor…';
+    }
+  }
+
+  async function writeToFile(){
+    if(!fileHandle) return;
+    try{
+      const writable = await fileHandle.createWritable();
+      await writable.write(JSON.stringify(state, null, 2));
+      await writable.close();
+    }catch(e){ /* keep silent — localStorage already has the data */ }
+  }
+  function scheduleFileWrite(){
+    if(!fileHandle) return;
+    clearTimeout(fileWriteTimer);
+    fileWriteTimer = setTimeout(writeToFile, 400);
+  }
+
+  async function useFileHandle(handle){
+    fileHandle = handle;
+    try{
+      const file = await handle.getFile();
+      const text = await file.text();
+      if(text.trim()){
+        const data = JSON.parse(text);
+        if(data.accounts && data.categories){
+          state = data;
+          selectedIds.clear();
+        }
+      }
+    }catch(e){ /* empty/new/invalid file — keep current state and write it below */ }
+    await idbSet('dataFile', handle);
+    updateFileStatus();
+    renderAll();
+    await writeToFile();
+    toast(`Datový soubor připojen: ${handle.name} ✓`);
+  }
+
+  if(FS_SUPPORTED){
+    updateFileStatus();
+    el('btnConnectFile').onclick = async ()=>{
+      try{
+        const handle = await window.showSaveFilePicker({
+          suggestedName: 'sklad-data.json',
+          types: [{ description: 'Sklad dat (JSON)', accept: {'application/json': ['.json']} }]
+        });
+        await useFileHandle(handle);
+      }catch(err){ if(err.name !== 'AbortError') toast('Nepodařilo se připojit soubor'); }
+    };
+    el('btnReconnectFile').onclick = async ()=>{
+      const handle = await idbGet('dataFile');
+      if(!handle) return;
+      try{
+        const perm = await handle.requestPermission({mode:'readwrite'});
+        if(perm==='granted') await useFileHandle(handle);
+        else toast('Přístup k souboru nebyl povolen');
+      }catch(e){ toast('Nepodařilo se obnovit přístup k souboru'); }
+    };
+    (async ()=>{
+      const handle = await idbGet('dataFile');
+      if(!handle) return;
+      try{
+        const perm = await handle.queryPermission({mode:'readwrite'});
+        if(perm==='granted'){ await useFileHandle(handle); }
+        else { updateFileStatus(handle); }
+      }catch(e){ /* handle no longer valid, ignore */ }
+    })();
+  } else {
+    el('fileBar').classList.remove('show');
+  }
+
+  // ---- rendering ----
+  function renderAll(){
+    pruneSelection();
+    renderStats();
+    renderCategories();
+    renderCategorySelects();
+    renderAccounts();
+    save();
+  }
+
+  function renderStats(){
+    const total = state.accounts.length;
+    const sklad = state.accounts.filter(a=>a.status==='sklad');
+    const prodano = state.accounts.filter(a=>a.status==='prodano').length;
+    const value = sklad.reduce((s,a)=>s+(Number(a.price)||0),0);
+    el('statTotal').textContent = total;
+    el('statSklad').textContent = sklad.length;
+    el('statProdano').textContent = prodano;
+    el('statValue').textContent = value.toLocaleString('cs-CZ')+' Kč';
+  }
+
+  function renderCategories(){
+    const allCount = state.accounts.length;
+    let html = `<div class="cat-item${activeCategory==='all'?' active':''}" data-cat="all">
+      <div class="name"><span class="dot" style="color:#a1a1aa;background:#a1a1aa;"></span>Vše</div>
+      <span class="count">${allCount}</span>
+    </div>`;
+
+    state.categories.forEach(cat=>{
+      const count = state.accounts.filter(a=>a.category===cat).length;
+      const [c1] = catColor(cat);
+      html += `<div class="cat-item${activeCategory===cat?' active':''}" data-cat="${escapeAttr(cat)}">
+        <div class="name"><span class="dot" style="color:${c1};background:${c1};"></span><span>${escapeHtml(cat)}</span></div>
+        <span class="count">${count}</span>
+        <span class="del" data-cat-del="${escapeAttr(cat)}" title="Smazat kategorii">✕</span>
+      </div>`;
+    });
+
+    const uncategorized = state.accounts.some(a=>!a.category);
+    if(uncategorized){
+      const count = state.accounts.filter(a=>!a.category).length;
+      html += `<div class="cat-item${activeCategory==='__none__'?' active':''}" data-cat="__none__">
+        <div class="name"><span class="dot" style="color:#71717a;background:#71717a;"></span>Bez kategorie</div>
+        <span class="count">${count}</span>
+      </div>`;
+    }
+    el('catList').innerHTML = html;
+  }
+
+  el('catList').addEventListener('click', e=>{
+    const delEl = e.target.closest('[data-cat-del]');
+    if(delEl){
+      e.stopPropagation();
+      const cat = delEl.getAttribute('data-cat-del');
+      showConfirm(`Smazat kategorii "${cat}"? Účty v ní zůstanou, ale budou bez kategorie.`, ()=>{
+        state.categories = state.categories.filter(c=>c!==cat);
+        state.accounts.forEach(a=>{ if(a.category===cat) a.category=''; });
+        if(activeCategory===cat) activeCategory='all';
+        renderAll();
+      }, 'Smazat');
+      return;
+    }
+    const item = e.target.closest('[data-cat]');
+    if(item){
+      activeCategory = item.getAttribute('data-cat');
+      renderCategories();
+      renderAccounts();
+    }
+  });
+
+  function renderCategorySelects(){
+    [el('f_category'), el('bulk_category')].forEach(sel=>{
+      const prev = sel.value;
+      sel.innerHTML = state.categories.map(c=>`<option value="${escapeAttr(c)}">${escapeHtml(c)}</option>`).join('');
+      if(state.categories.includes(prev)) sel.value = prev;
+    });
+    const hasCats = state.categories.length>0;
+    el('accNoCatHint').style.display = hasCats ? 'none':'block';
+    el('bulkNoCatHint').style.display = hasCats ? 'none':'block';
+    el('accForm').querySelectorAll('button[type=submit]').forEach(b=>b.disabled=!hasCats);
+    el('btnBulkSubmit').disabled = !hasCats;
+  }
+
+  function getFiltered(){
+    let list = state.accounts.slice();
+    if(activeCategory==='__none__') list = list.filter(a=>!a.category);
+    else if(activeCategory!=='all') list = list.filter(a=>a.category===activeCategory);
+    if(statusFilter!=='all') list = list.filter(a=>a.status===statusFilter);
+    if(searchTerm){
+      const q = searchTerm.toLowerCase();
+      list = list.filter(a=>
+        (a.title||'').toLowerCase().includes(q) ||
+        (a.login||'').toLowerCase().includes(q) ||
+        (a.email||'').toLowerCase().includes(q) ||
+        (a.code||'').toLowerCase().includes(q) ||
+        (a.note||'').toLowerCase().includes(q)
+      );
+    }
+    switch(sortBy){
+      case 'new': list.sort((a,b)=>b.created-a.created); break;
+      case 'old': list.sort((a,b)=>a.created-b.created); break;
+      case 'price_desc': list.sort((a,b)=>(b.price||0)-(a.price||0)); break;
+      case 'price_asc': list.sort((a,b)=>(a.price||0)-(b.price||0)); break;
+      case 'name': list.sort((a,b)=>a.title.localeCompare(b.title,'cs')); break;
+    }
+    return list;
+  }
+
+  function cardTemplate(a){
+    const [c1,c2] = catGradient(a.category);
+    const isPlainCode = a.type==='code' && (!a.title || a.title===a.code);
+    const bodyHtml = a.type==='code'
+      ? codeBox(a.code)
+      : `${a.login ? row('Login', a.login, true) : ''}${a.pass ? row('Heslo', a.pass, true, true) : ''}${a.email ? row('Email', a.email, true) : ''}`;
+    const titleText = isPlainCode ? (a.category || 'Kód') : a.title;
+    const checked = selectedIds.has(a.id) ? 'checked' : '';
+    const selectedClass = selectedIds.has(a.id) ? ' selected' : '';
+    return `<div class="card${selectedClass}" data-card="${a.id}" style="--cat-gradient:linear-gradient(135deg, ${c1}, ${c2});--cat-glow:${hexToRgba(c1,0.55)};">
+      <div class="card-top">
+        <label class="card-check"><input type="checkbox" data-select="${a.id}" ${checked}></label>
+        <div class="card-title">${escapeHtml(titleText)}</div>
+        <div class="price">${(Number(a.price)||0).toLocaleString('cs-CZ')} Kč</div>
+      </div>
+      <div class="badge">${escapeHtml(a.category||'Bez kategorie')}${a.type==='code'?' · 🎟️ kód':''}</div>
+      <div style="margin-top:10px;">
+        ${bodyHtml}
+      </div>
+      ${a.note ? `<div class="note">${escapeHtml(a.note)}</div>` : ''}
+      <div class="card-bottom">
+        <button class="status-btn ${a.status==='sklad'?'status-sklad':'status-prodano'}" data-toggle="${a.id}">
+          ${a.status==='sklad' ? '● Skladem' : '● Prodáno'}
+        </button>
+        <div class="card-tools">
+          <button class="icon-btn" data-edit="${a.id}" title="Upravit">✎</button>
+          <button class="icon-btn" data-del="${a.id}" title="Smazat">🗑</button>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  function renderAccounts(){
+    const grid = el('accountGrid');
+    const list = getFiltered();
+    if(list.length===0){
+      grid.innerHTML = `<div class="empty"><div class="big">📭</div>
+        ${state.accounts.length===0
+          ? 'Zatím tu nemáš žádné účty.<br><b>Přidej první účet</b> nebo použij <b>Hromadné přidání</b>.'
+          : 'Nic neodpovídá zvolenému filtru.'}</div>`;
+    } else {
+      grid.innerHTML = list.map(cardTemplate).join('');
+    }
+    updateSelectionBar();
+  }
+
+  function pruneSelection(){
+    const validIds = new Set(state.accounts.map(a=>a.id));
+    selectedIds.forEach(id=>{ if(!validIds.has(id)) selectedIds.delete(id); });
+  }
+
+  function updateSelectionBar(){
+    const bar = el('selectionBar');
+    const count = selectedIds.size;
+    bar.classList.toggle('show', count>0);
+    el('selectionCount').textContent = `Vybráno ${count}`;
+  }
+
+  // ---- account grid: event delegation (bound once, robust against re-renders) ----
+  el('accountGrid').addEventListener('click', e=>{
+    const copyBtn = e.target.closest('[data-copy]');
+    if(copyBtn){ copyText(copyBtn.getAttribute('data-copy'), copyBtn); return; }
+
+    const revealBtn = e.target.closest('[data-reveal]');
+    if(revealBtn){
+      const target = revealBtn.previousElementSibling;
+      const real = revealBtn.getAttribute('data-reveal');
+      if(target.textContent === real){ target.textContent = '•'.repeat(Math.min(real.length,10)); revealBtn.textContent='👁'; }
+      else { target.textContent = real; revealBtn.textContent='🙈'; }
+      return;
+    }
+
+    const toggleBtn = e.target.closest('[data-toggle]');
+    if(toggleBtn){
+      const acc = state.accounts.find(x=>x.id===toggleBtn.getAttribute('data-toggle'));
+      if(acc){ acc.status = acc.status==='sklad' ? 'prodano' : 'sklad'; renderAll(); }
+      return;
+    }
+
+    const editBtn = e.target.closest('[data-edit]');
+    if(editBtn){ openEdit(editBtn.getAttribute('data-edit')); return; }
+
+    const delBtn = e.target.closest('[data-del]');
+    if(delBtn){
+      const acc = state.accounts.find(x=>x.id===delBtn.getAttribute('data-del'));
+      if(!acc) return;
+      showConfirm(`Smazat "${acc.title}"?`, ()=>{
+        state.accounts = state.accounts.filter(x=>x.id!==acc.id);
+        selectedIds.delete(acc.id);
+        renderAll();
+      }, 'Smazat');
+      return;
+    }
+  });
+
+  el('accountGrid').addEventListener('change', e=>{
+    const chk = e.target.closest('[data-select]');
+    if(!chk) return;
+    const id = chk.getAttribute('data-select');
+    if(chk.checked) selectedIds.add(id); else selectedIds.delete(id);
+    const card = chk.closest('.card');
+    if(card) card.classList.toggle('selected', chk.checked);
+    updateSelectionBar();
+  });
+
+  el('btnSelectAllToolbar').onclick = ()=>{
+    const ids = getFiltered().map(a=>a.id);
+    if(ids.length===0){ toast('Nic k výběru v aktuálním filtru'); return; }
+    ids.forEach(id=>selectedIds.add(id));
+    renderAccounts();
+  };
+  el('btnClearSelection').onclick = ()=>{
+    selectedIds.clear();
+    renderAccounts();
+  };
+  el('btnDeleteSelected').onclick = ()=>{
+    const count = selectedIds.size;
+    if(count===0) return;
+    showConfirm(`Opravdu smazat ${count} vybraných položek? Tuto akci nelze vrátit zpět.`, ()=>{
+      state.accounts = state.accounts.filter(a=>!selectedIds.has(a.id));
+      selectedIds.clear();
+      renderAll();
+      toast(`Smazáno ${count} položek ✓`);
+    }, 'Smazat vše');
+  };
+
+  function codeBox(code){
+    return `<div class="code-box">
+      <span class="code-text">${escapeHtml(code)}</span>
+      <button class="icon-btn" data-copy="${escapeAttr(code)}" title="Kopírovat kód">⧉</button>
+    </div>`;
+  }
+
+  function row(label, value, copyable, secret){
+    const id = Math.random().toString(36).slice(2,8);
+    const display = secret ? '•'.repeat(Math.min(value.length,10)) : escapeHtml(value);
+    return `<div class="row">
+      <span class="k">${label}</span>
+      <span class="v" id="v_${id}">${display}</span>
+      ${secret ? `<button class="icon-btn" data-reveal="${escapeAttr(value)}" title="Zobrazit">👁</button>` : ''}
+      ${copyable ? `<button class="icon-btn" data-copy="${escapeAttr(value)}" title="Kopírovat">⧉</button>` : ''}
+    </div>`;
+  }
+
+  function escapeHtml(s){ return String(s??'').replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+  function escapeAttr(s){ return escapeHtml(s); }
+  function hexToRgba(hex, a){
+    const h = hex.replace('#','');
+    const r = parseInt(h.substring(0,2),16), g = parseInt(h.substring(2,4),16), b = parseInt(h.substring(4,6),16);
+    return `rgba(${r},${g},${b},${a})`;
+  }
+
+  // ---- modals ----
+  function openOverlay(id){ el(id).classList.add('show'); }
+  function closeOverlay(id){ el(id).classList.remove('show'); }
+
+  let formType = 'account';
+
+  function setTypeSeg(seg, value){
+    seg.querySelectorAll('button').forEach(b=>b.classList.toggle('active', b.getAttribute('data-v')===value));
+  }
+
+  function updateFormTypeUI(){
+    const isCode = formType==='code';
+    el('accountFields').style.display = isCode ? 'none' : 'block';
+    el('codeFields').style.display = isCode ? 'block' : 'none';
+    el('f_title_label').textContent = isCode ? 'Popisek (nepovinné)' : 'Název účtu';
+    el('f_title').placeholder = isCode ? 'necháš prázdné = použije se kód' : 'např. Fortnite - Save the World, lvl 130';
+    el('accSubmitBtn').textContent = isCode ? 'Uložit kód' : 'Uložit účet';
+    el('accModalTitle').textContent = (editingId ? 'Upravit ' : 'Nový ') + (isCode ? 'kód' : 'účet');
+  }
+
+  document.getElementById('typeSeg').querySelectorAll('button').forEach(b=>{
+    b.onclick = ()=>{ setTypeSeg(document.getElementById('typeSeg'), b.getAttribute('data-v')); formType = b.getAttribute('data-v'); updateFormTypeUI(); };
+  });
+
+  el('btnAddOpen').onclick = ()=>{
+    editingId = null;
+    formType = 'account';
+    el('accForm').reset();
+    setTypeSeg(document.getElementById('typeSeg'), 'account');
+    renderCategorySelects();
+    updateFormTypeUI();
+    openOverlay('overlayAccount');
+  };
+
+  function openEdit(id){
+    const acc = state.accounts.find(a=>a.id===id);
+    if(!acc) return;
+    editingId = id;
+    formType = acc.type || 'account';
+    setTypeSeg(document.getElementById('typeSeg'), formType);
+    renderCategorySelects();
+    el('f_title').value = acc.title;
+    el('f_category').value = acc.category;
+    el('f_status').value = acc.status;
+    el('f_login').value = acc.login||'';
+    el('f_pass').value = acc.pass||'';
+    el('f_email').value = acc.email||'';
+    el('f_code').value = acc.code||'';
+    el('f_price').value = acc.price;
+    el('f_note').value = acc.note;
+    updateFormTypeUI();
+    openOverlay('overlayAccount');
+  }
+
+  el('accForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    if(state.categories.length===0){ toast('Nejdřív vytvoř kategorii'); return; }
+    const isCode = formType==='code';
+    const code = el('f_code').value.trim();
+    if(isCode && !code){ toast('Vyplň kód'); return; }
+    let title = el('f_title').value.trim();
+    if(!title) title = isCode ? (code || 'Kód') : 'Bez názvu';
+    const data = {
+      type: formType,
+      title,
+      category: el('f_category').value,
+      status: el('f_status').value,
+      login: isCode ? '' : el('f_login').value.trim(),
+      pass: isCode ? '' : el('f_pass').value.trim(),
+      email: isCode ? '' : el('f_email').value.trim(),
+      code: isCode ? code : '',
+      price: parseFloat(el('f_price').value)||0,
+      note: el('f_note').value.trim(),
+    };
+    if(editingId){
+      Object.assign(state.accounts.find(a=>a.id===editingId), data);
+      toast((isCode?'Kód':'Účet')+' upraven ✓');
+    } else {
+      data.id = uid(); data.created = Date.now();
+      state.accounts.push(data);
+      toast((isCode?'Kód':'Účet')+' přidán ✓');
+    }
+    closeOverlay('overlayAccount');
+    renderAll();
+  });
+
+  let bulkMode = 'account';
+
+  function updateBulkUI(){
+    const isCode = bulkMode==='code';
+    el('bulkHintAccount').style.display = isCode ? 'none' : 'block';
+    el('bulkHintCode').style.display = isCode ? 'block' : 'none';
+    el('bulkText').placeholder = isCode
+      ? 'PXKY-NF-7FQK-6J3B-K\nPXKY-NF-5PDC-CYNJ-M\nPXKY-NF-BK3F-55NH-D\nPXKY-NF-3CZR-N4ZV-D'
+      : 'Fortnite acc lvl 100 | john123 | tajneheslo | john@mail.com | 350 | má battle pass\nValorant acc Radiant | val_pro | heslo2 | val@mail.com | 900\nMinecraft acc | mc_user';
+    el('btnBulkSubmit').textContent = isCode ? 'Přidat všechny kódy' : 'Přidat všechny účty';
+  }
+
+  document.getElementById('bulkTypeSeg').querySelectorAll('button').forEach(b=>{
+    b.onclick = ()=>{ setTypeSeg(document.getElementById('bulkTypeSeg'), b.getAttribute('data-v')); bulkMode = b.getAttribute('data-v'); updateBulkUI(); };
+  });
+
+  el('bulkText').addEventListener('input', ()=>{
+    if(bulkMode!=='account') return;
+    const lines = el('bulkText').value.split('\n').map(l=>l.trim()).filter(Boolean);
+    if(lines.length>=2 && lines.every(l=>!l.includes('|'))){
+      bulkMode = 'code';
+      setTypeSeg(document.getElementById('bulkTypeSeg'), 'code');
+      updateBulkUI();
+      toast('Detekovány čisté kódy → přepnuto na režim Kódy');
+    }
+  });
+
+  el('btnBulkOpen').onclick = ()=>{
+    bulkMode = 'account';
+    setTypeSeg(document.getElementById('bulkTypeSeg'), 'account');
+    renderCategorySelects();
+    el('bulkText').value='';
+    updateBulkUI();
+    openOverlay('overlayBulk');
+  };
+
+  el('btnBulkSubmit').onclick = ()=>{
+    if(state.categories.length===0){ toast('Nejdřív vytvoř kategorii'); return; }
+    const cat = el('bulk_category').value;
+    const lines = el('bulkText').value.split('\n').map(l=>l.trim()).filter(Boolean);
+    if(lines.length===0){ toast('Vlož alespoň jeden řádek'); return; }
+    let count=0;
+    if(bulkMode==='code'){
+      lines.forEach(line=>{
+        const parts = line.split('|').map(p=>p.trim());
+        const code = parts[0];
+        if(!code) return;
+        state.accounts.push({
+          id: uid(), type:'code', title: code, category: cat,
+          code, login:'', pass:'', email:'',
+          price: parseFloat(parts[1])||0, note: parts[2]||'',
+          status:'sklad', created: Date.now()+count,
+        });
+        count++;
+      });
+    } else {
+      lines.forEach(line=>{
+        const parts = line.split('|').map(p=>p.trim());
+        state.accounts.push({
+          id: uid(), type:'account', title: parts[0]||'Bez názvu', category: cat,
+          login: parts[1]||'', pass: parts[2]||'', email: parts[3]||'', code:'',
+          price: parseFloat(parts[4])||0, note: parts[5]||'',
+          status:'sklad', created: Date.now()+count,
+        });
+        count++;
+      });
+    }
+    closeOverlay('overlayBulk');
+    renderAll();
+    toast(`Přidáno ${count} ${bulkMode==='code'?'kódů':'účtů'} ✓`);
+  };
+
+  document.querySelectorAll('[data-close]').forEach(b=>{
+    b.onclick = ()=>{ const ov = b.closest('.overlay'); if(ov) ov.classList.remove('show'); };
+  });
+  document.querySelectorAll('.overlay').forEach(ov=>{
+    ov.addEventListener('click', e=>{ if(e.target===ov) ov.classList.remove('show'); });
+  });
+
+  // ---- categories ----
+  el('btnAddCat').onclick = addCategory;
+  el('newCatInput').addEventListener('keydown', e=>{ if(e.key==='Enter') addCategory(); });
+  function addCategory(){
+    const input = el('newCatInput');
+    const name = input.value.trim();
+    if(!name) return;
+    if(state.categories.includes(name)){ toast('Kategorie už existuje'); return; }
+    state.categories.push(name);
+    input.value='';
+    renderAll();
+    toast('Kategorie přidána ✓');
+  }
+
+  // ---- toolbar ----
+  el('searchInput').addEventListener('input', debounce(e=>{ searchTerm = e.target.value; renderAccounts(); }, 180));
+  el('sortSelect').addEventListener('change', e=>{ sortBy = e.target.value; renderAccounts(); });
+  el('statusSeg').querySelectorAll('button').forEach(b=>{
+    b.onclick = ()=>{
+      el('statusSeg').querySelectorAll('button').forEach(x=>x.classList.remove('active'));
+      b.classList.add('active');
+      statusFilter = b.getAttribute('data-v');
+      renderAccounts();
+    };
+  });
+
+  // ---- codes copy / export ----
+  function slug(s){
+    const map = {'á':'a','č':'c','ď':'d','é':'e','ě':'e','í':'i','ň':'n','ó':'o','ř':'r','š':'s','ť':'t','ú':'u','ů':'u','ý':'y','ž':'z'};
+    let out = (s||'polozky').toLowerCase().replace(/[áčďéěíňóřšťúůýž]/g, ch => map[ch] || ch);
+    out = out.replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
+    return out || 'polozky';
+  }
+  function activeCategoryLabel(){
+    if(activeCategory==='all') return 'vsechny';
+    if(activeCategory==='__none__') return 'bez-kategorie';
+    return activeCategory;
+  }
+  function filterSummary(){
+    const parts = [];
+    parts.push('kategorie: ' + (activeCategory==='all' ? 'Vše' : activeCategory==='__none__' ? 'Bez kategorie' : activeCategory));
+    if(statusFilter!=='all') parts.push('stav: ' + (statusFilter==='sklad' ? 'Skladem' : 'Prodáno'));
+    if(searchTerm) parts.push(`hledání: "${searchTerm}"`);
+    return parts.join(', ');
+  }
+  el('btnFixTypes').onclick = ()=>{
+    const candidates = state.accounts.filter(a=>a.type!=='code' && !a.login && !a.pass && !a.email && a.title);
+    if(candidates.length===0){ toast('Nenalezeny žádné položky k opravě'); return; }
+    showConfirm(`Nalezeno ${candidates.length} položek bez loginu/hesla/emailu (vypadají jako kódy uložené jako účty). Převést je na typ "Kód"?`, ()=>{
+      candidates.forEach(a=>{ a.type='code'; a.code = a.code || a.title; });
+      renderAll();
+      toast(`Opraveno ${candidates.length} položek ✓`);
+    }, 'Převést');
+  };
+  el('btnCopyCodes').onclick = ()=>{
+    const codes = getFiltered().filter(a=>a.type==='code').map(a=>a.code).filter(Boolean);
+    if(codes.length===0){ toast(`Žádné kódy (${filterSummary()})`); return; }
+    copyText(codes.join('\n'), null, `Zkopírováno ${codes.length} kódů ✓`);
+  };
+  el('btnExportCodes').onclick = ()=>{
+    const codes = getFiltered().filter(a=>a.type==='code').map(a=>a.code).filter(Boolean);
+    if(codes.length===0){ toast(`Žádné kódy (${filterSummary()})`); return; }
+    const blob = new Blob([codes.join('\n')], {type:'text/plain'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = `kody-${slug(activeCategoryLabel())}-${new Date().toISOString().slice(0,10)}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast(`Exportováno ${codes.length} kódů ✓`);
+  };
+
+  // ---- export / import ----
+  el('btnExport').onclick = ()=>{
+    const blob = new Blob([JSON.stringify(state,null,2)], {type:'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    const d = new Date();
+    const stamp = d.toISOString().slice(0,10);
+    a.href = url; a.download = `sklad-uctu-zaloha-${stamp}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast('Záloha stažena ✓');
+  };
+  el('btnImport').onclick = ()=> el('fileImport').click();
+  el('fileImport').addEventListener('change', e=>{
+    const file = e.target.files[0];
+    if(!file) return;
+    const reader = new FileReader();
+    reader.onload = ()=>{
+      try{
+        const data = JSON.parse(reader.result);
+        if(!data.accounts || !data.categories) throw new Error('bad format');
+        showConfirm('Import přepíše aktuální data ve skladu. Pokračovat?', ()=>{
+          state = data;
+          activeCategory='all';
+          selectedIds.clear();
+          renderAll();
+          toast('Data importována ✓');
+        }, 'Importovat');
+      }catch(err){ toast('Neplatný soubor zálohy'); }
+      e.target.value='';
+    };
+    reader.readAsText(file);
+  });
+
+  // ===== šifrovaná data pro GitHub Pages =====
+  const ENC_FILE = 'data.enc';
+  const _te = new TextEncoder(), _td = new TextDecoder();
+  const b64e = buf => { const u = new Uint8Array(buf); let s=''; for(let i=0;i<u.length;i+=0x8000) s += String.fromCharCode.apply(null, u.subarray(i,i+0x8000)); return btoa(s); };
+  const b64d = s => Uint8Array.from(atob(s), c=>c.charCodeAt(0));
+  let sessionPass = sessionStorage.getItem('sklad_pw') || null;
+
+  async function deriveKey(pass, salt, usage){
+    const km = await crypto.subtle.importKey('raw', _te.encode(pass), 'PBKDF2', false, ['deriveKey']);
+    return crypto.subtle.deriveKey({name:'PBKDF2', salt, iterations:300000, hash:'SHA-256'}, km, {name:'AES-GCM', length:256}, false, usage);
+  }
+  async function encryptRaw(pass, plaintext){
+    const salt = crypto.getRandomValues(new Uint8Array(16));
+    const iv = crypto.getRandomValues(new Uint8Array(12));
+    const key = await deriveKey(pass, salt, ['encrypt']);
+    const ct = await crypto.subtle.encrypt({name:'AES-GCM', iv}, key, _te.encode(plaintext));
+    return JSON.stringify({v:1, salt:b64e(salt), iv:b64e(iv), data:b64e(ct)});
+  }
+  async function decryptRaw(text, pass){
+    const obj = JSON.parse(text);
+    const key = await deriveKey(pass, b64d(obj.salt), ['decrypt']);
+    const pt = await crypto.subtle.decrypt({name:'AES-GCM', iv:b64d(obj.iv)}, key, b64d(obj.data));
+    return _td.decode(pt);
+  }
+  async function encryptState(pass){
+    return encryptRaw(pass, JSON.stringify({exportedAt: Date.now(), state}));
+  }
+  async function decryptEnc(text, pass){
+    return JSON.parse(await decryptRaw(text, pass));
+  }
+
+  // ===== GitHub auto-sync (Contents API) =====
+  const GH_CFG_KEY = 'sklad_gh_cfg';
+  let ghCfg = null;            // {owner, repo, branch, token}
+  let ghTimer = null, ghBusy = false, ghAgain = false;
+
+  async function loadGhCfg(pass){
+    try{
+      const raw = localStorage.getItem(GH_CFG_KEY);
+      if(!raw) return null;
+      const o = JSON.parse(raw);
+      const token = await decryptRaw(o.tokenEnc, pass);
+      return {owner:o.owner, repo:o.repo, branch:o.branch || 'main', token};
+    }catch(e){ return null; }
+  }
+  function ghHeaders(){
+    return {'Authorization':'Bearer ' + ghCfg.token, 'Accept':'application/vnd.github+json', 'X-GitHub-Api-Version':'2022-11-28'};
+  }
+  function ghUrl(){
+    return 'https://api.github.com/repos/' + ghCfg.owner + '/' + ghCfg.repo + '/contents/' + ENC_FILE;
+  }
+  async function ghGetFile(){
+    const res = await fetch(ghUrl() + '?ref=' + encodeURIComponent(ghCfg.branch) + '&t=' + Date.now(), {headers: ghHeaders(), cache:'no-store'});
+    if(res.status === 404) return null;
+    if(!res.ok) throw new Error('GitHub ' + res.status);
+    const j = await res.json();
+    return {sha: j.sha, text: _td.decode(b64d((j.content || '').replace(/\s/g, '')))};
+  }
+  function cloudStatus(mode, extra){
+    const bar = el('cloudBar'); bar.classList.add('show');
+    const dot = el('cloudDot'), txt = el('cloudStatusText');
+    dot.classList.toggle('connected', mode === 'ok');
+    if(mode === 'off')       txt.textContent = '☁️ GitHub sync: vypnuto — změny zůstávají jen v tomto prohlížeči';
+    else if(mode === 'sync') txt.textContent = '☁️ Ukládám na GitHub…';
+    else if(mode === 'ok')   txt.textContent = '☁️ Uloženo na GitHub ✓ ' + new Date().toLocaleTimeString('cs-CZ', {hour:'2-digit', minute:'2-digit'});
+    else if(mode === 'on')   txt.textContent = '☁️ GitHub sync zapnutý' + (ghCfg ? ' (' + ghCfg.owner + '/' + ghCfg.repo + ')' : '');
+    else if(mode === 'err')  txt.textContent = '⚠️ Sync selhal: ' + (extra || 'neznámá chyba');
+    el('btnCloudSetup').textContent = ghCfg ? '⚙️ Sync nastavení' : '☁️ Nastavit GitHub sync…';
+  }
+  function scheduleGhPush(){
+    if(!ghCfg) return;
+    clearTimeout(ghTimer);
+    ghTimer = setTimeout(ghPush, 1500);
+  }
+  async function ghPush(){
+    if(!ghCfg || !sessionPass) return;
+    if(ghBusy){ ghAgain = true; return; }
+    ghBusy = true;
+    cloudStatus('sync');
+    try{
+      const encTxt = await encryptState(sessionPass);
+      let sha = null;
+      try{ const f = await ghGetFile(); if(f) sha = f.sha; }catch(e){}
+      const body = {message: 'sklad sync ' + new Date().toISOString(), content: btoa(encTxt), branch: ghCfg.branch};
+      if(sha) body.sha = sha;
+      const res = await fetch(ghUrl(), {method:'PUT', headers: {...ghHeaders(), 'Content-Type':'application/json'}, body: JSON.stringify(body)});
+      if(!res.ok) throw new Error('HTTP ' + res.status);
+      cloudStatus('ok');
+    }catch(e){
+      cloudStatus('err', e.message);
+    }
+    ghBusy = false;
+    if(ghAgain){ ghAgain = false; scheduleGhPush(); }
+  }
+
+  // --- settings UI ---
+  function prefillGh(){
+    if(ghCfg){
+      el('ghOwner').value = ghCfg.owner; el('ghRepo').value = ghCfg.repo; el('ghBranch').value = ghCfg.branch;
+      el('ghToken').value = ''; el('ghToken').placeholder = 'token uložen — vyplň jen při změně';
+      el('ghDisconnectBtn').style.display = 'inline-flex';
+    } else {
+      const h = location.hostname, seg = location.pathname.split('/').filter(Boolean);
+      if(h.endsWith('.github.io')) el('ghOwner').value = h.split('.')[0];
+      if(seg.length) el('ghRepo').value = seg[0];
+      el('ghDisconnectBtn').style.display = 'none';
+    }
+    el('ghMsg').textContent = '';
+  }
+  el('btnCloudSetup').onclick = ()=>{ prefillGh(); openOverlay('overlayGitHub'); };
+  el('ghCancelBtn').onclick = ()=> closeOverlay('overlayGitHub');
+  el('ghDisconnectBtn').onclick = ()=>{
+    localStorage.removeItem(GH_CFG_KEY); ghCfg = null;
+    cloudStatus('off'); closeOverlay('overlayGitHub'); toast('GitHub sync vypnut');
+  };
+  el('ghSaveBtn').onclick = async ()=>{
+    const owner = el('ghOwner').value.trim(), repo = el('ghRepo').value.trim();
+    const branch = el('ghBranch').value.trim() || 'main';
+    let token = el('ghToken').value.trim();
+    if(!owner || !repo){ el('ghMsg').textContent = 'Vyplň uživatele a repo'; return; }
+    if(!token && ghCfg) token = ghCfg.token;
+    if(!token){ el('ghMsg').textContent = 'Vyplň token'; return; }
+    if(!sessionPass){ el('ghMsg').textContent = 'Chybí heslo — obnov stránku a odemkni ji'; return; }
+    el('ghMsg').textContent = 'Testuji přístup…';
+    const prev = ghCfg;
+    ghCfg = {owner, repo, branch, token};
+    try{
+      const res = await fetch('https://api.github.com/repos/' + owner + '/' + repo, {headers: ghHeaders()});
+      if(!res.ok) throw new Error('HTTP ' + res.status + (res.status === 401 ? ' — špatný token' : res.status === 404 ? ' — repo nenalezeno / token nemá přístup' : ''));
+      const tokenEnc = await encryptRaw(sessionPass, token);
+      localStorage.setItem(GH_CFG_KEY, JSON.stringify({owner, repo, branch, tokenEnc}));
+      cloudStatus('on');
+      closeOverlay('overlayGitHub');
+      toast('GitHub sync zapnut ✓');
+      ghPush(); // hned commitne aktuální stav jako data.enc
+    }catch(e){
+      ghCfg = prev;
+      el('ghMsg').textContent = 'Chyba: ' + e.message;
+    }
+  };
+
+  const gateEl = el('encGate');
+  function hideGate(){ gateEl.classList.add('hidden'); setTimeout(()=>{ gateEl.style.display='none'; }, 350); }
+  function gateMsg(t, isErr){ const m = el('gateMsg'); m.textContent = t || ''; m.classList.toggle('err', !!isErr); }
+
+  async function fetchEnc(){
+    try{
+      const res = await fetch(ENC_FILE + '?t=' + Date.now(), {cache:'no-store'});
+      if(!res.ok) return null;
+      const t = await res.text();
+      return t.trim().startsWith('{') ? t : null;
+    }catch(e){ return null; }
+  }
+
+  async function attemptUnlock(pass){
+    gateMsg('Odemykám…');
+    ghCfg = await loadGhCfg(pass);
+    let txt = null;
+    if(ghCfg){
+      try{ const f = await ghGetFile(); txt = f ? f.text : null; }catch(e){ txt = null; }
+    }
+    if(txt === null) txt = await fetchEnc();
+    if(txt === null){
+      sessionPass = pass; sessionStorage.setItem('sklad_pw', pass);
+      cloudStatus(ghCfg ? 'on' : 'off');
+      gateMsg('data.enc nenalezen — pokračuji s lokálními daty');
+      setTimeout(hideGate, 700);
+      return;
+    }
+    let payload;
+    try{ payload = await decryptEnc(txt, pass); }
+    catch(e){ gateMsg('Špatné heslo', true); sessionStorage.removeItem('sklad_pw'); return; }
+    sessionPass = pass; sessionStorage.setItem('sklad_pw', pass);
+    cloudStatus(ghCfg ? 'on' : 'off');
+    const remote = payload.state;
+    const localRaw = localStorage.getItem(STORE_KEY);
+    if(localRaw && localRaw !== JSON.stringify(remote)){
+      el('gateForm').style.display = 'none';
+      gateMsg('');
+      el('gateChoice').style.display = 'flex';
+      el('btnUseRemote').onclick = ()=>{ state = remote; selectedIds.clear(); save(); renderAll(); hideGate(); toast('Načtena data z GitHubu ✓'); };
+      el('btnUseLocal').onclick = ()=>{ hideGate(); };
+    } else {
+      state = remote; selectedIds.clear(); save(); renderAll(); hideGate();
+    }
+  }
+
+  el('gateUnlock').onclick = ()=>{
+    const p = el('gatePass').value;
+    if(!p){ gateMsg('Zadej heslo', true); return; }
+    attemptUnlock(p);
+  };
+  el('gatePass').addEventListener('keydown', e=>{ if(e.key==='Enter') el('gateUnlock').click(); });
+
+  if(sessionPass){ attemptUnlock(sessionPass); }
+  else { setTimeout(()=>el('gatePass').focus(), 50); }
+  cloudStatus(ghCfg ? 'on' : 'off');
+
+  el('btnExportEnc').onclick = async ()=>{
+    let p = sessionPass;
+    if(!p){ p = window.prompt('Heslo pro zašifrování dat:') || ''; if(!p) return; sessionPass = p; sessionStorage.setItem('sklad_pw', p); }
+    const txt = await encryptState(p);
+    const blob = new Blob([txt], {type:'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'data.enc';
+    a.click();
+    URL.revokeObjectURL(url);
+    toast('data.enc staženo — nahraj ho do GitHub repa ✓');
+  };
+
+  renderAll();
+})();
+</script>
+</body>
+</html>
