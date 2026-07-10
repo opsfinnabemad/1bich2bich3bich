@@ -297,11 +297,6 @@
       <input type="password" id="gatePass" placeholder="Heslo" autocomplete="current-password">
       <button class="btn btn-primary" id="gateUnlock" style="justify-content:center">Odemknout</button>
     </div>
-    <div id="gateChoice">
-      <p style="margin-bottom:6px">V tomto prohlížeči už máš lokální data, která se liší od dat na GitHubu.</p>
-      <button class="btn btn-primary" id="btnUseRemote" style="justify-content:center">☁️ Načíst data z GitHubu</button>
-      <button class="btn" id="btnUseLocal" style="justify-content:center">💾 Ponechat lokální data</button>
-    </div>
     <div id="gateMsg"></div>
   </div>
 </div>
@@ -551,15 +546,12 @@ Minecraft acc | mc_user"></textarea>
   let state = load();
 
   function load(){
-    try{
-      const raw = localStorage.getItem(STORE_KEY);
-      if(raw) return JSON.parse(raw);
-    }catch(e){}
+    // data žijí jen na GitHubu — lokálně se nic nenačítá
     return { categories: [], accounts: [] };
   }
   function save(){
-    localStorage.setItem(STORE_KEY, JSON.stringify(state));
-    scheduleFileWrite();
+    ghDirty = true;
+    if(!ghCfg){ cloudStatus('nosync'); }
     scheduleGhPush();
   }
   function uid(){ return 'a'+Date.now().toString(36)+Math.random().toString(36).slice(2,8); }
@@ -628,7 +620,7 @@ Minecraft acc | mc_user"></textarea>
   }
 
   // ---- optional: connect a real file on disk (Chrome/Edge only) so data can travel between computers ----
-  const FS_SUPPORTED = 'showSaveFilePicker' in window;
+  const FS_SUPPORTED = false; // vypnuto — data jdou jen přes GitHub
   let fileHandle = null;
   let fileWriteTimer = null;
 
@@ -1316,6 +1308,10 @@ Minecraft acc | mc_user"></textarea>
   const GH_CFG_KEY = 'sklad_gh_cfg';
   let ghCfg = null;            // {owner, repo, branch, token}
   let ghTimer = null, ghBusy = false, ghAgain = false;
+  let ghDirty = false;
+  window.addEventListener('beforeunload', e=>{
+    if(ghDirty || ghBusy){ e.preventDefault(); e.returnValue = ''; }
+  });
 
   async function loadGhCfg(pass){
     try{
@@ -1348,6 +1344,7 @@ Minecraft acc | mc_user"></textarea>
     else if(mode === 'ok')   txt.textContent = '☁️ Uloženo na GitHub ✓ ' + new Date().toLocaleTimeString('cs-CZ', {hour:'2-digit', minute:'2-digit'});
     else if(mode === 'on')   txt.textContent = '☁️ GitHub sync zapnutý' + (ghCfg ? ' (' + ghCfg.owner + '/' + ghCfg.repo + ')' : '');
     else if(mode === 'err')  txt.textContent = '⚠️ Sync selhal: ' + (extra || 'neznámá chyba');
+    else if(mode === 'nosync') txt.textContent = '⚠️ Sync není nastavený — změny se NEUKLÁDAJÍ! Klikni na nastavení →';
     el('btnCloudSetup').textContent = ghCfg ? '⚙️ Sync nastavení' : '☁️ Nastavit GitHub sync…';
   }
   function scheduleGhPush(){
@@ -1368,6 +1365,7 @@ Minecraft acc | mc_user"></textarea>
       if(sha) body.sha = sha;
       const res = await fetch(ghUrl(), {method:'PUT', headers: {...ghHeaders(), 'Content-Type':'application/json'}, body: JSON.stringify(body)});
       if(!res.ok) throw new Error('HTTP ' + res.status);
+      if(!ghAgain) ghDirty = false;
       cloudStatus('ok');
     }catch(e){
       cloudStatus('err', e.message);
@@ -1446,7 +1444,7 @@ Minecraft acc | mc_user"></textarea>
     if(txt === null){
       sessionPass = pass; sessionStorage.setItem('sklad_pw', pass);
       cloudStatus(ghCfg ? 'on' : 'off');
-      gateMsg('data.enc nenalezen — pokračuji s lokálními daty');
+      gateMsg('data.enc na GitHubu nenalezen — začínáš s prázdným skladem');
       setTimeout(hideGate, 700);
       return;
     }
@@ -1455,17 +1453,10 @@ Minecraft acc | mc_user"></textarea>
     catch(e){ gateMsg('Špatné heslo', true); sessionStorage.removeItem('sklad_pw'); return; }
     sessionPass = pass; sessionStorage.setItem('sklad_pw', pass);
     cloudStatus(ghCfg ? 'on' : 'off');
-    const remote = payload.state;
-    const localRaw = localStorage.getItem(STORE_KEY);
-    if(localRaw && localRaw !== JSON.stringify(remote)){
-      el('gateForm').style.display = 'none';
-      gateMsg('');
-      el('gateChoice').style.display = 'flex';
-      el('btnUseRemote').onclick = ()=>{ state = remote; selectedIds.clear(); save(); renderAll(); hideGate(); toast('Načtena data z GitHubu ✓'); };
-      el('btnUseLocal').onclick = ()=>{ hideGate(); };
-    } else {
-      state = remote; selectedIds.clear(); save(); renderAll(); hideGate();
-    }
+    state = payload.state; selectedIds.clear();
+    // úklid po starších verzích, které ukládaly data lokálně
+    try{ localStorage.removeItem(STORE_KEY); localStorage.removeItem('sklad_sync_hash'); }catch(e){}
+    renderAll(); hideGate();
   }
 
   el('gateUnlock').onclick = ()=>{
