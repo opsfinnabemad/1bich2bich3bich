@@ -368,6 +368,7 @@
       <div class="selection-bar" id="selectionBar">
         <span id="selectionCount">Vybráno 0</span>
         <span class="spacer"></span>
+        <button class="btn btn-ghost" id="btnCopySelected" title="Zkopíruje vybrané kódy a účty do schránky"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Kopírovat vybrané</button>
         <button class="btn btn-ghost" id="btnClearSelection">Zrušit výběr</button>
         <button class="btn btn-danger" id="btnDeleteSelected"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg> Smazat vybrané</button>
       </div>
@@ -593,7 +594,7 @@ Minecraft acc | mc_user"></textarea>
 
   function copyText(text, btn, msg){
     if(!text){ toast('Nic ke zkopírování'); return; }
-    const done = ()=>{ toast(msg || 'Zkopírováno ✓'); if(btn){ const o=btn.textContent; btn.textContent='✓'; setTimeout(()=>btn.textContent=o,900);} };
+    const done = ()=>{ toast(msg || 'Zkopírováno ✓'); if(btn){ const o=btn.innerHTML; btn.innerHTML='✓'; setTimeout(()=>btn.innerHTML=o,900);} };
     if(navigator.clipboard && navigator.clipboard.writeText){
       navigator.clipboard.writeText(text).then(done).catch(()=>fallbackCopy(text,done));
     } else fallbackCopy(text,done);
@@ -795,7 +796,25 @@ Minecraft acc | mc_user"></textarea>
   }
 
   // ---- account grid: event delegation (bound once, robust against re-renders) ----
+  el('accountGrid').addEventListener('mousedown', e=>{
+    if(e.shiftKey && e.target.closest('.card')) e.preventDefault(); // ať shift+klik neoznačuje text
+  });
+
   el('accountGrid').addEventListener('click', e=>{
+    if(e.shiftKey){
+      const card = e.target.closest('.card');
+      if(card){
+        e.preventDefault();
+        const id = card.getAttribute('data-card');
+        if(selectedIds.has(id)) selectedIds.delete(id); else selectedIds.add(id);
+        const on = selectedIds.has(id);
+        card.classList.toggle('selected', on);
+        const chk = card.querySelector('[data-select]');
+        if(chk) chk.checked = on;
+        updateSelectionBar();
+        return;
+      }
+    }
     const copyBtn = e.target.closest('[data-copy]');
     if(copyBtn){ copyText(copyBtn.getAttribute('data-copy'), copyBtn); return; }
 
@@ -803,8 +822,8 @@ Minecraft acc | mc_user"></textarea>
     if(revealBtn){
       const target = revealBtn.previousElementSibling;
       const real = revealBtn.getAttribute('data-reveal');
-      if(target.textContent === real){ target.textContent = '•'.repeat(Math.min(real.length,10)); revealBtn.textContent='👁'; }
-      else { target.textContent = real; revealBtn.textContent='🙈'; }
+      if(target.textContent === real){ target.textContent = '•'.repeat(Math.min(real.length,10)); revealBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"/><circle cx="12" cy="12" r="3"/></svg>'; }
+      else { target.textContent = real; revealBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><path d="M14.12 14.12a3 3 0 1 1-4.24-4.24"/><path d="M1 1l22 22"/><path d="M6.61 6.61A13.53 13.53 0 0 0 1 12s4 8 11 8a9.74 9.74 0 0 0 5.39-1.61"/></svg>'; }
       return;
     }
 
@@ -851,6 +870,19 @@ Minecraft acc | mc_user"></textarea>
     selectedIds.clear();
     renderAccounts();
   };
+  el('btnCopySelected').onclick = ()=>{
+    if(selectedIds.size===0) return;
+    const lines = state.accounts.filter(a=>selectedIds.has(a.id)).map(a=>{
+      if(a.type==='code') return a.code || '';
+      const who = a.login || a.email || '';
+      if(who && a.pass) return who + ':' + a.pass;
+      if(who) return who;
+      return a.title || '';
+    }).filter(Boolean);
+    if(lines.length===0){ toast('Vybrané položky nemají co zkopírovat'); return; }
+    copyText(lines.join('\n'), null, `Zkopírováno ${lines.length} položek ✓`);
+  };
+
   el('btnDeleteSelected').onclick = ()=>{
     const count = selectedIds.size;
     if(count===0) return;
