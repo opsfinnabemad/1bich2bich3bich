@@ -3,13 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sklad účtů</title>
+<title>Storage</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%232563eb'/><stop offset='1' stop-color='%230ea5e9'/></linearGradient></defs><rect width='64' height='64' rx='14' fill='url(%23g)'/><path d='M14 46h36a4 4 0 0 0 4-4V24a4 4 0 0 0-4-4H33.8a4 4 0 0 1-3.4-1.8l-2.4-3.4A4 4 0 0 0 24.7 13H14a4 4 0 0 0-4 4v25a4 4 0 0 0 4 4Z' fill='none' stroke='white' stroke-width='4.5' stroke-linecap='round' stroke-linejoin='round'/></svg>">
 <style>
   :root{
     --bg:#f4f7fc;
     --panel:#ffffff;
     --panel-solid:#ffffff;
-    --border:#dde5f0;
+    --border:#d3e2f4;
     --text:#0f1f38;
     --muted:#5b6b85;
     --muted2:#8b99b0;
@@ -26,7 +27,7 @@
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
   body{
-    background:var(--bg);
+    background:linear-gradient(165deg,#cfe6ff 0%,#e0efff 35%,#eef7ff 70%,#f8fcff 100%) fixed;
     color:var(--text);
     font-family:'Segoe UI',system-ui,-apple-system,Roboto,sans-serif;
     min-height:100vh;
@@ -260,8 +261,7 @@
 <style>
   #encGate{
     position:fixed;inset:0;z-index:9999;
-    background:radial-gradient(circle at 25% 15%, rgba(37,99,235,0.08), transparent 55%),
-               radial-gradient(circle at 80% 90%, rgba(14,165,233,0.08), transparent 55%), var(--bg);
+    background:linear-gradient(165deg,#cfe6ff 0%,#e0efff 35%,#eef7ff 70%,#f8fcff 100%);
     display:flex;align-items:center;justify-content:center;
     transition:opacity .3s ease;
   }
@@ -292,7 +292,7 @@
 <div id="encGate">
   <div class="gate-card">
     <div class="glogo">&#128274;</div>
-    <h2>Sklad účtů</h2>
+    <h2>Storage</h2>
     <p>Zadej heslo pro odešifrování dat</p>
     <div id="gateForm">
       <input type="password" id="gatePass" placeholder="Heslo" autocomplete="current-password">
@@ -308,7 +308,7 @@
     <div class="brand">
       <div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:22px;height:22px;color:#fff;"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"/></svg></div>
       <div>
-        <h1>Sklad účtů</h1>
+        <h1>Storage</h1>
         <p>Přehled tvých účtů na prodej</p>
       </div>
     </div>
@@ -533,7 +533,7 @@ Minecraft acc | mc_user"></textarea>
 
   function load(){
     // data žijí jen na GitHubu — lokálně se nic nenačítá
-    return { categories: [], accounts: [] };
+    return { categories: [], accounts: [], activity: {} };
   }
   let saveSuppressed = false;
   function save(){
@@ -559,6 +559,26 @@ Minecraft acc | mc_user"></textarea>
   let searchTerm = '';
   let sortBy = 'new';
   let editingId = null;
+
+  // ---- denní počítadlo přidaných položek (persistentní, přežije mazání účtů) ----
+  function dayKey(d){
+    return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+  }
+  function bumpActivity(n){
+    if(!state.activity) state.activity = {};
+    const k = dayKey(new Date());
+    state.activity[k] = (state.activity[k]||0) + n;
+  }
+  function normalizeActivity(){
+    if(state.activity) return;
+    // jednorázový backfill ze stávajících účtů podle data vytvoření
+    state.activity = {};
+    state.accounts.forEach(a=>{
+      if(!a.created) return;
+      const k = dayKey(new Date(a.created));
+      state.activity[k] = (state.activity[k]||0) + 1;
+    });
+  }
   let selectedIds = new Set();
 
   const el = id => document.getElementById(id);
@@ -638,11 +658,8 @@ Minecraft acc | mc_user"></textarea>
       const d = new Date(start.getTime() - i*DAY);
       days.push({t:d.getTime(), label:d.getDate()+'.'+(d.getMonth()+1)+'.', count:0});
     }
-    state.accounts.forEach(a=>{
-      if(!a.created) return;
-      const idx = Math.floor((a.created - days[0].t)/DAY);
-      if(idx>=0 && idx<14) days[idx].count++;
-    });
+    const act = state.activity || {};
+    days.forEach(d=>{ d.count = act[dayKey(new Date(d.t))] || 0; });
     const max = Math.max(1, ...days.map(d=>d.count));
     bars.innerHTML = days.map(d=>`<div class="cb-col" title="${d.label} — ${d.count} \u00fa\u010dt\u016f">
         <div class="cb-val">${d.count || ''}</div>
@@ -999,6 +1016,7 @@ Minecraft acc | mc_user"></textarea>
     } else {
       data.id = uid(); data.created = Date.now();
       state.accounts.push(data);
+      bumpActivity(1);
       toast((isCode?'Kód':'Účet')+' přidán ✓');
     }
     closeOverlay('overlayAccount');
@@ -1072,6 +1090,7 @@ Minecraft acc | mc_user"></textarea>
         count++;
       });
     }
+    if(count>0) bumpActivity(count);
     closeOverlay('overlayBulk');
     renderAll();
     toast(`Přidáno ${count} ${bulkMode==='code'?'kódů':'účtů'} ✓`);
@@ -1328,6 +1347,7 @@ Minecraft acc | mc_user"></textarea>
     sessionPass = pass; sessionStorage.setItem('sklad_pw', pass);
     cloudStatus(ghCfg ? 'on' : 'off');
     state = payload.state; selectedIds.clear();
+    normalizeActivity();
     // úklid po starších verzích, které ukládaly data lokálně
     try{ localStorage.removeItem(STORE_KEY); localStorage.removeItem('sklad_sync_hash'); }catch(e){}
     saveSuppressed = true; renderAll(); saveSuppressed = false;
