@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Storage — Private Inventory</title>
+<title>ELD Command Center — Private Inventory</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -734,6 +734,265 @@
   @media(prefers-reduced-motion:reduce){
     *,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}
   }
+
+</style>
+
+<style id="eld-command-center-v6">
+  /* ===== ELD COMMAND CENTER v6 ===== */
+  :root{
+    --cc-orange:#ff7617;
+    --cc-orange2:#ff9b50;
+    --cc-panel:rgba(13,15,20,.86);
+    --cc-line:rgba(255,255,255,.075);
+    --cc-line-hi:rgba(255,255,255,.13);
+  }
+
+  body{letter-spacing:-.01em}
+  .wrap{max-width:1580px;padding-top:22px}
+
+  /* hero: less "landing page", more dashboard */
+  .hero{
+    min-height:194px;
+    padding:40px 44px 38px;
+    border-radius:24px;
+    align-items:center;
+  }
+  .hero h1{
+    font-size:clamp(48px,5vw,70px);
+    letter-spacing:2px;
+    padding-top:32px;
+  }
+  .hero h1::before{
+    content:'ELD COMMAND CENTER  /  PRIVATE INVENTORY';
+    color:#ffab68;
+    letter-spacing:2.55px;
+  }
+  .hero p{
+    display:flex;align-items:center;gap:9px;flex-wrap:wrap;
+    margin-top:16px;color:#8f96a1
+  }
+  .hero p::before{
+    content:'';width:7px;height:7px;border-radius:50%;
+    background:#54e89b;box-shadow:0 0 16px rgba(84,232,155,.75);
+  }
+  .hero-actions{max-width:560px;justify-content:flex-end}
+  .hero-actions .btn{min-height:44px}
+  .hero-actions .btn-primary{padding-inline:18px}
+  .hero-mark{opacity:.026;right:105px;width:230px;height:230px}
+
+  /* command strip */
+  .cc-command-strip{
+    display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;
+    margin:0 0 14px;
+  }
+  .cc-search-shell{position:relative;min-width:0}
+  .cc-search-shell .search-row{margin:0}
+  .cc-search-shell .search-row input{height:58px;padding-right:160px}
+  .cc-search-hint{
+    position:absolute;right:12px;top:50%;transform:translateY(-50%);
+    display:flex;align-items:center;gap:7px;pointer-events:none;
+    color:#676d78;font-size:10.5px;font-weight:750;letter-spacing:.25px;
+  }
+  .cc-search-hint kbd{
+    min-width:25px;height:25px;padding:0 7px;display:grid;place-items:center;
+    border-radius:7px;border:1px solid rgba(255,255,255,.09);
+    background:#0b0d11;color:#8b919c;box-shadow:inset 0 1px 0 rgba(255,255,255,.035);
+    font:700 10px 'Space Grotesk',sans-serif;
+  }
+  .cc-view-tools{
+    display:flex;gap:8px;align-items:center;padding:7px;
+    border-radius:15px;background:rgba(14,16,21,.8);
+    border:1px solid var(--border);backdrop-filter:blur(16px);
+  }
+  .cc-view-tools .btn{min-height:42px;padding:9px 12px}
+  .cc-view-tools .btn.active{
+    color:#ffb476;background:rgba(255,107,0,.1);
+    border-color:rgba(255,124,24,.3);
+  }
+
+  .cc-filter-meta{
+    min-height:38px;margin:-2px 0 15px;padding:0 4px;
+    display:flex;align-items:center;gap:9px;flex-wrap:wrap;
+    color:#747b86;font-size:11.5px;font-weight:650;
+  }
+  .cc-meta-pill{
+    display:inline-flex;align-items:center;gap:6px;
+    padding:5px 9px;border:1px solid rgba(255,255,255,.065);
+    border-radius:8px;background:rgba(255,255,255,.02);
+  }
+  .cc-meta-pill b{color:#d8dbe0;font-weight:800}
+  .cc-meta-dot{width:6px;height:6px;border-radius:50%;background:#ff8a31}
+  .cc-meta-spacer{flex:1}
+  #ccClearFilters{opacity:0;pointer-events:none;transition:.16s}
+  #ccClearFilters.show{opacity:1;pointer-events:auto}
+
+  /* cloud status made compact + readable */
+  .file-bar{
+    min-height:48px;margin-bottom:12px;
+    border-color:rgba(255,255,255,.07);
+  }
+  .file-bar::before{
+    content:'SYNC';font-size:9px;font-weight:900;letter-spacing:1.1px;color:#555c67;
+    padding-right:3px;
+  }
+  #cloudStatusText{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  #btnCloudSetup{min-height:34px;font-size:10.5px}
+
+  /* main dashboard layout */
+  .main-grid{grid-template-columns:minmax(0,1fr) 322px;gap:16px}
+  .inv-panel{padding:20px;border-radius:20px}
+  .inv-head{margin-bottom:15px;padding-bottom:15px}
+  .inv-head h2{font-size:17px}
+  .inv-tools{justify-content:flex-end}
+  .inv-tools .btn{white-space:nowrap}
+  .chips-row{
+    padding:2px 0 1px;margin-bottom:15px;
+    flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;
+    scrollbar-width:thin;
+  }
+  .cat-list,.add-cat{flex:none}
+  .cat-item{white-space:nowrap}
+
+  /* Cards */
+  .grid{grid-template-columns:repeat(auto-fill,minmax(315px,1fr));gap:11px}
+  .card{
+    padding:16px 15px 13px;
+    border-radius:15px;
+    background:
+      linear-gradient(145deg,rgba(25,28,34,.95),rgba(14,16,20,.98));
+  }
+  .card:hover{transform:translateY(-3px)}
+  .card-top{align-items:center;margin-bottom:10px}
+  .card-title{font-size:13.5px}
+  .badge{font-size:9px}
+  .cc-card-meta{
+    display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:9px;
+  }
+  .cc-mini-tag{
+    display:inline-flex;align-items:center;gap:5px;
+    padding:4px 7px;border-radius:7px;
+    font-size:9.5px;font-weight:750;color:#777f8b;
+    border:1px solid rgba(255,255,255,.055);background:rgba(255,255,255,.018);
+  }
+  .cc-mini-tag.price{color:#ffb071;border-color:rgba(255,124,24,.16);background:rgba(255,107,0,.045)}
+  .row .v{padding-top:6px;padding-bottom:6px}
+  .code-box{min-height:42px}
+  .note{margin-top:8px}
+  .card-bottom{margin-top:11px;padding-top:10px}
+
+  /* Compact density */
+  body.cc-compact .grid{grid-template-columns:repeat(auto-fill,minmax(275px,1fr));gap:8px}
+  body.cc-compact .card{padding:12px 12px 10px;border-radius:13px}
+  body.cc-compact .card-top{margin-bottom:7px}
+  body.cc-compact .row{margin:4px 0}
+  body.cc-compact .row .v{padding:4px 7px}
+  body.cc-compact .code-box{padding:8px 9px}
+  body.cc-compact .note{display:none}
+  body.cc-compact .card-bottom{margin-top:8px;padding-top:8px}
+  body.cc-compact .badge{padding:3px 7px}
+  body.cc-compact .cc-card-meta{margin-top:6px}
+
+  /* side rail */
+  .side{top:14px;grid-template-columns:1fr 1fr;gap:10px}
+  .stat-card{
+    min-height:118px;padding:16px;border-radius:16px;
+  }
+  .stat-card .value{font-size:34px;margin-top:15px}
+  .stat-card .label{font-size:9px}
+  .cc-stat-sub{
+    position:absolute;left:16px;bottom:12px;color:#5f6671;
+    font-size:9.5px;font-weight:650;
+  }
+  .chart-card{min-height:192px}
+  .cc-health-card{
+    grid-column:1/-1;min-height:auto;padding:15px 16px;
+  }
+  .cc-health-row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .cc-health-left{display:flex;align-items:center;gap:9px}
+  .cc-health-icon{
+    width:30px;height:30px;border-radius:9px;display:grid;place-items:center;
+    color:#ffad69;background:rgba(255,107,0,.08);border:1px solid rgba(255,124,24,.18)
+  }
+  .cc-health-title{font-size:10px;font-weight:850;text-transform:uppercase;letter-spacing:.65px;color:#858c97}
+  .cc-health-value{font-size:11px;color:#c5c9d0;margin-top:2px}
+  .cc-stockbar{
+    height:5px;margin-top:11px;border-radius:99px;overflow:hidden;background:#20232a;
+  }
+  .cc-stockbar>i{
+    display:block;height:100%;width:0;border-radius:inherit;
+    background:linear-gradient(90deg,#ff6b00,#ff9c4a);transition:width .35s ease;
+  }
+
+  /* selection bar is sticky and more useful */
+  .selection-bar.show{
+    position:sticky;top:10px;z-index:15;
+    backdrop-filter:blur(18px);box-shadow:0 16px 40px rgba(0,0,0,.35);
+  }
+  .cc-bulk-status{display:flex;gap:6px}
+  .cc-bulk-status .btn{padding-inline:9px}
+
+  /* price field */
+  .cc-price-prefix{position:relative}
+  .cc-price-prefix::before{
+    content:'#';position:absolute;left:12px;top:50%;transform:translateY(-50%);
+    color:#565d68;font-size:11px;font-weight:800;pointer-events:none;
+  }
+  .cc-price-prefix input{padding-left:27px}
+
+  /* Modals */
+  .overlay.show .modal{animation:ccModalIn .18s ease-out both}
+  @keyframes ccModalIn{from{opacity:0;transform:translateY(10px) scale(.985)}to{opacity:1;transform:none}}
+  .modal{border-radius:20px}
+  .modal h2{padding-right:42px}
+
+  /* toast */
+  .toast{max-width:min(90vw,520px);text-align:center}
+
+  /* focused search */
+  body.cc-searching .cc-search-shell .search-row input{
+    border-color:rgba(255,124,24,.58);
+    box-shadow:0 0 0 4px rgba(255,107,0,.09),0 20px 48px rgba(0,0,0,.25);
+  }
+
+  @media(max-width:1180px){
+    .main-grid{grid-template-columns:1fr}
+    .side{position:static;grid-template-columns:repeat(4,1fr)}
+    .chart-card{grid-column:span 2}
+    .cc-health-card{grid-column:span 2}
+  }
+  @media(max-width:860px){
+    .cc-command-strip{grid-template-columns:1fr}
+    .cc-view-tools{justify-content:flex-end}
+    .side{grid-template-columns:repeat(2,1fr)}
+    .chart-card,.cc-health-card{grid-column:1/-1}
+    .hero{padding:34px 26px}
+    .hero-actions{justify-content:flex-start}
+  }
+  @media(max-width:640px){
+    .wrap{padding:12px 10px 44px}
+    .hero{padding:27px 19px;border-radius:19px;margin-bottom:12px}
+    .hero h1{font-size:42px}
+    .hero p{font-size:12px}
+    .hero-actions{display:grid;grid-template-columns:1fr 1fr;width:100%}
+    .hero-actions .btn:last-child{grid-column:1/-1}
+    .cc-search-shell .search-row input{padding-right:54px}
+    .cc-search-hint span{display:none}
+    .cc-search-hint kbd:nth-of-type(2){display:none}
+    .cc-filter-meta{padding-inline:2px}
+    .cc-view-tools{overflow-x:auto;justify-content:flex-start}
+    .inv-panel{padding:12px;border-radius:16px}
+    .inv-head{gap:11px}
+    .inv-tools{width:100%;justify-content:stretch}
+    .inv-tools .seg{width:100%}
+    .inv-tools .seg button{flex:1}
+    .inv-tools>select{flex:1}
+    .grid{grid-template-columns:1fr}
+    .selection-bar.show{top:5px}
+    .selection-bar .spacer{display:none}
+    .selection-bar .btn{flex:1}
+    .cc-bulk-status{width:100%}
+    .cc-bulk-status .btn{flex:1}
+  }
 </style>
 
 <div id="encGate">
@@ -754,7 +1013,7 @@
   <section class="hero">
     <div>
       <h1>Storage</h1>
-      <p>Přehled tvých účtů na prodej</p>
+      <p>Accounts, keys &amp; secure stock management <span id="ccClock" style="color:#5f6670"></span></p>
     </div>
     <div class="hero-actions">
       <button class="btn" id="btnExportEnc" title="Zašifruje aktuální data heslem a stáhne data.enc (ruční záloha)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Záloha</button>
@@ -771,8 +1030,25 @@
     <button class="btn btn-ghost" id="btnCloudSetup">☁️ Nastavit GitHub sync…</button>
   </div>
 
-  <div class="search-row">
-    <input type="text" id="searchInput" placeholder="Hledat podle názvu, loginu, emailu…">
+  <div class="cc-command-strip">
+    <div class="cc-search-shell">
+      <div class="search-row">
+        <input type="text" id="searchInput" placeholder="Hledat název, login, email, kód nebo poznámku…" autocomplete="off">
+      </div>
+      <div class="cc-search-hint"><span>SEARCH</span><kbd>Ctrl</kbd><kbd>K</kbd></div>
+    </div>
+    <div class="cc-view-tools">
+      <button class="btn btn-ghost" id="ccDensityBtn" title="Přepnout hustotu karet">▦ &nbsp;Kompaktní</button>
+      <button class="btn btn-ghost" id="ccRefreshBtn" title="Překreslit aktuální data">↻ &nbsp;Obnovit</button>
+    </div>
+  </div>
+
+  <div class="cc-filter-meta">
+    <span class="cc-meta-pill"><i class="cc-meta-dot"></i><span>Zobrazeno <b id="ccVisibleCount">0</b> / <b id="ccTotalCount">0</b></span></span>
+    <span class="cc-meta-pill">Kategorie: <b id="ccActiveCat">Vše</b></span>
+    <span class="cc-meta-pill">Filtr: <b id="ccActiveStatus">Vše</b></span>
+    <span class="cc-meta-spacer"></span>
+    <button class="btn btn-ghost" id="ccClearFilters" style="min-height:31px;padding:6px 10px;font-size:10.5px">Vyčistit filtry</button>
   </div>
 
   <div class="main-grid">
@@ -789,6 +1065,8 @@
           <option value="new">Nejnovější</option>
           <option value="old">Nejstarší</option>
           <option value="name">Název A-Z</option>
+          <option value="price_desc">Cena ↓</option>
+          <option value="price_asc">Cena ↑</option>
         </select>
         <button class="btn btn-ghost" id="btnCopyCodes" title="Zkopíruje kódy z aktuálního výběru"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Kódy</button>
         <button class="btn btn-ghost" id="btnExportCodes" title="Export kódů z aktuálního výběru do .txt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> TXT</button>
@@ -807,6 +1085,10 @@
       <div class="selection-bar" id="selectionBar">
         <span id="selectionCount">Vybráno 0</span>
         <span class="spacer"></span>
+        <div class="cc-bulk-status">
+          <button class="btn btn-ghost" id="ccMarkStock" title="Označit vybrané jako skladem">● Skladem</button>
+          <button class="btn btn-ghost" id="ccMarkSold" title="Označit vybrané jako prodané">● Prodáno</button>
+        </div>
         <button class="btn btn-ghost" id="btnCopySelected" title="Zkopíruje vybrané kódy a účty do schránky"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Kopírovat vybrané</button>
         <button class="btn btn-ghost" id="btnClearSelection">Zrušit výběr</button>
         <button class="btn btn-danger" id="btnDeleteSelected"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg> Smazat vybrané</button>
@@ -816,12 +1098,23 @@
     </section>
 
     <aside class="side">
-      <div class="stat-card glow-purple"><div class="label">Celkem účtů</div><div class="value" id="statTotal">0</div></div>
-      <div class="stat-card glow-green"><div class="label">Skladem</div><div class="value" id="statSklad">0</div></div>
-      <div class="stat-card glow-pink"><div class="label">Prodáno</div><div class="value" id="statProdano">0</div></div>
+      <div class="stat-card glow-purple"><div class="label">Celkem položek</div><div class="value" id="statTotal">0</div><div class="cc-stat-sub" id="ccCatCount">0 kategorií</div></div>
+      <div class="stat-card glow-green"><div class="label">Skladem</div><div class="value" id="statSklad">0</div><div class="cc-stat-sub" id="ccStockPct">0 % inventáře</div></div>
+      <div class="stat-card glow-pink"><div class="label">Prodáno</div><div class="value" id="statProdano">0</div><div class="cc-stat-sub" id="ccSoldPct">0 % inventáře</div></div>
+      <div class="stat-card"><div class="label">Dnes přidáno</div><div class="value" id="ccTodayAdded">0</div><div class="cc-stat-sub">nových položek</div></div>
       <div class="stat-card chart-card">
-        <div class="label">Přidané účty — 14 dní</div>
+        <div class="label">Aktivita — posledních 14 dní</div>
         <div class="chart-bars" id="chartBars"></div>
+      </div>
+      <div class="stat-card cc-health-card">
+        <div class="cc-health-row">
+          <div class="cc-health-left">
+            <div class="cc-health-icon">⌁</div>
+            <div><div class="cc-health-title">Inventory health</div><div class="cc-health-value" id="ccHealthText">Čekám na data…</div></div>
+          </div>
+          <b id="ccHealthPct" style="font-size:17px;color:#ffad69">0%</b>
+        </div>
+        <div class="cc-stockbar"><i id="ccStockBar"></i></div>
       </div>
     </aside>
   </div>
@@ -858,6 +1151,10 @@
             <option value="prodano">Prodáno</option>
           </select>
         </div>
+      </div>
+      <div class="field">
+        <label>Cena / hodnota <span style="text-transform:none;font-weight:500;color:#555c67">(volitelné, bez měny)</span></label>
+        <div class="cc-price-prefix"><input type="number" id="f_price" min="0" step="0.01" placeholder="např. 12.99"></div>
       </div>
       <div id="accountFields">
         <div class="field-row">
@@ -1092,9 +1389,21 @@ Minecraft acc | mc_user"></textarea>
     const total = state.accounts.length;
     const sklad = state.accounts.filter(a=>a.status==='sklad').length;
     const prodano = state.accounts.filter(a=>a.status==='prodano').length;
+    const stockPct = total ? Math.round(sklad/total*100) : 0;
+    const soldPct = total ? Math.round(prodano/total*100) : 0;
     el('statTotal').textContent = total;
     el('statSklad').textContent = sklad;
     el('statProdano').textContent = prodano;
+    if(el('ccCatCount')) el('ccCatCount').textContent = `${state.categories.length} ${state.categories.length===1?'kategorie':state.categories.length>1&&state.categories.length<5?'kategorie':'kategorií'}`;
+    if(el('ccStockPct')) el('ccStockPct').textContent = stockPct + ' % inventáře';
+    if(el('ccSoldPct')) el('ccSoldPct').textContent = soldPct + ' % inventáře';
+    if(el('ccTodayAdded')) el('ccTodayAdded').textContent = (state.activity && state.activity[dayKey(new Date())]) || 0;
+    if(el('ccHealthPct')) el('ccHealthPct').textContent = stockPct + '%';
+    if(el('ccStockBar')) el('ccStockBar').style.width = stockPct + '%';
+    if(el('ccHealthText')){
+      el('ccHealthText').textContent = !total ? 'Inventář je prázdný' : stockPct >= 70 ? 'Silná zásoba' : stockPct >= 35 ? 'Střední zásoba' : 'Nízká zásoba';
+    }
+    updateCommandMeta();
   }
 
   function renderChart(){
@@ -1204,6 +1513,20 @@ Minecraft acc | mc_user"></textarea>
     return list;
   }
 
+
+  function updateCommandMeta(visibleOverride){
+    const visible = typeof visibleOverride === 'number' ? visibleOverride : getFiltered().length;
+    const total = state.accounts.length;
+    if(el('ccVisibleCount')) el('ccVisibleCount').textContent = visible;
+    if(el('ccTotalCount')) el('ccTotalCount').textContent = total;
+    if(el('ccActiveCat')) el('ccActiveCat').textContent =
+      activeCategory==='all' ? 'Vše' : activeCategory==='__none__' ? 'Bez kategorie' : activeCategory;
+    if(el('ccActiveStatus')) el('ccActiveStatus').textContent =
+      statusFilter==='all' ? 'Vše' : statusFilter==='sklad' ? 'Skladem' : 'Prodáno';
+    const filtered = activeCategory!=='all' || statusFilter!=='all' || !!searchTerm;
+    if(el('ccClearFilters')) el('ccClearFilters').classList.toggle('show', filtered);
+  }
+
   function cardTemplate(a){
     const [c1,c2] = catGradient(a.category);
     const isPlainCode = a.type==='code' && (!a.title || a.title===a.code);
@@ -1219,7 +1542,12 @@ Minecraft acc | mc_user"></textarea>
         <div class="card-title">${escapeHtml(titleText)}</div>
       </div>
       <div class="badge">${escapeHtml(a.category||'Bez kategorie')}${a.type==='code'?' · 🎟️ kód':''}</div>
-      <div style="margin-top:10px;">
+      <div class="cc-card-meta">
+        <span class="cc-mini-tag">${a.type==='code'?'KEY':'ACCOUNT'}</span>
+        ${Number(a.price)>0 ? `<span class="cc-mini-tag price">Cena ${escapeHtml(Number(a.price).toLocaleString('cs-CZ',{maximumFractionDigits:2}))}</span>` : ''}
+        ${a.created ? `<span class="cc-mini-tag">${new Date(a.created).toLocaleDateString('cs-CZ',{day:'2-digit',month:'2-digit'})}</span>` : ''}
+      </div>
+      <div style="margin-top:9px;">
         ${bodyHtml}
       </div>
       ${a.note ? `<div class="note">${escapeHtml(a.note)}</div>` : ''}
@@ -1247,6 +1575,7 @@ Minecraft acc | mc_user"></textarea>
       grid.innerHTML = list.map(cardTemplate).join('');
     }
     updateSelectionBar();
+    updateCommandMeta(list.length);
   }
 
   function pruneSelection(){
@@ -1434,6 +1763,7 @@ Minecraft acc | mc_user"></textarea>
     el('f_pass').value = acc.pass||'';
     el('f_email').value = acc.email||'';
     el('f_code').value = acc.code||'';
+    el('f_price').value = acc.price || '';
     el('f_note').value = acc.note;
     updateFormTypeUI();
     openOverlay('overlayAccount');
@@ -1456,7 +1786,7 @@ Minecraft acc | mc_user"></textarea>
       pass: isCode ? '' : el('f_pass').value.trim(),
       email: isCode ? '' : el('f_email').value.trim(),
       code: isCode ? code : '',
-      price: 0,
+      price: Math.max(0, parseFloat(el('f_price').value)||0),
       note: el('f_note').value.trim(),
     };
     if(editingId){
@@ -1577,6 +1907,79 @@ Minecraft acc | mc_user"></textarea>
       renderAccounts();
     };
   });
+
+
+  // ---- command center UX ----
+  const ccDensityBtn = el('ccDensityBtn');
+  function applyDensity(compact){
+    document.body.classList.toggle('cc-compact', compact);
+    if(ccDensityBtn){
+      ccDensityBtn.classList.toggle('active', compact);
+      ccDensityBtn.innerHTML = compact ? '▦ &nbsp;Normální' : '▦ &nbsp;Kompaktní';
+    }
+    try{ localStorage.setItem('eld_cc_compact', compact ? '1' : '0'); }catch(e){}
+  }
+  try{ applyDensity(localStorage.getItem('eld_cc_compact') === '1'); }catch(e){ applyDensity(false); }
+  if(ccDensityBtn) ccDensityBtn.onclick = ()=>applyDensity(!document.body.classList.contains('cc-compact'));
+
+  if(el('ccRefreshBtn')) el('ccRefreshBtn').onclick = ()=>{
+    pruneSelection(); renderStats(); renderChart(); renderCategories(); renderCategorySelects(); renderAccounts();
+    toast('Dashboard obnoven ✓');
+  };
+
+  if(el('ccClearFilters')) el('ccClearFilters').onclick = ()=>{
+    activeCategory = 'all';
+    statusFilter = 'all';
+    searchTerm = '';
+    el('searchInput').value = '';
+    el('statusSeg').querySelectorAll('button').forEach(b=>b.classList.toggle('active', b.getAttribute('data-v')==='all'));
+    renderCategories();
+    renderAccounts();
+    toast('Filtry vyčištěny');
+  };
+
+  function setSelectedStatus(nextStatus){
+    if(!selectedIds.size) return;
+    let changed = 0;
+    state.accounts.forEach(a=>{
+      if(selectedIds.has(a.id) && a.status !== nextStatus){ a.status = nextStatus; changed++; }
+    });
+    if(!changed){ toast(nextStatus==='sklad' ? 'Vybrané už jsou skladem' : 'Vybrané už jsou prodané'); return; }
+    renderAll();
+    toast(`${changed} položek → ${nextStatus==='sklad'?'Skladem':'Prodáno'} ✓`);
+  }
+  if(el('ccMarkStock')) el('ccMarkStock').onclick = ()=>setSelectedStatus('sklad');
+  if(el('ccMarkSold')) el('ccMarkSold').onclick = ()=>setSelectedStatus('prodano');
+
+  const searchEl = el('searchInput');
+  searchEl.addEventListener('focus', ()=>document.body.classList.add('cc-searching'));
+  searchEl.addEventListener('blur', ()=>document.body.classList.remove('cc-searching'));
+
+  document.addEventListener('keydown', e=>{
+    const tag = (e.target && e.target.tagName || '').toLowerCase();
+    const typing = tag==='input' || tag==='textarea' || tag==='select';
+    if((e.ctrlKey || e.metaKey) && e.key.toLowerCase()==='k'){
+      e.preventDefault(); searchEl.focus(); searchEl.select(); return;
+    }
+    if(e.key==='/' && !typing){
+      e.preventDefault(); searchEl.focus(); return;
+    }
+    if(e.key==='Escape'){
+      const open = [...document.querySelectorAll('.overlay.show')].pop();
+      if(open){ open.classList.remove('show'); return; }
+      if(searchEl.value){
+        searchEl.value=''; searchTerm=''; renderAccounts(); searchEl.blur();
+      }
+    }
+  });
+
+  function ccTickClock(){
+    if(!el('ccClock')) return;
+    const d = new Date();
+    el('ccClock').textContent = '• ' + d.toLocaleTimeString('cs-CZ',{hour:'2-digit',minute:'2-digit'});
+  }
+  ccTickClock();
+  setInterval(ccTickClock, 30000);
 
   // ---- codes copy / export ----
   function slug(s){
