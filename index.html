@@ -2,8 +2,9 @@
 <html lang="cs">
 <head>
 <meta charset="UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sklad â€” Private Inventory</title>
+<title>Sklad — Private Inventory</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -265,7 +266,7 @@
   .card-title{min-width:0;flex:1;color:#eef2f7;font-size:12px;font-weight:750;line-height:1.35;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .card-check{padding:0;display:inline-flex;flex:none}
   .card-check input{appearance:none;width:15px;height:15px;margin:1px 0 0;padding:0;display:grid;place-items:center;background:#0a0d11;border:1px solid var(--line-strong);border-radius:4px;cursor:pointer}
-  .card-check input::after{content:'âœ“';color:#fff;font-size:9px;font-weight:900;transform:scale(0)}
+  .card-check input::after{content:'✓';color:#fff;font-size:9px;font-weight:900;transform:scale(0)}
   .card-check input:checked{background:var(--accent);border-color:var(--accent)}
   .card-check input:checked::after{transform:scale(1)}
   .badge{display:inline-flex;align-items:center;max-width:100%;padding:3px 7px;color:#dfe5ed;background:#1a2028;border:1px solid var(--line);border-radius:5px;font-size:7.5px;font-weight:800;letter-spacing:.55px;text-transform:uppercase;white-space:nowrap;box-shadow:none}
@@ -422,7 +423,7 @@
   <div class="gate-card">
     <div class="glogo">&#128274;</div>
     <h2>Storage</h2>
-    <p>Zadej heslo pro odeÅ¡ifrovÃ¡nÃ­ dat</p>
+    <p>Zadej heslo pro odešifrování dat</p>
     <div id="gateForm">
       <input type="password" id="gatePass" placeholder="Heslo" autocomplete="current-password">
       <button class="btn btn-primary" id="gateUnlock" style="justify-content:center">Odemknout</button>
@@ -439,101 +440,101 @@
       <p>Accounts, keys &amp; secure stock management <span id="ccClock" style="color:#5f6670"></span></p>
     </div>
     <div class="hero-actions">
-      <button class="btn" id="btnExportEnc" title="ZaÅ¡ifruje aktuÃ¡lnÃ­ data heslem a stÃ¡hne data.enc (ruÄnÃ­ zÃ¡loha)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> ZÃ¡loha</button>
-      <button class="btn btn-accent2" id="btnBulkOpen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg> HromadnÄ› pÅ™idat</button>
-      <button class="btn btn-primary" id="btnAddOpen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg> NovÃ½ ÃºÄet</button>
+      <button class="btn" id="btnExportEnc" title="Zašifruje aktuální data heslem a stáhne data.enc (ruční záloha)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Záloha</button>
+      <button class="btn btn-accent2" id="btnBulkOpen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg> Hromadně přidat</button>
+      <button class="btn btn-primary" id="btnAddOpen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg> Nový účet</button>
     </div>
     <svg class="hero-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"/></svg>
   </section>
 
   <div class="file-bar" id="cloudBar">
     <span class="file-dot" id="cloudDot"></span>
-    <span id="cloudStatusText">â˜ï¸ GitHub sync: vypnuto</span>
+    <span id="cloudStatusText">☁️ GitHub sync: vypnuto</span>
     <span class="spacer"></span>
-    <button class="btn btn-ghost" id="btnCloudSetup">â˜ï¸ Nastavit GitHub syncâ€¦</button>
+    <button class="btn btn-ghost" id="btnCloudSetup">☁️ Nastavit GitHub sync…</button>
   </div>
 
   <div class="cc-command-strip">
     <div class="cc-search-shell">
       <div class="search-row">
-        <input type="text" id="searchInput" placeholder="Hledat nÃ¡zev, login, email, kÃ³d nebo poznÃ¡mkuâ€¦" autocomplete="off">
+        <input type="text" id="searchInput" placeholder="Hledat název, login, email, kód nebo poznámku…" autocomplete="off">
       </div>
       <div class="cc-search-hint"><span>SEARCH</span><kbd>Ctrl</kbd><kbd>K</kbd></div>
     </div>
     <div class="cc-view-tools">
-      <button class="btn btn-ghost" id="ccDensityBtn" title="PÅ™epnout hustotu karet">â–¦ &nbsp;KompaktnÃ­</button>
-      <button class="btn btn-ghost" id="ccRefreshBtn" title="PÅ™ekreslit aktuÃ¡lnÃ­ data">â†» &nbsp;Obnovit</button>
+      <button class="btn btn-ghost" id="ccDensityBtn" title="Přepnout hustotu karet">▦ &nbsp;Kompaktní</button>
+      <button class="btn btn-ghost" id="ccRefreshBtn" title="Překreslit aktuální data">↻ &nbsp;Obnovit</button>
     </div>
   </div>
 
   <div class="cc-filter-meta">
     <span class="cc-meta-pill"><i class="cc-meta-dot"></i><span>Zobrazeno <b id="ccVisibleCount">0</b> / <b id="ccTotalCount">0</b></span></span>
-    <span class="cc-meta-pill">Kategorie: <b id="ccActiveCat">VÅ¡e</b></span>
-    <span class="cc-meta-pill">Filtr: <b id="ccActiveStatus">VÅ¡e</b></span>
+    <span class="cc-meta-pill">Kategorie: <b id="ccActiveCat">Vše</b></span>
+    <span class="cc-meta-pill">Filtr: <b id="ccActiveStatus">Vše</b></span>
     <span class="cc-meta-spacer"></span>
-    <button class="btn btn-ghost" id="ccClearFilters" style="min-height:31px;padding:6px 10px;font-size:10.5px">VyÄistit filtry</button>
+    <button class="btn btn-ghost" id="ccClearFilters" style="min-height:31px;padding:6px 10px;font-size:10.5px">Vyčistit filtry</button>
   </div>
 
   <div class="main-grid">
     <section class="inv-panel">
       <div class="inv-head">
-        <h2>InventÃ¡Å™</h2>
+        <h2>Inventář</h2>
         <div class="inv-tools">
         <div class="seg" id="statusSeg">
-          <button data-v="all" class="active">VÅ¡e</button>
+          <button data-v="all" class="active">Vše</button>
           <button data-v="sklad">Skladem</button>
-          <button data-v="prodano">ProdÃ¡no</button>
+          <button data-v="prodano">Prodáno</button>
         </div>
         <select id="sortSelect">
-          <option value="new">NejnovÄ›jÅ¡Ã­</option>
-          <option value="old">NejstarÅ¡Ã­</option>
-          <option value="name">NÃ¡zev A-Z</option>
-          <option value="price_desc">Cena â†“</option>
-          <option value="price_asc">Cena â†‘</option>
+          <option value="new">Nejnovější</option>
+          <option value="old">Nejstarší</option>
+          <option value="name">Název A-Z</option>
+          <option value="price_desc">Cena ↓</option>
+          <option value="price_asc">Cena ↑</option>
         </select>
-        <button class="btn btn-ghost" id="btnCopyCodes" title="ZkopÃ­ruje kÃ³dy z aktuÃ¡lnÃ­ho vÃ½bÄ›ru"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> KÃ³dy</button>
-        <button class="btn btn-ghost" id="btnExportCodes" title="Export kÃ³dÅ¯ z aktuÃ¡lnÃ­ho vÃ½bÄ›ru do .txt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> TXT</button>
-        <button class="btn btn-ghost" id="btnSelectAllToolbar" title="Vybrat vÅ¡echny viditelnÃ© poloÅ¾ky"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg> Vybrat vÅ¡e</button>
+        <button class="btn btn-ghost" id="btnCopyCodes" title="Zkopíruje kódy z aktuálního výběru"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Kódy</button>
+        <button class="btn btn-ghost" id="btnExportCodes" title="Export kódů z aktuálního výběru do .txt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> TXT</button>
+        <button class="btn btn-ghost" id="btnSelectAllToolbar" title="Vybrat všechny viditelné položky"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg> Vybrat vše</button>
         </div>
       </div>
 
       <div class="chips-row">
       <div class="cat-list" id="catList"></div>
       <div class="add-cat">
-        <input type="text" id="newCatInput" placeholder="NovÃ¡ kategorieâ€¦">
-        <button class="btn btn-ghost" id="btnAddCat" title="PÅ™idat kategorii"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></button>
+        <input type="text" id="newCatInput" placeholder="Nová kategorie…">
+        <button class="btn btn-ghost" id="btnAddCat" title="Přidat kategorii"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg></button>
       </div>
       </div>
 
       <div class="selection-bar" id="selectionBar">
-        <span id="selectionCount">VybrÃ¡no 0</span>
+        <span id="selectionCount">Vybráno 0</span>
         <span class="spacer"></span>
         <div class="cc-bulk-status">
-          <button class="btn btn-ghost" id="ccMarkStock" title="OznaÄit vybranÃ© jako skladem">â— Skladem</button>
-          <button class="btn btn-ghost" id="ccMarkSold" title="OznaÄit vybranÃ© jako prodanÃ©">â— ProdÃ¡no</button>
+          <button class="btn btn-ghost" id="ccMarkStock" title="Označit vybrané jako skladem">● Skladem</button>
+          <button class="btn btn-ghost" id="ccMarkSold" title="Označit vybrané jako prodané">● Prodáno</button>
         </div>
-        <button class="btn btn-ghost" id="btnCopySelected" title="ZkopÃ­ruje vybranÃ© kÃ³dy a ÃºÄty do schrÃ¡nky"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> KopÃ­rovat vybranÃ©</button>
-        <button class="btn btn-ghost" id="btnClearSelection">ZruÅ¡it vÃ½bÄ›r</button>
-        <button class="btn btn-danger" id="btnDeleteSelected"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg> Smazat vybranÃ©</button>
+        <button class="btn btn-ghost" id="btnCopySelected" title="Zkopíruje vybrané kódy a účty do schránky"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Kopírovat vybrané</button>
+        <button class="btn btn-ghost" id="btnClearSelection">Zrušit výběr</button>
+        <button class="btn btn-danger" id="btnDeleteSelected"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg> Smazat vybrané</button>
       </div>
 
       <div class="grid" id="accountGrid"></div>
     </section>
 
     <aside class="side">
-      <div class="stat-card glow-purple"><div class="label">Celkem poloÅ¾ek</div><div class="value" id="statTotal">0</div><div class="cc-stat-sub" id="ccCatCount">0 kategoriÃ­</div></div>
-      <div class="stat-card glow-green"><div class="label">Skladem</div><div class="value" id="statSklad">0</div><div class="cc-stat-sub" id="ccStockPct">0 % inventÃ¡Å™e</div></div>
-      <div class="stat-card glow-pink"><div class="label">ProdÃ¡no</div><div class="value" id="statProdano">0</div><div class="cc-stat-sub" id="ccSoldPct">0 % inventÃ¡Å™e</div></div>
-      <div class="stat-card"><div class="label">Dnes pÅ™idÃ¡no</div><div class="value" id="ccTodayAdded">0</div><div class="cc-stat-sub">novÃ½ch poloÅ¾ek</div></div>
+      <div class="stat-card glow-purple"><div class="label">Celkem položek</div><div class="value" id="statTotal">0</div><div class="cc-stat-sub" id="ccCatCount">0 kategorií</div></div>
+      <div class="stat-card glow-green"><div class="label">Skladem</div><div class="value" id="statSklad">0</div><div class="cc-stat-sub" id="ccStockPct">0 % inventáře</div></div>
+      <div class="stat-card glow-pink"><div class="label">Prodáno</div><div class="value" id="statProdano">0</div><div class="cc-stat-sub" id="ccSoldPct">0 % inventáře</div></div>
+      <div class="stat-card"><div class="label">Dnes přidáno</div><div class="value" id="ccTodayAdded">0</div><div class="cc-stat-sub">nových položek</div></div>
       <div class="stat-card chart-card">
-        <div class="label">Aktivita â€” poslednÃ­ch 14 dnÃ­</div>
+        <div class="label">Aktivita — posledních 14 dní</div>
         <div class="chart-bars" id="chartBars"></div>
       </div>
       <div class="stat-card cc-health-card">
         <div class="cc-health-row">
           <div class="cc-health-left">
-            <div class="cc-health-icon">âŒ</div>
-            <div><div class="cc-health-title">Inventory health</div><div class="cc-health-value" id="ccHealthText">ÄŒekÃ¡m na dataâ€¦</div></div>
+            <div class="cc-health-icon">⌁</div>
+            <div><div class="cc-health-title">Inventory health</div><div class="cc-health-value" id="ccHealthText">Čekám na data…</div></div>
           </div>
           <b id="ccHealthPct" style="font-size:17px;color:#ffad69">0%</b>
         </div>
@@ -546,21 +547,21 @@
 <!-- single account modal -->
 <div class="overlay" id="overlayAccount">
   <div class="modal">
-    <button class="close-x" data-close>âœ•</button>
-    <h2 id="accModalTitle">NovÃ½ ÃºÄet</h2>
-    <div class="sub">VyplÅˆ Ãºdaje o ÃºÄtu na prodej</div>
-    <div id="accNoCatHint" class="hint-box" style="display:none;">NejdÅ™Ã­v vytvoÅ™ alespoÅˆ jednu kategorii v levÃ©m panelu.</div>
+    <button class="close-x" data-close>✕</button>
+    <h2 id="accModalTitle">Nový účet</h2>
+    <div class="sub">Vyplň údaje o účtu na prodej</div>
+    <div id="accNoCatHint" class="hint-box" style="display:none;">Nejdřív vytvoř alespoň jednu kategorii v levém panelu.</div>
     <form id="accForm">
       <div class="field">
-        <label>Typ poloÅ¾ky</label>
+        <label>Typ položky</label>
         <div class="seg" id="typeSeg" style="width:100%;">
-          <button type="button" data-v="account" class="active" style="flex:1;">ðŸ”‘ ÃšÄet</button>
-          <button type="button" data-v="code" style="flex:1;">ðŸŽŸï¸ KÃ³d</button>
+          <button type="button" data-v="account" class="active" style="flex:1;">🔑 Účet</button>
+          <button type="button" data-v="code" style="flex:1;">🎟️ Kód</button>
         </div>
       </div>
       <div class="field">
-        <label id="f_title_label">NÃ¡zev ÃºÄtu</label>
-        <input type="text" id="f_title" placeholder="napÅ™. Fortnite - Save the World, lvl 130">
+        <label id="f_title_label">Název účtu</label>
+        <input type="text" id="f_title" placeholder="např. Fortnite - Save the World, lvl 130">
       </div>
       <div class="field-row">
         <div class="field">
@@ -571,19 +572,19 @@
           <label>Stav</label>
           <select id="f_status">
             <option value="sklad">Skladem</option>
-            <option value="prodano">ProdÃ¡no</option>
+            <option value="prodano">Prodáno</option>
           </select>
         </div>
       </div>
       <div class="field">
-        <label>Cena / hodnota <span style="text-transform:none;font-weight:500;color:#555c67">(volitelnÃ©, bez mÄ›ny)</span></label>
-        <div class="cc-price-prefix"><input type="number" id="f_price" min="0" step="0.01" placeholder="napÅ™. 12.99"></div>
+        <label>Cena / hodnota <span style="text-transform:none;font-weight:500;color:#555c67">(volitelné, bez měny)</span></label>
+        <div class="cc-price-prefix"><input type="number" id="f_price" min="0" step="0.01" placeholder="např. 12.99"></div>
       </div>
       <div id="accountFields">
         <div class="field-row">
           <div class="field">
             <label>Login</label>
-            <input type="text" id="f_login" placeholder="uÅ¾ivatelskÃ© jmÃ©no">
+            <input type="text" id="f_login" placeholder="uživatelské jméno">
           </div>
           <div class="field">
             <label>Heslo</label>
@@ -592,22 +593,22 @@
         </div>
         <div class="field">
           <label>Email</label>
-          <input type="text" id="f_email" placeholder="email k ÃºÄtu">
+          <input type="text" id="f_email" placeholder="email k účtu">
         </div>
       </div>
       <div id="codeFields" style="display:none;">
         <div class="field">
-          <label>KÃ³d</label>
-          <input type="text" id="f_code" placeholder="napÅ™. PXKY-NF-7FQK-6J3B-K" style="font-family:'Consolas',monospace;">
+          <label>Kód</label>
+          <input type="text" id="f_code" placeholder="např. PXKY-NF-7FQK-6J3B-K" style="font-family:'Consolas',monospace;">
         </div>
       </div>
       <div class="field">
-        <label>PoznÃ¡mka</label>
-        <textarea id="f_note" rows="2" placeholder="skiny, level, extra infoâ€¦"></textarea>
+        <label>Poznámka</label>
+        <textarea id="f_note" rows="2" placeholder="skiny, level, extra info…"></textarea>
       </div>
       <div class="modal-actions">
-        <button type="button" class="btn btn-ghost" data-close>ZruÅ¡it</button>
-        <button type="submit" class="btn btn-primary" id="accSubmitBtn">UloÅ¾it ÃºÄet</button>
+        <button type="button" class="btn btn-ghost" data-close>Zrušit</button>
+        <button type="submit" class="btn btn-primary" id="accSubmitBtn">Uložit účet</button>
       </div>
     </form>
   </div>
@@ -616,39 +617,39 @@
 <!-- bulk add modal -->
 <div class="overlay" id="overlayBulk">
   <div class="modal wide">
-    <button class="close-x" data-close>âœ•</button>
-    <h2>HromadnÃ© pÅ™idÃ¡nÃ­</h2>
-    <div class="sub">VloÅ¾ vÃ­c poloÅ¾ek najednou, kaÅ¾dou na novÃ½ Å™Ã¡dek</div>
-    <div id="bulkNoCatHint" class="hint-box" style="display:none;">NejdÅ™Ã­v vytvoÅ™ alespoÅˆ jednu kategorii v levÃ©m panelu.</div>
+    <button class="close-x" data-close>✕</button>
+    <h2>Hromadné přidání</h2>
+    <div class="sub">Vlož víc položek najednou, každou na nový řádek</div>
+    <div id="bulkNoCatHint" class="hint-box" style="display:none;">Nejdřív vytvoř alespoň jednu kategorii v levém panelu.</div>
     <div class="field">
-      <label>Typ poloÅ¾ek</label>
+      <label>Typ položek</label>
       <div class="seg" id="bulkTypeSeg" style="width:100%;">
-        <button type="button" data-v="account" class="active" style="flex:1;">ðŸ”‘ ÃšÄty (login/heslo)</button>
-        <button type="button" data-v="code" style="flex:1;">ðŸŽŸï¸ KÃ³dy</button>
+        <button type="button" data-v="account" class="active" style="flex:1;">🔑 Účty (login/heslo)</button>
+        <button type="button" data-v="code" style="flex:1;">🎟️ Kódy</button>
       </div>
     </div>
     <div class="field">
-      <label>Kategorie pro vÅ¡echny vloÅ¾enÃ© poloÅ¾ky</label>
+      <label>Kategorie pro všechny vložené položky</label>
       <select id="bulk_category"></select>
     </div>
     <div class="hint-box" id="bulkHintAccount">
-      FormÃ¡t Å™Ã¡dku (oddÄ›leno svislÃ­tkem <code>|</code>):<br>
-      <code>NÃ¡zev | Login | Heslo | Email | Cena | PoznÃ¡mka</code><br>
-      Login, heslo, email, cena a poznÃ¡mka jsou nepovinnÃ©.
+      Formát řádku (odděleno svislítkem <code>|</code>):<br>
+      <code>Název | Login | Heslo | Email | Cena | Poznámka</code><br>
+      Login, heslo, email, cena a poznámka jsou nepovinné.
     </div>
     <div class="hint-box" id="bulkHintCode" style="display:none;">
-      Jeden kÃ³d na Å™Ã¡dek, klidnÄ› rovnou zkopÃ­rovanÃ© z generÃ¡toru:<br>
-      <code>KÃ“D</code> nebo <code>KÃ“D | Cena | PoznÃ¡mka</code> â€” cena a poznÃ¡mka jsou nepovinnÃ©.<br>
-      PodporovÃ¡no je takÃ© <code>EMAIL:HESLO | Details: {"country":"ZemÄ› ðŸ‡¬ðŸ‡§", ...}</code> â€” uloÅ¾Ã­ se jako <code>EMAIL:HESLO | ZemÄ› ðŸ‡¬ðŸ‡§</code>.
+      Jeden kód na řádek, klidně rovnou zkopírované z generátoru:<br>
+      <code>KÓD</code> nebo <code>KÓD | Cena | Poznámka</code> — cena a poznámka jsou nepovinné.<br>
+      Podporováno je také <code>EMAIL:HESLO | Details: {"country":"Země 🇬🇧", ...}</code> — uloží se jako <code>EMAIL:HESLO | Země 🇬🇧</code>.
     </div>
     <div class="field">
-      <textarea class="bulk" id="bulkText" placeholder="Fortnite acc lvl 100 | john123 | tajneheslo | john@mail.com | 350 | mÃ¡ battle pass
+      <textarea class="bulk" id="bulkText" placeholder="Fortnite acc lvl 100 | john123 | tajneheslo | john@mail.com | 350 | má battle pass
 Valorant acc Radiant | val_pro | heslo2 | val@mail.com | 900
 Minecraft acc | mc_user"></textarea>
     </div>
     <div class="modal-actions">
-      <button type="button" class="btn btn-ghost" data-close>ZruÅ¡it</button>
-      <button type="button" class="btn btn-accent2" id="btnBulkSubmit">PÅ™idat vÅ¡echny ÃºÄty</button>
+      <button type="button" class="btn btn-ghost" data-close>Zrušit</button>
+      <button type="button" class="btn btn-accent2" id="btnBulkSubmit">Přidat všechny účty</button>
     </div>
   </div>
 </div>
@@ -656,18 +657,18 @@ Minecraft acc | mc_user"></textarea>
 <!-- confirm modal -->
 <div class="overlay" id="overlayGitHub">
   <div class="modal" style="max-width:460px;">
-    <h2>â˜ï¸ GitHub auto-sync</h2>
-    <div class="sub" style="margin-bottom:16px;">KaÅ¾dÃ¡ zmÄ›na se zaÅ¡ifruje tvÃ½m heslem a automaticky commitne jako <b>data.enc</b> do repa. Token zÅ¯stÃ¡vÃ¡ jen v tomto prohlÃ­Å¾eÄi (zaÅ¡ifrovanÃ½).</div>
+    <h2>☁️ GitHub auto-sync</h2>
+    <div class="sub" style="margin-bottom:16px;">Každá změna se zašifruje tvým heslem a automaticky commitne jako <b>data.enc</b> do repa. Token zůstává jen v tomto prohlížeči (zašifrovaný).</div>
     <div class="field-row">
-      <div class="field"><label>GitHub uÅ¾ivatel</label><input type="text" id="ghOwner" placeholder="tvuj-ucet"></div>
-      <div class="field"><label>RepozitÃ¡Å™</label><input type="text" id="ghRepo" placeholder="sklad"></div>
+      <div class="field"><label>GitHub uživatel</label><input type="text" id="ghOwner" placeholder="tvuj-ucet"></div>
+      <div class="field"><label>Repozitář</label><input type="text" id="ghRepo" placeholder="sklad"></div>
     </div>
     <div class="field"><label>Branch</label><input type="text" id="ghBranch" value="main"></div>
     <div class="field"><label>Fine-grained token (Contents: Read &amp; write)</label><input type="password" id="ghToken" placeholder="github_pat_..."></div>
     <div class="modal-actions">
-      <button type="button" class="btn btn-ghost" id="ghCancelBtn">ZavÅ™Ã­t</button>
+      <button type="button" class="btn btn-ghost" id="ghCancelBtn">Zavřít</button>
       <button type="button" class="btn btn-danger" id="ghDisconnectBtn" style="display:none;">Vypnout sync</button>
-      <button type="button" class="btn btn-primary" id="ghSaveBtn">UloÅ¾it a otestovat</button>
+      <button type="button" class="btn btn-primary" id="ghSaveBtn">Uložit a otestovat</button>
     </div>
     <div class="sub" id="ghMsg" style="margin-top:12px;min-height:16px;"></div>
   </div>
@@ -677,7 +678,7 @@ Minecraft acc | mc_user"></textarea>
     <h2 id="confirmTitle">Potvrdit akci</h2>
     <div class="sub" id="confirmMessage" style="margin-bottom:18px;"></div>
     <div class="modal-actions">
-      <button type="button" class="btn btn-ghost" id="confirmCancelBtn">ZruÅ¡it</button>
+      <button type="button" class="btn btn-ghost" id="confirmCancelBtn">Zrušit</button>
       <button type="button" class="btn btn-danger" id="confirmOkBtn">Potvrdit</button>
     </div>
   </div>
@@ -710,15 +711,15 @@ Minecraft acc | mc_user"></textarea>
       <div><strong>Sklad</strong><span>Private inventory</span></div>
     </div>
     <div class="sidebar-nav">
-      <div class="sidebar-nav-item active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg><span>InventÃ¡Å™</span></div>
-      <div class="sidebar-nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V9m5 10V5m5 14v-7m5 7V3"/></svg><span>PÅ™ehled zÃ¡sob</span></div>
+      <div class="sidebar-nav-item active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg><span>Inventář</span></div>
+      <div class="sidebar-nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V9m5 10V5m5 14v-7m5 7V3"/></svg><span>Přehled zásob</span></div>
     </div>
     <div class="sidebar-section">
       <div class="sidebar-section-head"><span>Kategorie</span><b id="sidebarCategoryCount">0</b></div>
       <div class="sidebar-category-slot"></div>
     </div>
     <div class="sidebar-footer">
-      <div class="sidebar-security"><i></i><span>Data jsou Å¡ifrovanÃ¡ pÅ™ed odeslÃ¡nÃ­m na GitHub.</span></div>
+      <div class="sidebar-security"><i></i><span>Data jsou šifrovaná před odesláním na GitHub.</span></div>
       <div class="sidebar-backup-slot"></div>
     </div>`;
 
@@ -739,9 +740,9 @@ Minecraft acc | mc_user"></textarea>
 
   sidebar.querySelector('.sidebar-category-slot').appendChild(categories);
   if(backup) sidebar.querySelector('.sidebar-backup-slot').appendChild(backup);
-  hero.querySelector('h1').textContent = 'PÅ™ehled zÃ¡sob';
+  hero.querySelector('h1').textContent = 'Přehled zásob';
   const heroText = hero.querySelector('p');
-  if(heroText) heroText.innerHTML = 'ÃšÄty, kÃ³dy a bezpeÄnÃ¡ sprÃ¡va skladu <span id="ccClock"></span>';
+  if(heroText) heroText.innerHTML = 'Účty, kódy a bezpečná správa skladu <span id="ccClock"></span>';
   inventory.insertBefore(command, inventory.firstChild);
   inventory.insertBefore(meta, inventory.querySelector('.selection-bar'));
   inner.append(hero, cloud, overview, inventory);
@@ -776,7 +777,7 @@ Minecraft acc | mc_user"></textarea>
   let state = load();
 
   function load(){
-    // data Å¾ijÃ­ jen na GitHubu â€” lokÃ¡lnÄ› se nic nenaÄÃ­tÃ¡
+    // data žijí jen na GitHubu — lokálně se nic nenačítá
     return { categories: [], accounts: [], activity: {} };
   }
   let saveSuppressed = false;
@@ -805,7 +806,7 @@ Minecraft acc | mc_user"></textarea>
   let sortBy = 'new';
   let editingId = null;
 
-  // ---- dennÃ­ poÄÃ­tadlo pÅ™idanÃ½ch poloÅ¾ek (persistentnÃ­, pÅ™eÅ¾ije mazÃ¡nÃ­ ÃºÄtÅ¯) ----
+  // ---- denní počítadlo přidaných položek (persistentní, přežije mazání účtů) ----
   function dayKey(d){
     return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
   }
@@ -816,7 +817,7 @@ Minecraft acc | mc_user"></textarea>
   }
   function normalizeActivity(){
     if(state.activity) return;
-    // jednorÃ¡zovÃ½ backfill ze stÃ¡vajÃ­cÃ­ch ÃºÄtÅ¯ podle data vytvoÅ™enÃ­
+    // jednorázový backfill ze stávajících účtů podle data vytvoření
     state.activity = {};
     state.accounts.forEach(a=>{
       if(!a.created) return;
@@ -858,8 +859,8 @@ Minecraft acc | mc_user"></textarea>
   }
 
   function copyText(text, btn, msg){
-    if(!text){ toast('Nic ke zkopÃ­rovÃ¡nÃ­'); return; }
-    const done = ()=>{ toast(msg || 'ZkopÃ­rovÃ¡no âœ“'); if(btn){ const o=btn.innerHTML; btn.innerHTML='âœ“'; setTimeout(()=>btn.innerHTML=o,900);} };
+    if(!text){ toast('Nic ke zkopírování'); return; }
+    const done = ()=>{ toast(msg || 'Zkopírováno ✓'); if(btn){ const o=btn.innerHTML; btn.innerHTML='✓'; setTimeout(()=>btn.innerHTML=o,900);} };
     if(navigator.clipboard && navigator.clipboard.writeText){
       navigator.clipboard.writeText(text).then(done).catch(()=>fallbackCopy(text,done));
     } else fallbackCopy(text,done);
@@ -868,7 +869,7 @@ Minecraft acc | mc_user"></textarea>
     const ta = document.createElement('textarea');
     ta.value = text; ta.style.position='fixed'; ta.style.opacity='0';
     document.body.appendChild(ta); ta.select();
-    try{ document.execCommand('copy'); cb(); }catch(e){ toast('ZkopÃ­rovÃ¡nÃ­ selhalo'); }
+    try{ document.execCommand('copy'); cb(); }catch(e){ toast('Zkopírování selhalo'); }
     document.body.removeChild(ta);
   }
 
@@ -893,14 +894,14 @@ Minecraft acc | mc_user"></textarea>
     el('statTotal').textContent = total;
     el('statSklad').textContent = sklad;
     el('statProdano').textContent = prodano;
-    if(el('ccCatCount')) el('ccCatCount').textContent = `${state.categories.length} ${state.categories.length===1?'kategorie':state.categories.length>1&&state.categories.length<5?'kategorie':'kategoriÃ­'}`;
-    if(el('ccStockPct')) el('ccStockPct').textContent = stockPct + ' % inventÃ¡Å™e';
-    if(el('ccSoldPct')) el('ccSoldPct').textContent = soldPct + ' % inventÃ¡Å™e';
+    if(el('ccCatCount')) el('ccCatCount').textContent = `${state.categories.length} ${state.categories.length===1?'kategorie':state.categories.length>1&&state.categories.length<5?'kategorie':'kategorií'}`;
+    if(el('ccStockPct')) el('ccStockPct').textContent = stockPct + ' % inventáře';
+    if(el('ccSoldPct')) el('ccSoldPct').textContent = soldPct + ' % inventáře';
     if(el('ccTodayAdded')) el('ccTodayAdded').textContent = (state.activity && state.activity[dayKey(new Date())]) || 0;
     if(el('ccHealthPct')) el('ccHealthPct').textContent = stockPct + '%';
     if(el('ccStockBar')) el('ccStockBar').style.width = stockPct + '%';
     if(el('ccHealthText')){
-      el('ccHealthText').textContent = !total ? 'InventÃ¡Å™ je prÃ¡zdnÃ½' : stockPct >= 70 ? 'SilnÃ¡ zÃ¡soba' : stockPct >= 35 ? 'StÅ™ednÃ­ zÃ¡soba' : 'NÃ­zkÃ¡ zÃ¡soba';
+      el('ccHealthText').textContent = !total ? 'Inventář je prázdný' : stockPct >= 70 ? 'Silná zásoba' : stockPct >= 35 ? 'Střední zásoba' : 'Nízká zásoba';
     }
     updateCommandMeta();
   }
@@ -918,7 +919,7 @@ Minecraft acc | mc_user"></textarea>
     const act = state.activity || {};
     days.forEach(d=>{ d.count = act[dayKey(new Date(d.t))] || 0; });
     const max = Math.max(1, ...days.map(d=>d.count));
-    bars.innerHTML = days.map(d=>`<div class="cb-col" title="${d.label} â€” ${d.count} \u00fa\u010dt\u016f">
+    bars.innerHTML = days.map(d=>`<div class="cb-col" title="${d.label} — ${d.count} \u00fa\u010dt\u016f">
         <div class="cb-val">${d.count || ''}</div>
         <div class="cb-bar${d.count ? '' : ' zero'}" style="height:${Math.max(3, Math.round(d.count/max*100))}%"></div>
         <div class="cb-lbl">${d.label}</div>
@@ -928,7 +929,7 @@ Minecraft acc | mc_user"></textarea>
   function renderCategories(){
     const allCount = state.accounts.length;
     let html = `<div class="cat-item${activeCategory==='all'?' active':''}" data-cat="all">
-      <div class="name"><span class="dot" style="color:#a1a1aa;background:#a1a1aa;"></span>VÅ¡e</div>
+      <div class="name"><span class="dot" style="color:#a1a1aa;background:#a1a1aa;"></span>Vše</div>
       <span class="count">${allCount}</span>
     </div>`;
 
@@ -938,7 +939,7 @@ Minecraft acc | mc_user"></textarea>
       html += `<div class="cat-item${activeCategory===cat?' active':''}" data-cat="${escapeAttr(cat)}">
         <div class="name"><span class="dot" style="color:${c1};background:${c1};"></span><span>${escapeHtml(cat)}</span></div>
         <span class="count">${count}</span>
-        <span class="del" data-cat-del="${escapeAttr(cat)}" title="Smazat kategorii">âœ•</span>
+        <span class="del" data-cat-del="${escapeAttr(cat)}" title="Smazat kategorii">✕</span>
       </div>`;
     });
 
@@ -958,7 +959,7 @@ Minecraft acc | mc_user"></textarea>
     if(delEl){
       e.stopPropagation();
       const cat = delEl.getAttribute('data-cat-del');
-      showConfirm(`Smazat kategorii "${cat}"? ÃšÄty v nÃ­ zÅ¯stanou, ale budou bez kategorie.`, ()=>{
+      showConfirm(`Smazat kategorii "${cat}"? Účty v ní zůstanou, ale budou bez kategorie.`, ()=>{
         state.categories = state.categories.filter(c=>c!==cat);
         state.accounts.forEach(a=>{ if(a.category===cat) a.category=''; });
         if(activeCategory===cat) activeCategory='all';
@@ -1019,9 +1020,9 @@ Minecraft acc | mc_user"></textarea>
     if(el('ccVisibleCount')) el('ccVisibleCount').textContent = visible;
     if(el('ccTotalCount')) el('ccTotalCount').textContent = total;
     if(el('ccActiveCat')) el('ccActiveCat').textContent =
-      activeCategory==='all' ? 'VÅ¡e' : activeCategory==='__none__' ? 'Bez kategorie' : activeCategory;
+      activeCategory==='all' ? 'Vše' : activeCategory==='__none__' ? 'Bez kategorie' : activeCategory;
     if(el('ccActiveStatus')) el('ccActiveStatus').textContent =
-      statusFilter==='all' ? 'VÅ¡e' : statusFilter==='sklad' ? 'Skladem' : 'ProdÃ¡no';
+      statusFilter==='all' ? 'Vše' : statusFilter==='sklad' ? 'Skladem' : 'Prodáno';
     const filtered = activeCategory!=='all' || statusFilter!=='all' || !!searchTerm;
     if(el('ccClearFilters')) el('ccClearFilters').classList.toggle('show', filtered);
   }
@@ -1032,7 +1033,7 @@ Minecraft acc | mc_user"></textarea>
     const bodyHtml = a.type==='code'
       ? codeBox(a.code)
       : `${a.login ? row('Login', a.login, true) : ''}${a.pass ? row('Heslo', a.pass, true, true) : ''}${a.email ? row('Email', a.email, true) : ''}`;
-    const titleText = isPlainCode ? (a.category || 'KÃ³d') : a.title;
+    const titleText = isPlainCode ? (a.category || 'Kód') : a.title;
     const checked = selectedIds.has(a.id) ? 'checked' : '';
     const selectedClass = selectedIds.has(a.id) ? ' selected' : '';
     return `<div class="card${selectedClass}" data-card="${a.id}" style="--cat-gradient:linear-gradient(180deg, ${c1}, ${c2});--cat-glow:${hexToRgba(c1,0.55)};">
@@ -1041,7 +1042,7 @@ Minecraft acc | mc_user"></textarea>
           <label class="card-check"><input type="checkbox" data-select="${a.id}" ${checked}></label>
           <div class="card-title">${escapeHtml(titleText)}</div>
         </div>
-        <div class="badge">${escapeHtml(a.category||'Bez kategorie')}${a.type==='code'?' Â· kÃ³d':''}</div>
+        <div class="badge">${escapeHtml(a.category||'Bez kategorie')}${a.type==='code'?' · kód':''}</div>
         <div class="cc-card-meta">
           <span class="cc-mini-tag">${a.type==='code'?'KEY':'ACCOUNT'}</span>
           ${Number(a.price)>0 ? `<span class="cc-mini-tag price">Cena ${escapeHtml(Number(a.price).toLocaleString('cs-CZ',{maximumFractionDigits:2}))}</span>` : ''}
@@ -1054,7 +1055,7 @@ Minecraft acc | mc_user"></textarea>
       </div>
       <div class="card-bottom">
         <button class="status-btn ${a.status==='sklad'?'status-sklad':'status-prodano'}" data-toggle="${a.id}">
-          <span class="s-dot"></span>${a.status==='sklad' ? 'Skladem' : 'ProdÃ¡no'}
+          <span class="s-dot"></span>${a.status==='sklad' ? 'Skladem' : 'Prodáno'}
         </button>
         <div class="card-tools">
           <button class="icon-btn" data-edit="${a.id}" title="Upravit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg></button>
@@ -1068,10 +1069,10 @@ Minecraft acc | mc_user"></textarea>
     const grid = el('accountGrid');
     const list = getFiltered();
     if(list.length===0){
-      grid.innerHTML = `<div class="empty"><div class="big">ðŸ“­</div>
+      grid.innerHTML = `<div class="empty"><div class="big">📭</div>
         ${state.accounts.length===0
-          ? 'ZatÃ­m tu nemÃ¡Å¡ Å¾Ã¡dnÃ© ÃºÄty.<br><b>PÅ™idej prvnÃ­ ÃºÄet</b> nebo pouÅ¾ij <b>HromadnÃ© pÅ™idÃ¡nÃ­</b>.'
-          : 'Nic neodpovÃ­dÃ¡ zvolenÃ©mu filtru.'}</div>`;
+          ? 'Zatím tu nemáš žádné účty.<br><b>Přidej první účet</b> nebo použij <b>Hromadné přidání</b>.'
+          : 'Nic neodpovídá zvolenému filtru.'}</div>`;
     } else {
       grid.innerHTML = list.map(cardTemplate).join('');
     }
@@ -1088,12 +1089,12 @@ Minecraft acc | mc_user"></textarea>
     const bar = el('selectionBar');
     const count = selectedIds.size;
     bar.classList.toggle('show', count>0);
-    el('selectionCount').textContent = `VybrÃ¡no ${count}`;
+    el('selectionCount').textContent = `Vybráno ${count}`;
   }
 
   // ---- account grid: event delegation (bound once, robust against re-renders) ----
   el('accountGrid').addEventListener('mousedown', e=>{
-    if(e.shiftKey && e.target.closest('.card')) e.preventDefault(); // aÅ¥ shift+klik neoznaÄuje text
+    if(e.shiftKey && e.target.closest('.card')) e.preventDefault(); // ať shift+klik neoznačuje text
   });
 
   el('accountGrid').addEventListener('click', e=>{
@@ -1118,7 +1119,7 @@ Minecraft acc | mc_user"></textarea>
     if(revealBtn){
       const target = revealBtn.previousElementSibling;
       const real = revealBtn.getAttribute('data-reveal');
-      if(target.textContent === real){ target.textContent = 'â€¢'.repeat(Math.min(real.length,10)); revealBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"/><circle cx="12" cy="12" r="3"/></svg>'; }
+      if(target.textContent === real){ target.textContent = '•'.repeat(Math.min(real.length,10)); revealBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"/><circle cx="12" cy="12" r="3"/></svg>'; }
       else { target.textContent = real; revealBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><path d="M14.12 14.12a3 3 0 1 1-4.24-4.24"/><path d="M1 1l22 22"/><path d="M6.61 6.61A13.53 13.53 0 0 0 1 12s4 8 11 8a9.74 9.74 0 0 0 5.39-1.61"/></svg>'; }
       return;
     }
@@ -1158,7 +1159,7 @@ Minecraft acc | mc_user"></textarea>
 
   el('btnSelectAllToolbar').onclick = ()=>{
     const ids = getFiltered().map(a=>a.id);
-    if(ids.length===0){ toast('Nic k vÃ½bÄ›ru v aktuÃ¡lnÃ­m filtru'); return; }
+    if(ids.length===0){ toast('Nic k výběru v aktuálním filtru'); return; }
     ids.forEach(id=>selectedIds.add(id));
     renderAccounts();
   };
@@ -1175,36 +1176,36 @@ Minecraft acc | mc_user"></textarea>
       if(who) return who;
       return a.title || '';
     }).filter(Boolean);
-    if(lines.length===0){ toast('VybranÃ© poloÅ¾ky nemajÃ­ co zkopÃ­rovat'); return; }
-    copyText(lines.join('\n'), null, `ZkopÃ­rovÃ¡no ${lines.length} poloÅ¾ek âœ“`);
+    if(lines.length===0){ toast('Vybrané položky nemají co zkopírovat'); return; }
+    copyText(lines.join('\n'), null, `Zkopírováno ${lines.length} položek ✓`);
   };
 
   el('btnDeleteSelected').onclick = ()=>{
     const count = selectedIds.size;
     if(count===0) return;
-    showConfirm(`Opravdu smazat ${count} vybranÃ½ch poloÅ¾ek? Tuto akci nelze vrÃ¡tit zpÄ›t.`, ()=>{
+    showConfirm(`Opravdu smazat ${count} vybraných položek? Tuto akci nelze vrátit zpět.`, ()=>{
       state.accounts = state.accounts.filter(a=>!selectedIds.has(a.id));
       selectedIds.clear();
       renderAll();
-      toast(`SmazÃ¡no ${count} poloÅ¾ek âœ“`);
-    }, 'Smazat vÅ¡e');
+      toast(`Smazáno ${count} položek ✓`);
+    }, 'Smazat vše');
   };
 
   function codeBox(code){
     return `<div class="code-box">
       <span class="code-text">${escapeHtml(code)}</span>
-      <button class="icon-btn" data-copy="${escapeAttr(code)}" title="KopÃ­rovat kÃ³d"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
+      <button class="icon-btn" data-copy="${escapeAttr(code)}" title="Kopírovat kód"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
     </div>`;
   }
 
   function row(label, value, copyable, secret){
     const id = Math.random().toString(36).slice(2,8);
-    const display = secret ? 'â€¢'.repeat(Math.min(value.length,10)) : escapeHtml(value);
+    const display = secret ? '•'.repeat(Math.min(value.length,10)) : escapeHtml(value);
     return `<div class="row">
       <span class="k">${label}</span>
       <span class="v" id="v_${id}">${display}</span>
       ${secret ? `<button class="icon-btn" data-reveal="${escapeAttr(value)}" title="Zobrazit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"/><circle cx="12" cy="12" r="3"/></svg></button>` : ''}
-      ${copyable ? `<button class="icon-btn" data-copy="${escapeAttr(value)}" title="KopÃ­rovat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>` : ''}
+      ${copyable ? `<button class="icon-btn" data-copy="${escapeAttr(value)}" title="Kopírovat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>` : ''}
     </div>`;
   }
 
@@ -1230,10 +1231,10 @@ Minecraft acc | mc_user"></textarea>
     const isCode = formType==='code';
     el('accountFields').style.display = isCode ? 'none' : 'block';
     el('codeFields').style.display = isCode ? 'block' : 'none';
-    el('f_title_label').textContent = isCode ? 'Popisek (nepovinnÃ©)' : 'NÃ¡zev ÃºÄtu';
-    el('f_title').placeholder = isCode ? 'nechÃ¡Å¡ prÃ¡zdnÃ© = pouÅ¾ije se kÃ³d' : 'napÅ™. Fortnite - Save the World, lvl 130';
-    el('accSubmitBtn').textContent = isCode ? 'UloÅ¾it kÃ³d' : 'UloÅ¾it ÃºÄet';
-    el('accModalTitle').textContent = (editingId ? 'Upravit ' : 'NovÃ½ ') + (isCode ? 'kÃ³d' : 'ÃºÄet');
+    el('f_title_label').textContent = isCode ? 'Popisek (nepovinné)' : 'Název účtu';
+    el('f_title').placeholder = isCode ? 'necháš prázdné = použije se kód' : 'např. Fortnite - Save the World, lvl 130';
+    el('accSubmitBtn').textContent = isCode ? 'Uložit kód' : 'Uložit účet';
+    el('accModalTitle').textContent = (editingId ? 'Upravit ' : 'Nový ') + (isCode ? 'kód' : 'účet');
   }
 
   document.getElementById('typeSeg').querySelectorAll('button').forEach(b=>{
@@ -1272,12 +1273,12 @@ Minecraft acc | mc_user"></textarea>
 
   el('accForm').addEventListener('submit', function(e){
     e.preventDefault();
-    if(state.categories.length===0){ toast('NejdÅ™Ã­v vytvoÅ™ kategorii'); return; }
+    if(state.categories.length===0){ toast('Nejdřív vytvoř kategorii'); return; }
     const isCode = formType==='code';
     const code = el('f_code').value.trim();
-    if(isCode && !code){ toast('VyplÅˆ kÃ³d'); return; }
+    if(isCode && !code){ toast('Vyplň kód'); return; }
     let title = el('f_title').value.trim();
-    if(!title) title = isCode ? (code || 'KÃ³d') : 'Bez nÃ¡zvu';
+    if(!title) title = isCode ? (code || 'Kód') : 'Bez názvu';
     const data = {
       type: formType,
       title,
@@ -1292,12 +1293,12 @@ Minecraft acc | mc_user"></textarea>
     };
     if(editingId){
       Object.assign(state.accounts.find(a=>a.id===editingId), data);
-      toast((isCode?'KÃ³d':'ÃšÄet')+' upraven âœ“');
+      toast((isCode?'Kód':'Účet')+' upraven ✓');
     } else {
       data.id = uid(); data.created = Date.now();
       state.accounts.push(data);
       bumpActivity(1);
-      toast((isCode?'KÃ³d':'ÃšÄet')+' pÅ™idÃ¡n âœ“');
+      toast((isCode?'Kód':'Účet')+' přidán ✓');
     }
     closeOverlay('overlayAccount');
     renderAll();
@@ -1311,8 +1312,8 @@ Minecraft acc | mc_user"></textarea>
     el('bulkHintCode').style.display = isCode ? 'block' : 'none';
     el('bulkText').placeholder = isCode
       ? 'PXKY-NF-7FQK-6J3B-K\nPXKY-NF-5PDC-CYNJ-M\nPXKY-NF-BK3F-55NH-D\nPXKY-NF-3CZR-N4ZV-D'
-      : 'Fortnite acc lvl 100 | john123 | tajneheslo | john@mail.com | 350 | mÃ¡ battle pass\nValorant acc Radiant | val_pro | heslo2 | val@mail.com | 900\nMinecraft acc | mc_user';
-    el('btnBulkSubmit').textContent = isCode ? 'PÅ™idat vÅ¡echny kÃ³dy' : 'PÅ™idat vÅ¡echny ÃºÄty';
+      : 'Fortnite acc lvl 100 | john123 | tajneheslo | john@mail.com | 350 | má battle pass\nValorant acc Radiant | val_pro | heslo2 | val@mail.com | 900\nMinecraft acc | mc_user';
+    el('btnBulkSubmit').textContent = isCode ? 'Přidat všechny kódy' : 'Přidat všechny účty';
   }
 
   document.getElementById('bulkTypeSeg').querySelectorAll('button').forEach(b=>{
@@ -1320,8 +1321,8 @@ Minecraft acc | mc_user"></textarea>
   });
 
   function parseBulkCodeLine(line){
-    // FormÃ¡t checkeru: email:heslo | Details: {"country":"United Kingdom ðŸ‡¬ðŸ‡§", ...}
-    // CelÃ½ JSON bereme najednou, protoÅ¾e hodnoty uvnitÅ™ mohou takÃ© obsahovat znak |.
+    // Formát checkeru: email:heslo | Details: {"country":"United Kingdom 🇬🇧", ...}
+    // Celý JSON bereme najednou, protože hodnoty uvnitř mohou také obsahovat znak |.
     const detailsMatch = line.match(/^(.*?)\s*\|\s*Details:\s*(\{.*\})\s*$/i);
     if(detailsMatch){
       const credentials = detailsMatch[1].trim();
@@ -1330,7 +1331,7 @@ Minecraft acc | mc_user"></textarea>
         const details = JSON.parse(detailsMatch[2]);
         country = String(details.country || '').trim();
       }catch(err){
-        // NeplatnÃ½ JSON nezablokuje celÃ½ import; uloÅ¾Ã­ se alespoÅˆ email:heslo.
+        // Neplatný JSON nezablokuje celý import; uloží se alespoň email:heslo.
       }
       return {
         code: country ? `${credentials} | ${country}` : credentials,
@@ -1354,7 +1355,7 @@ Minecraft acc | mc_user"></textarea>
       bulkMode = 'code';
       setTypeSeg(document.getElementById('bulkTypeSeg'), 'code');
       updateBulkUI();
-      toast('DetekovÃ¡ny ÄistÃ© kÃ³dy â†’ pÅ™epnuto na reÅ¾im KÃ³dy');
+      toast('Detekovány čisté kódy → přepnuto na režim Kódy');
     }
   });
 
@@ -1368,10 +1369,10 @@ Minecraft acc | mc_user"></textarea>
   };
 
   el('btnBulkSubmit').onclick = ()=>{
-    if(state.categories.length===0){ toast('NejdÅ™Ã­v vytvoÅ™ kategorii'); return; }
+    if(state.categories.length===0){ toast('Nejdřív vytvoř kategorii'); return; }
     const cat = el('bulk_category').value;
     const lines = el('bulkText').value.split('\n').map(l=>l.trim()).filter(Boolean);
-    if(lines.length===0){ toast('VloÅ¾ alespoÅˆ jeden Å™Ã¡dek'); return; }
+    if(lines.length===0){ toast('Vlož alespoň jeden řádek'); return; }
     let count=0;
     if(bulkMode==='code'){
       lines.forEach(line=>{
@@ -1390,7 +1391,7 @@ Minecraft acc | mc_user"></textarea>
       lines.forEach(line=>{
         const parts = line.split('|').map(p=>p.trim());
         state.accounts.push({
-          id: uid(), type:'account', title: parts[0]||'Bez nÃ¡zvu', category: cat,
+          id: uid(), type:'account', title: parts[0]||'Bez názvu', category: cat,
           login: parts[1]||'', pass: parts[2]||'', email: parts[3]||'', code:'',
           price: parseFloat(parts[4])||0, note: parts[5]||'',
           status:'sklad', created: Date.now()+count,
@@ -1401,7 +1402,7 @@ Minecraft acc | mc_user"></textarea>
     if(count>0) bumpActivity(count);
     closeOverlay('overlayBulk');
     renderAll();
-    toast(`PÅ™idÃ¡no ${count} ${bulkMode==='code'?'kÃ³dÅ¯':'ÃºÄtÅ¯'} âœ“`);
+    toast(`Přidáno ${count} ${bulkMode==='code'?'kódů':'účtů'} ✓`);
   };
 
   document.querySelectorAll('[data-close]').forEach(b=>{
@@ -1418,11 +1419,11 @@ Minecraft acc | mc_user"></textarea>
     const input = el('newCatInput');
     const name = input.value.trim();
     if(!name) return;
-    if(state.categories.includes(name)){ toast('Kategorie uÅ¾ existuje'); return; }
+    if(state.categories.includes(name)){ toast('Kategorie už existuje'); return; }
     state.categories.push(name);
     input.value='';
     renderAll();
-    toast('Kategorie pÅ™idÃ¡na âœ“');
+    toast('Kategorie přidána ✓');
   }
 
   // ---- toolbar ----
@@ -1444,7 +1445,7 @@ Minecraft acc | mc_user"></textarea>
     document.body.classList.toggle('cc-compact', compact);
     if(ccDensityBtn){
       ccDensityBtn.classList.toggle('active', compact);
-      ccDensityBtn.innerHTML = compact ? 'â–¦ &nbsp;BÄ›Å¾nÃ© zobrazenÃ­' : 'â–¦ &nbsp;KompaktnÃ­';
+      ccDensityBtn.innerHTML = compact ? '▦ &nbsp;Běžné zobrazení' : '▦ &nbsp;Kompaktní';
     }
     try{ localStorage.setItem('eld_cc_compact', compact ? '1' : '0'); }catch(e){}
   }
@@ -1453,7 +1454,7 @@ Minecraft acc | mc_user"></textarea>
 
   if(el('ccRefreshBtn')) el('ccRefreshBtn').onclick = ()=>{
     pruneSelection(); renderStats(); renderChart(); renderCategories(); renderCategorySelects(); renderAccounts();
-    toast('Dashboard obnoven âœ“');
+    toast('Dashboard obnoven ✓');
   };
 
   if(el('ccClearFilters')) el('ccClearFilters').onclick = ()=>{
@@ -1464,7 +1465,7 @@ Minecraft acc | mc_user"></textarea>
     el('statusSeg').querySelectorAll('button').forEach(b=>b.classList.toggle('active', b.getAttribute('data-v')==='all'));
     renderCategories();
     renderAccounts();
-    toast('Filtry vyÄiÅ¡tÄ›ny');
+    toast('Filtry vyčištěny');
   };
 
   function setSelectedStatus(nextStatus){
@@ -1473,9 +1474,9 @@ Minecraft acc | mc_user"></textarea>
     state.accounts.forEach(a=>{
       if(selectedIds.has(a.id) && a.status !== nextStatus){ a.status = nextStatus; changed++; }
     });
-    if(!changed){ toast(nextStatus==='sklad' ? 'VybranÃ© uÅ¾ jsou skladem' : 'VybranÃ© uÅ¾ jsou prodanÃ©'); return; }
+    if(!changed){ toast(nextStatus==='sklad' ? 'Vybrané už jsou skladem' : 'Vybrané už jsou prodané'); return; }
     renderAll();
-    toast(`${changed} poloÅ¾ek â†’ ${nextStatus==='sklad'?'Skladem':'ProdÃ¡no'} âœ“`);
+    toast(`${changed} položek → ${nextStatus==='sklad'?'Skladem':'Prodáno'} ✓`);
   }
   if(el('ccMarkStock')) el('ccMarkStock').onclick = ()=>setSelectedStatus('sklad');
   if(el('ccMarkSold')) el('ccMarkSold').onclick = ()=>setSelectedStatus('prodano');
@@ -1505,15 +1506,15 @@ Minecraft acc | mc_user"></textarea>
   function ccTickClock(){
     if(!el('ccClock')) return;
     const d = new Date();
-    el('ccClock').textContent = 'â€¢ ' + d.toLocaleTimeString('cs-CZ',{hour:'2-digit',minute:'2-digit'});
+    el('ccClock').textContent = '• ' + d.toLocaleTimeString('cs-CZ',{hour:'2-digit',minute:'2-digit'});
   }
   ccTickClock();
   setInterval(ccTickClock, 30000);
 
   // ---- codes copy / export ----
   function slug(s){
-    const map = {'Ã¡':'a','Ä':'c','Ä':'d','Ã©':'e','Ä›':'e','Ã­':'i','Åˆ':'n','Ã³':'o','Å™':'r','Å¡':'s','Å¥':'t','Ãº':'u','Å¯':'u','Ã½':'y','Å¾':'z'};
-    let out = (s||'polozky').toLowerCase().replace(/[Ã¡ÄÄÃ©Ä›Ã­ÅˆÃ³Å™Å¡Å¥ÃºÅ¯Ã½Å¾]/g, ch => map[ch] || ch);
+    const map = {'á':'a','č':'c','ď':'d','é':'e','ě':'e','í':'i','ň':'n','ó':'o','ř':'r','š':'s','ť':'t','ú':'u','ů':'u','ý':'y','ž':'z'};
+    let out = (s||'polozky').toLowerCase().replace(/[áčďéěíňóřšťúůýž]/g, ch => map[ch] || ch);
     out = out.replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
     return out || 'polozky';
   }
@@ -1524,30 +1525,30 @@ Minecraft acc | mc_user"></textarea>
   }
   function filterSummary(){
     const parts = [];
-    parts.push('kategorie: ' + (activeCategory==='all' ? 'VÅ¡e' : activeCategory==='__none__' ? 'Bez kategorie' : activeCategory));
-    if(statusFilter!=='all') parts.push('stav: ' + (statusFilter==='sklad' ? 'Skladem' : 'ProdÃ¡no'));
-    if(searchTerm) parts.push(`hledÃ¡nÃ­: "${searchTerm}"`);
+    parts.push('kategorie: ' + (activeCategory==='all' ? 'Vše' : activeCategory==='__none__' ? 'Bez kategorie' : activeCategory));
+    if(statusFilter!=='all') parts.push('stav: ' + (statusFilter==='sklad' ? 'Skladem' : 'Prodáno'));
+    if(searchTerm) parts.push(`hledání: "${searchTerm}"`);
     return parts.join(', ');
   }
   el('btnCopyCodes').onclick = ()=>{
     const codes = getFiltered().filter(a=>a.type==='code').map(a=>a.code).filter(Boolean);
-    if(codes.length===0){ toast(`Å½Ã¡dnÃ© kÃ³dy (${filterSummary()})`); return; }
-    copyText(codes.join('\n'), null, `ZkopÃ­rovÃ¡no ${codes.length} kÃ³dÅ¯ âœ“`);
+    if(codes.length===0){ toast(`Žádné kódy (${filterSummary()})`); return; }
+    copyText(codes.join('\n'), null, `Zkopírováno ${codes.length} kódů ✓`);
   };
   el('btnExportCodes').onclick = ()=>{
     const codes = getFiltered().filter(a=>a.type==='code').map(a=>a.code).filter(Boolean);
-    if(codes.length===0){ toast(`Å½Ã¡dnÃ© kÃ³dy (${filterSummary()})`); return; }
+    if(codes.length===0){ toast(`Žádné kódy (${filterSummary()})`); return; }
     const blob = new Blob([codes.join('\n')], {type:'text/plain'});
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url; a.download = `kody-${slug(activeCategoryLabel())}-${new Date().toISOString().slice(0,10)}.txt`;
     a.click();
     URL.revokeObjectURL(url);
-    toast(`ExportovÃ¡no ${codes.length} kÃ³dÅ¯ âœ“`);
+    toast(`Exportováno ${codes.length} kódů ✓`);
   };
 
 
-  // ===== Å¡ifrovanÃ¡ data pro GitHub Pages =====
+  // ===== šifrovaná data pro GitHub Pages =====
   const ENC_FILE = 'data.enc';
   const _te = new TextEncoder(), _td = new TextDecoder();
   const b64e = buf => { const u = new Uint8Array(buf); let s=''; for(let i=0;i<u.length;i+=0x8000) s += String.fromCharCode.apply(null, u.subarray(i,i+0x8000)); return btoa(s); };
@@ -1609,7 +1610,7 @@ Minecraft acc | mc_user"></textarea>
       return await fetch(url, {...(options || {}), signal:controller.signal});
     }catch(e){
       if(e && e.name === 'AbortError'){
-        const timeoutError = new Error('PÅ™ipojenÃ­ vyprÅ¡elo');
+        const timeoutError = new Error('Připojení vypršelo');
         timeoutError.isNetworkError = true;
         throw timeoutError;
       }
@@ -1632,11 +1633,11 @@ Minecraft acc | mc_user"></textarea>
   function friendlyGhError(err){
     const status = Number(err && err.status) || 0;
     if(!navigator.onLine) return 'jsi offline';
-    if(status === 401) return 'GitHub token je neplatnÃ½ nebo vyprÅ¡el';
-    if(status === 403) return 'token nemÃ¡ oprÃ¡vnÄ›nÃ­ k zÃ¡pisu';
-    if(status === 404) return 'repozitÃ¡Å™, vÄ›tev nebo data.enc nebyly nalezeny';
-    if(status) return 'GitHub vrÃ¡til chybu HTTP ' + status;
-    return 'pÅ™ipojenÃ­ bylo doÄasnÄ› pÅ™eruÅ¡eno';
+    if(status === 401) return 'GitHub token je neplatný nebo vypršel';
+    if(status === 403) return 'token nemá oprávnění k zápisu';
+    if(status === 404) return 'repozitář, větev nebo data.enc nebyly nalezeny';
+    if(status) return 'GitHub vrátil chybu HTTP ' + status;
+    return 'připojení bylo dočasně přerušeno';
   }
   async function ghGetFile(){
     const res = await ghFetch(ghUrl() + '?ref=' + encodeURIComponent(ghCfg.branch) + '&t=' + Date.now(), {headers: ghHeaders(), cache:'no-store'});
@@ -1649,14 +1650,14 @@ Minecraft acc | mc_user"></textarea>
     const bar = el('cloudBar'); bar.classList.add('show');
     const dot = el('cloudDot'), txt = el('cloudStatusText');
     dot.classList.toggle('connected', mode === 'ok');
-    if(mode === 'off')       txt.textContent = 'â˜ï¸ GitHub sync: vypnuto â€” nastav sync, aby se zmÄ›ny uloÅ¾ily';
-    else if(mode === 'sync') txt.textContent = 'â˜ï¸ UklÃ¡dÃ¡m na GitHubâ€¦';
-    else if(mode === 'ok')   txt.textContent = 'â˜ï¸ UloÅ¾eno na GitHub âœ“ ' + new Date().toLocaleTimeString('cs-CZ', {hour:'2-digit', minute:'2-digit'});
-    else if(mode === 'on')   txt.textContent = 'â˜ï¸ GitHub sync zapnutÃ½' + (ghCfg ? ' (' + ghCfg.owner + '/' + ghCfg.repo + ')' : '');
-    else if(mode === 'retry') txt.textContent = 'â†» Sync se obnovÃ­ automaticky: ' + (extra || 'ÄekÃ¡m na pÅ™ipojenÃ­');
-    else if(mode === 'err')  txt.textContent = 'âš ï¸ Sync selhal: ' + (extra || 'neznÃ¡mÃ¡ chyba');
-    else if(mode === 'nosync') txt.textContent = 'âš ï¸ Sync nenÃ­ nastavenÃ½ â€” zmÄ›ny se NEUKLÃDAJÃ! Klikni na nastavenÃ­ â†’';
-    el('btnCloudSetup').textContent = ghCfg ? 'âš™ï¸ Sync nastavenÃ­' : 'â˜ï¸ Nastavit GitHub syncâ€¦';
+    if(mode === 'off')       txt.textContent = '☁️ GitHub sync: vypnuto — nastav sync, aby se změny uložily';
+    else if(mode === 'sync') txt.textContent = '☁️ Ukládám na GitHub…';
+    else if(mode === 'ok')   txt.textContent = '☁️ Uloženo na GitHub ✓ ' + new Date().toLocaleTimeString('cs-CZ', {hour:'2-digit', minute:'2-digit'});
+    else if(mode === 'on')   txt.textContent = '☁️ GitHub sync zapnutý' + (ghCfg ? ' (' + ghCfg.owner + '/' + ghCfg.repo + ')' : '');
+    else if(mode === 'retry') txt.textContent = '↻ Sync se obnoví automaticky: ' + (extra || 'čekám na připojení');
+    else if(mode === 'err')  txt.textContent = '⚠️ Sync selhal: ' + (extra || 'neznámá chyba');
+    else if(mode === 'nosync') txt.textContent = '⚠️ Sync není nastavený — změny se NEUKLÁDAJÍ! Klikni na nastavení →';
+    el('btnCloudSetup').textContent = ghCfg ? '⚙️ Sync nastavení' : '☁️ Nastavit GitHub sync…';
   }
   function scheduleGhPush(delay){
     if(!ghCfg || !ghDirty) return;
@@ -1685,7 +1686,7 @@ Minecraft acc | mc_user"></textarea>
       if(isRetryableGhError(e)){
         ghRetryCount++;
         retryDelay = Math.min(30000, 1000 * Math.pow(2, Math.min(ghRetryCount, 5)));
-        cloudStatus('retry', friendlyGhError(e) + ' â€” zkusÃ­m to znovu');
+        cloudStatus('retry', friendlyGhError(e) + ' — zkusím to znovu');
       }else{
         cloudStatus('err', friendlyGhError(e));
       }
@@ -1698,8 +1699,8 @@ Minecraft acc | mc_user"></textarea>
     }
   }
 
-  // Firefox mÅ¯Å¾e pÅ™i pÅ™epnutÃ­ tabu krÃ¡tce pozastavit sÃ­Å¥ nebo ÄasovaÄe.
-  // Po nÃ¡vratu/obnovenÃ­ pÅ™ipojenÃ­ proto rozehranÃ½ sync ihned bezpeÄnÄ› dokonÄÃ­me.
+  // Firefox může při přepnutí tabu krátce pozastavit síť nebo časovače.
+  // Po návratu/obnovení připojení proto rozehraný sync ihned bezpečně dokončíme.
   document.addEventListener('visibilitychange', ()=>{
     if(!document.hidden && ghDirty) scheduleGhPush(100);
   });
@@ -1710,7 +1711,7 @@ Minecraft acc | mc_user"></textarea>
   function prefillGh(){
     if(ghCfg){
       el('ghOwner').value = ghCfg.owner; el('ghRepo').value = ghCfg.repo; el('ghBranch').value = ghCfg.branch;
-      el('ghToken').value = ''; el('ghToken').placeholder = 'token uloÅ¾en â€” vyplÅˆ jen pÅ™i zmÄ›nÄ›';
+      el('ghToken').value = ''; el('ghToken').placeholder = 'token uložen — vyplň jen při změně';
       el('ghDisconnectBtn').style.display = 'inline-flex';
     } else {
       const h = location.hostname, seg = location.pathname.split('/').filter(Boolean);
@@ -1730,24 +1731,24 @@ Minecraft acc | mc_user"></textarea>
     const owner = el('ghOwner').value.trim(), repo = el('ghRepo').value.trim();
     const branch = el('ghBranch').value.trim() || 'main';
     let token = el('ghToken').value.trim();
-    if(!owner || !repo){ el('ghMsg').textContent = 'VyplÅˆ uÅ¾ivatele a repo'; return; }
+    if(!owner || !repo){ el('ghMsg').textContent = 'Vyplň uživatele a repo'; return; }
     if(!token && ghCfg) token = ghCfg.token;
-    if(!token){ el('ghMsg').textContent = 'VyplÅˆ token'; return; }
-    if(!sessionPass){ el('ghMsg').textContent = 'ChybÃ­ heslo â€” obnov strÃ¡nku a odemkni ji'; return; }
-    el('ghMsg').textContent = 'Testuji pÅ™Ã­stupâ€¦';
+    if(!token){ el('ghMsg').textContent = 'Vyplň token'; return; }
+    if(!sessionPass){ el('ghMsg').textContent = 'Chybí heslo — obnov stránku a odemkni ji'; return; }
+    el('ghMsg').textContent = 'Testuji přístup…';
     const prev = ghCfg;
     ghCfg = {owner, repo, branch, token};
     try{
       const res = await fetch('https://api.github.com/repos/' + owner + '/' + repo, {headers: ghHeaders()});
-      if(!res.ok) throw new Error('HTTP ' + res.status + (res.status === 401 ? ' â€” Å¡patnÃ½ token' : res.status === 404 ? ' â€” repo nenalezeno / token nemÃ¡ pÅ™Ã­stup' : ''));
+      if(!res.ok) throw new Error('HTTP ' + res.status + (res.status === 401 ? ' — špatný token' : res.status === 404 ? ' — repo nenalezeno / token nemá přístup' : ''));
       const tokenEnc = await encryptRaw(sessionPass, token);
       localStorage.setItem(GH_CFG_KEY, JSON.stringify({owner, repo, branch, tokenEnc}));
       cloudStatus('on');
       closeOverlay('overlayGitHub');
-      toast('GitHub sync zapnut âœ“');
+      toast('GitHub sync zapnut ✓');
       ghDirty = true;
       ghRevision++;
-      ghPush(); // hned commitne aktuÃ¡lnÃ­ stav jako data.enc
+      ghPush(); // hned commitne aktuální stav jako data.enc
     }catch(e){
       ghCfg = prev;
       el('ghMsg').textContent = 'Chyba: ' + e.message;
@@ -1768,7 +1769,7 @@ Minecraft acc | mc_user"></textarea>
   }
 
   async function attemptUnlock(pass){
-    gateMsg('OdemykÃ¡mâ€¦');
+    gateMsg('Odemykám…');
     ghCfg = await loadGhCfg(pass);
     let txt = null;
     if(ghCfg){
@@ -1778,18 +1779,18 @@ Minecraft acc | mc_user"></textarea>
     if(txt === null){
       sessionPass = pass; sessionStorage.setItem('sklad_pw', pass);
       cloudStatus(ghCfg ? 'on' : 'off');
-      gateMsg('data.enc na GitHubu nenalezen â€” zaÄÃ­nÃ¡Å¡ s prÃ¡zdnÃ½m skladem');
+      gateMsg('data.enc na GitHubu nenalezen — začínáš s prázdným skladem');
       setTimeout(hideGate, 700);
       return;
     }
     let payload;
     try{ payload = await decryptEnc(txt, pass); }
-    catch(e){ gateMsg('Å patnÃ© heslo', true); sessionStorage.removeItem('sklad_pw'); return; }
+    catch(e){ gateMsg('Špatné heslo', true); sessionStorage.removeItem('sklad_pw'); return; }
     sessionPass = pass; sessionStorage.setItem('sklad_pw', pass);
     cloudStatus(ghCfg ? 'on' : 'off');
     state = payload.state; selectedIds.clear();
     normalizeActivity();
-    // Ãºklid po starÅ¡Ã­ch verzÃ­ch, kterÃ© uklÃ¡daly data lokÃ¡lnÄ›
+    // úklid po starších verzích, které ukládaly data lokálně
     try{ localStorage.removeItem(STORE_KEY); localStorage.removeItem('sklad_sync_hash'); }catch(e){}
     saveSuppressed = true; renderAll(); saveSuppressed = false;
     hideGate();
@@ -1808,7 +1809,7 @@ Minecraft acc | mc_user"></textarea>
 
   el('btnExportEnc').onclick = async ()=>{
     let p = sessionPass;
-    if(!p){ p = window.prompt('Heslo pro zaÅ¡ifrovÃ¡nÃ­ dat:') || ''; if(!p) return; sessionPass = p; sessionStorage.setItem('sklad_pw', p); }
+    if(!p){ p = window.prompt('Heslo pro zašifrování dat:') || ''; if(!p) return; sessionPass = p; sessionStorage.setItem('sklad_pw', p); }
     const txt = await encryptState(p);
     const blob = new Blob([txt], {type:'application/json'});
     const url = URL.createObjectURL(blob);
@@ -1816,7 +1817,7 @@ Minecraft acc | mc_user"></textarea>
     a.href = url; a.download = 'data.enc';
     a.click();
     URL.revokeObjectURL(url);
-    toast('data.enc staÅ¾eno â€” nahraj ho do GitHub repa âœ“');
+    toast('data.enc staženo — nahraj ho do GitHub repa ✓');
   };
 
   saveSuppressed = true; renderAll(); saveSuppressed = false;
@@ -1824,4 +1825,3 @@ Minecraft acc | mc_user"></textarea>
 </script>
 </body>
 </html>
-
