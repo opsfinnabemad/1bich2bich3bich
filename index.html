@@ -9,7 +9,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='16' fill='%235b7cff'/><path d='M17 22h30M17 32h30M17 42h20' fill='none' stroke='white' stroke-width='5' stroke-linecap='round'/></svg>">
-<!-- Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-database-compat.js"></script>
 </head>
@@ -243,7 +242,7 @@
   .workspace-sidebar .add-cat{display:grid;grid-template-columns:minmax(0,1fr) 34px;gap:5px;margin-top:10px}
   .workspace-sidebar .add-cat input{width:100%;min-width:0;height:34px;padding:0 9px;border-radius:8px;font-size:9.5px}
   .workspace-sidebar .add-cat .btn{width:34px;min-height:34px;padding:0;border-radius:8px}
-  .workspace-sidebar #btnExportEnc{width:100%;justify-content:flex-start;min-height:38px}
+  .workspace-sidebar #btnExportEnc, .workspace-sidebar #btnImportTrigger{width:100%;justify-content:flex-start;min-height:38px}
 
   .selection-bar{
     display:none;align-items:center;gap:7px;flex-wrap:wrap;margin:10px 0 0;padding:9px 10px;
@@ -443,6 +442,8 @@
       <p>Accounts, keys &amp; secure stock management <span id="ccClock" style="color:#5f6670"></span></p>
     </div>
     <div class="hero-actions">
+      <input type="file" id="fileImportEnc" accept=".enc,.txt" style="display:none">
+      <button class="btn" id="btnImportTrigger" title="Import data from data.enc file"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg> Import backup</button>
       <button class="btn" id="btnExportEnc" title="Encrypts current data with password and downloads data.enc (manual backup)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Backup</button>
       <button class="btn btn-accent2" id="btnBulkOpen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg> Bulk add</button>
       <button class="btn btn-primary" id="btnAddOpen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg> New account</button>
@@ -682,7 +683,11 @@ Minecraft acc | mc_user"></textarea>
   const inventory = mainGrid && mainGrid.querySelector('.inv-panel');
   const oldSide = mainGrid && mainGrid.querySelector('.side');
   const categories = inventory && inventory.querySelector('.chips-row');
+  
   const backup = hero && hero.querySelector('#btnExportEnc');
+  const importBtn = hero && hero.querySelector('#btnImportTrigger');
+  const importInput = hero && hero.querySelector('#fileImportEnc');
+
   if(!hero || !cloud || !command || !meta || !inventory || !oldSide || !categories) return;
 
   const shell = document.createElement('div');
@@ -704,7 +709,7 @@ Minecraft acc | mc_user"></textarea>
     </div>
     <div class="sidebar-footer">
       <div class="sidebar-security"><i></i><span>Data is encrypted before being sent to Firebase.</span></div>
-      <div class="sidebar-backup-slot"></div>
+      <div class="sidebar-backup-slot" style="display:grid; gap:6px;"></div>
     </div>`;
 
   const main = document.createElement('main');
@@ -723,7 +728,11 @@ Minecraft acc | mc_user"></textarea>
   overview.append(metrics, insights);
 
   sidebar.querySelector('.sidebar-category-slot').appendChild(categories);
+  
+  if(importInput) sidebar.querySelector('.sidebar-backup-slot').appendChild(importInput);
+  if(importBtn) sidebar.querySelector('.sidebar-backup-slot').appendChild(importBtn);
   if(backup) sidebar.querySelector('.sidebar-backup-slot').appendChild(backup);
+  
   hero.querySelector('h1').textContent = 'Stock Overview';
   const heroText = hero.querySelector('p');
   if(heroText) heroText.innerHTML = 'Accounts, keys &amp; secure stock management <span id="ccClock"></span>';
@@ -1663,6 +1672,33 @@ Minecraft acc | mc_user"></textarea>
     URL.revokeObjectURL(url);
     toast('Záloha stažena ✓');
   };
+
+  if(el('btnImportTrigger')){
+    el('btnImportTrigger').onclick = () => el('fileImportEnc').click();
+    el('fileImportEnc').onchange = (e) => {
+      const file = e.target.files[0];
+      if(!file) return;
+      const reader = new FileReader();
+      reader.onload = async (ev) => {
+        try {
+          const txt = ev.target.result;
+          const payload = await decryptEnc(txt, sessionPass); 
+          await db.ref('sklad_data').set(txt);
+          
+          state = payload.state;
+          saveSuppressed = true;
+          renderAll();
+          saveSuppressed = false;
+          
+          toast('Stará data z GitHubu úspěšně nahrána do Firebase ✓');
+        } catch(err) {
+          alert('Chyba při nahrávání: špatné heslo nebo neplatný soubor.');
+        }
+        e.target.value = '';
+      };
+      reader.readAsText(file);
+    };
+  }
 
 })();
 </script>
