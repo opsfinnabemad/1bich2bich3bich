@@ -1616,30 +1616,36 @@ Minecraft acc | mc_user"></textarea>
   function hideGate(){ gateEl.classList.add('hidden'); setTimeout(()=>{ gateEl.style.display='none'; }, 350); }
   function gateMsg(t, isErr){ const m = el('gateMsg'); m.textContent = t || ''; m.classList.toggle('err', !!isErr); }
 
-  async function attemptUnlock(pass){
+   async function attemptUnlock(pass){
     gateMsg('Připojuji k databázi...');
     
     const snapshot = await db.ref('sklad_data').once('value');
     const txt = snapshot.val();
 
+    // Pokud by někdo smazal celou Firebase databázi, nepustíme ho vytvořit novou
     if(!txt) {
+      gateMsg('Databáze je prázdná. Nahraj data přes tlačítko Import.', true);
       sessionPass = pass; sessionStorage.setItem('sklad_pw', pass);
-      gateMsg('Nová databáze, začínáme...');
-      setTimeout(hideGate, 700);
+      setTimeout(hideGate, 2000);
       cloudStatus('ok');
       startFirebaseListener();
       return;
     }
 
     try { 
+      // ZDE JE OPRAVDOVÁ OCHRANA:
+      // Pokusíme se dešifrovat data z Firebase zadaným heslem.
+      // Pokud heslo není 'barofrajeris', dešifrování spadne a kód skočí do bloku catch(e)
       const payload = await decryptEnc(txt, pass); 
       state = payload.state; 
     } catch(e) { 
-      gateMsg('Špatné heslo', true); 
+      // Sem to skočí, když někdo zadá cokoliv jiného než tvé správné heslo
+      gateMsg('Špatné heslo! Přístup odepřen.', true); 
       sessionStorage.removeItem('sklad_pw'); 
       return; 
     }
 
+    // Pokud heslo prošlo, pustíme uživatele dovnitř
     sessionPass = pass; sessionStorage.setItem('sklad_pw', pass);
     cloudStatus('ok');
     selectedIds.clear();
