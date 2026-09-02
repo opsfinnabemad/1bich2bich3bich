@@ -16,7 +16,6 @@
 <body>
 <style id="warehouse-ui-2026">
   :root {
-    /* Flat Clean Basic Dark Palette */
     --bg: #0a0c0f;
     --sidebar: #0d1014;
     --surface: #11151a;
@@ -28,7 +27,6 @@
     --muted: #8d98a7;
     --muted-2: #5f6977;
     
-    /* Clean Blue Accent */
     --accent: #3b82f6;
     --accent-hi: #60a5fa;
     --accent-soft: rgba(59, 130, 246, 0.12);
@@ -73,15 +71,18 @@
   .sidebar-logo svg{width:18px;height:18px}
   .sidebar-brand strong{display:block;font-size:15px;font-weight:800;letter-spacing:-.25px}
   .sidebar-brand span{display:block;margin-top:2px;color:var(--muted-2);font-size:9px;font-weight:700;letter-spacing:1.05px;text-transform:uppercase}
+  
   .sidebar-nav{display:grid;gap:5px;padding-bottom:20px;border-bottom:1px solid var(--line)}
   .sidebar-nav-item{
-    display:flex;align-items:center;gap:10px;min-height:40px;padding:0 11px;
+    display:flex;align-items:center;justify-content:space-between; gap:10px;min-height:40px;padding:0 11px;
     color:var(--muted);border:1px solid transparent;border-radius:var(--radius);
-    font-size:12px;font-weight:700;
+    font-size:12px;font-weight:700; cursor:pointer; transition:0.2s;
   }
+  .sidebar-nav-item:hover{background:var(--surface-2);color:#fff;}
   .sidebar-nav-item svg{width:17px;height:17px;color:var(--muted-2)}
   .sidebar-nav-item.active{color:#fff;background:var(--accent-soft);border-color:rgba(59, 130, 246, 0.18)}
   .sidebar-nav-item.active svg{color:var(--accent-hi)}
+  
   .sidebar-section{min-height:0;display:flex;flex-direction:column;flex:1;padding-top:22px}
   .sidebar-section-head{display:flex;align-items:center;justify-content:space-between;padding:0 7px 11px}
   .sidebar-section-head span{color:var(--muted-2);font-size:9px;font-weight:800;letter-spacing:1.15px;text-transform:uppercase}
@@ -108,7 +109,7 @@
   .btn{
     min-height:36px;padding:0 14px;display:inline-flex;align-items:center;justify-content:center;gap:7px;
     color:#dce3ec;background:var(--surface-2);border:1px solid var(--line);
-    border-radius:var(--radius);font-size:11px;font-weight:700;transition:.14s ease;
+    border-radius:var(--radius);font-size:11px;font-weight:700;transition:.14s ease; cursor:pointer;
   }
   .btn:hover{color:#fff;background:var(--surface-3);border-color:var(--line-strong);}
   .btn:active{transform:translateY(1px)}
@@ -121,6 +122,8 @@
   .btn-ghost:hover{color:#fff;background:var(--surface-2)}
   .btn-danger{color:#fca5a5;background:rgba(239, 68, 68, 0.08);border-color:rgba(239, 68, 68, 0.2)}
   .btn-danger:hover{color:#fecaca;background:rgba(239, 68, 68, 0.13);border-color:rgba(239, 68, 68, 0.32)}
+  .btn-success{color:#6ee7b7;background:rgba(16, 185, 129, 0.08);border-color:rgba(16, 185, 129, 0.2)}
+  .btn-success:hover{color:#a7f3d0;background:rgba(16, 185, 129, 0.13);border-color:rgba(16, 185, 129, 0.32)}
 
   .file-bar{
     display:none;align-items:center;gap:9px;min-height:42px;margin:0 0 16px;padding:8px 10px 8px 14px;
@@ -156,15 +159,6 @@
   .cb-col:hover .cb-bar:not(.zero){background:var(--accent-hi)}
   .cb-lbl{color:var(--muted-2);font-size:7.5px;}
 
-  .cc-health-card{min-height:160px;padding:16px;display:flex;flex-direction:column;justify-content:space-between}
-  .cc-health-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
-  .cc-health-left{display:flex;align-items:center;gap:10px}
-  .cc-health-icon{width:32px;height:32px;display:grid;place-items:center;color:var(--accent-hi);background:var(--accent-soft);border-radius:8px}
-  .cc-health-title{color:var(--muted-2);font-size:8px;font-weight:800;text-transform:uppercase}
-  .cc-health-value{margin-top:4px;color:#d2d9e2;font-size:11px;font-weight:650}
-  .cc-stockbar{height:6px;margin-top:16px;background:var(--surface-3);border-radius:99px}
-  .cc-stockbar>i{display:block;height:100%;background:var(--accent);border-radius:inherit;transition:width .3s ease}
-
   .inv-panel{
     padding:20px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-md);
   }
@@ -189,7 +183,7 @@
   .inv-tools{display:flex;gap:6px;flex-wrap:wrap}
 
   .seg{display:flex;background:#06080a;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;}
-  .seg button{padding:0 12px;min-height:32px;background:transparent;border:0;color:var(--muted);font-size:10px;font-weight:700}
+  .seg button{padding:0 12px;min-height:32px;background:transparent;border:0;color:var(--muted);font-size:10px;font-weight:700;cursor:pointer;}
   .seg button.active{color:#fff;background:var(--line-strong);}
   
   select{background:#06080a;border:1px solid var(--line);border-radius:var(--radius);padding:0 10px;font-size:10px;height:34px;outline:none;}
@@ -208,7 +202,6 @@
   .cat-item .dot{width:6px;height:6px;border-radius:50%;flex:none;}
   .cat-item .count{font-size:9px;background:var(--surface-3);padding:2px 6px;border-radius:6px;color:var(--muted-2);}
   
-  /* Edit & Delete in categories */
   .cat-actions { display:flex; align-items:center; gap:2px; opacity:0; }
   .cat-item:hover .cat-actions { opacity:1; }
   .cat-actions span { width:22px; height:22px; display:grid; place-items:center; border-radius:4px; font-size:11px; }
@@ -247,7 +240,7 @@
   .row .k{width:36px;font-size:8px;color:var(--muted-2);text-transform:uppercase;font-weight:700;}
   .row .v{flex:1;background:#06080a;border:1px solid var(--line);border-radius:6px;padding:4px 8px;font-size:10px;font-family:monospace;color:#d8dee7;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   
-  .icon-btn{width:24px;height:24px;display:grid;place-items:center;background:var(--surface-2);border:1px solid var(--line);border-radius:6px;color:var(--muted);transition:0.1s;}
+  .icon-btn{width:24px;height:24px;display:grid;place-items:center;background:var(--surface-2);border:1px solid var(--line);border-radius:6px;color:var(--muted);transition:0.1s; cursor:pointer;}
   .icon-btn:hover{background:var(--surface-3);color:#fff;}
   .icon-btn svg{width:11px;height:11px}
   
@@ -256,7 +249,7 @@
   .note{font-size:9.5px;color:var(--muted-2);margin-top:6px;padding-left:8px;border-left:2px solid var(--line-strong);}
 
   .card-bottom{display:flex;justify-content:flex-end;align-items:center;gap:10px;}
-  .status-btn{padding:4px 8px;display:inline-flex;align-items:center;gap:5px;font-size:8px;font-weight:800;text-transform:uppercase;border-radius:4px;background:transparent;}
+  .status-btn{padding:4px 8px;display:inline-flex;align-items:center;gap:5px;font-size:8px;font-weight:800;text-transform:uppercase;border-radius:4px;background:transparent; cursor:pointer;}
   .s-dot{width:5px;height:5px;border-radius:50%;background:currentColor;}
   .status-sklad{color:var(--good);border:1px solid rgba(16,185,129,0.2);background:rgba(16,185,129,0.05);}
   .status-prodano{color:var(--bad);border:1px solid rgba(239,68,68,0.2);background:rgba(239,68,68,0.05);}
@@ -272,14 +265,14 @@
   .selection-bar.show{display:flex;position:sticky;top:10px;z-index:20;}
   .selection-bar .spacer{flex:1}
 
-  /* --- Modals (Flat, solid) --- */
+  /* --- Modals --- */
   .overlay{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,0.8);}
   .overlay.show{display:flex;}
   .modal{
-    width:100%;max-width:460px;padding:24px;border-radius:var(--radius-md);
+    position:relative; width:100%;max-width:460px;padding:24px;border-radius:var(--radius-md);
     background:var(--surface);border:1px solid var(--line-strong);box-shadow:var(--shadow-lg);
   }
-  .modal.wide{max-width:600px;}
+  .modal.wide{max-width:700px;}
   .modal h2{margin:0 0 6px;font-size:18px;}
   .modal .sub{margin:0 0 20px;font-size:11px;color:var(--muted);}
   
@@ -297,11 +290,22 @@
   .hint-box code{background:#000;padding:2px 4px;border-radius:3px;color:var(--accent-hi);}
 
   .modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:20px;padding-top:20px;border-top:1px solid var(--line);}
-  .close-x{position:absolute;right:16px;top:16px;width:26px;height:26px;display:grid;place-items:center;border-radius:6px;background:var(--surface-2);border:1px solid var(--line);color:var(--muted);}
+  .close-x{position:absolute;right:16px;top:16px;width:26px;height:26px;display:grid;place-items:center;border-radius:6px;background:var(--surface-2);border:1px solid var(--line);color:var(--muted);cursor:pointer;}
   .close-x:hover{background:var(--surface-3);color:#fff;}
 
   .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);opacity:0;background:var(--text);color:#000;padding:10px 20px;border-radius:30px;font-size:11.5px;font-weight:700;pointer-events:none;transition:0.2s;z-index:999;}
   .toast.show{opacity:1;transform:translateX(-50%) translateY(-10px);}
+
+  /* Tickets list style */
+  .ticket-card { display: flex; align-items: center; justify-content: space-between; gap:16px; padding: 14px; background: #0d1115; border: 1px solid var(--line); border-radius: var(--radius); margin-bottom: 8px;}
+  .ticket-card:hover { border-color: var(--line-strong); background: var(--surface-2); }
+  .ticket-link { color: var(--accent-hi); font-size: 12px; text-decoration: none; word-break: break-all; font-weight: 600;}
+  .ticket-link:hover { text-decoration: underline; }
+  .ticket-note { font-size: 10px; color: var(--muted); margin-top: 4px; }
+  .ticket-meta { font-size: 9px; color: var(--muted-2); margin-top: 6px; }
+  .ticket-status { font-size: 9px; font-weight: 800; text-transform: uppercase; padding: 4px 8px; border-radius: 4px; }
+  .t-pending { color: var(--warning); background: rgba(245, 158, 11, 0.1); }
+  .t-checked { color: var(--good); background: rgba(16, 185, 129, 0.1); }
 
   /* Login Gate */
   #encGate{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:var(--bg);transition:0.3s;}
@@ -315,15 +319,6 @@
   #gateUnlock{width:100%;height:44px;}
   #gateMsg{margin-top:12px;font-size:11px;color:var(--muted-2);}
   #gateMsg.err{color:var(--bad);}
-
-  @media(max-width: 900px){
-    .workspace-shell{display:block;}
-    .workspace-sidebar{position:static;height:auto;border-right:none;border-bottom:1px solid var(--line);padding:16px;}
-    .workspace-main{padding:20px 16px;}
-    .insights-grid{grid-template-columns:1fr;}
-    .card{grid-template-columns:1fr 1fr;gap:12px;}
-    .card-bottom{grid-column:1/-1;justify-content:space-between;border-top:1px solid var(--line);padding-top:12px;}
-  }
 </style>
 
 <div id="encGate">
@@ -347,7 +342,7 @@
     </div>
     <div class="hero-actions">
       <input type="file" id="fileImportEnc" accept=".enc,.txt" style="display:none">
-      <button class="btn" id="btnImportTrigger" title="Import data from data.enc file"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg> Import</button>
+      <button class="btn" id="btnImportTrigger" title="Import data"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg> Import</button>
       <button class="btn" id="btnExportEnc" title="Download data.enc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Backup</button>
       <button class="btn btn-accent2" id="btnBulkOpen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg> Bulk add</button>
       <button class="btn btn-primary" id="btnAddOpen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg> New item</button>
@@ -509,6 +504,43 @@
   </div>
 </div>
 
+<!-- TICKETS SYSTEM MODALS -->
+<div class="overlay" id="overlayTicketsDashboard">
+  <div class="modal wide" style="max-height: 85vh; display:flex; flex-direction:column;">
+    <button class="close-x" data-close>✕</button>
+    <h2>Tickets Dashboard</h2>
+    <div class="sub">Orders submitted for checking.</div>
+    <div style="margin-bottom: 16px;">
+       <button class="btn btn-primary" id="btnSubmitTicketOpen">+ Submit Order for Check</button>
+    </div>
+    <div id="ticketsList" style="flex:1; overflow-y:auto; padding-right:4px;">
+       <!-- Tickets render here -->
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="overlaySubmitTicket">
+  <div class="modal">
+    <button class="close-x" data-close>✕</button>
+    <h2>Submit Ticket</h2>
+    <div class="sub">Worker: Paste order link below to request a check. Notification will be emailed.</div>
+    <form id="formSubmitTicket">
+      <div class="field">
+        <label>Order Link</label>
+        <input type="url" id="t_link" required placeholder="https://...">
+      </div>
+      <div class="field">
+        <label>Note (Optional)</label>
+        <input type="text" id="t_note" placeholder="E.g., fast delivery needed...">
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-ghost" data-close>Cancel</button>
+        <button type="submit" class="btn btn-primary" id="t_submitBtn">Send Ticket</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <!-- JS Structure Remap -->
@@ -534,6 +566,21 @@
     <div class="sidebar-brand">
       <div class="sidebar-logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 7h14M5 12h14M5 17h9"/></svg></div>
       <div><strong>Storage</strong><span>Encrypted DB</span></div>
+    </div>
+    <div class="sidebar-nav">
+      <div class="sidebar-nav-item active" id="navInventory">
+         <div style="display:flex; align-items:center; gap:8px;">
+           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+           Inventory
+         </div>
+      </div>
+      <div class="sidebar-nav-item" id="navTicketsBtn">
+         <div style="display:flex; align-items:center; gap:8px;">
+           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+           Tickets
+         </div>
+         <span id="ticketBadge" style="background:var(--accent); color:#fff; padding:2px 6px; border-radius:4px; font-size:9px; font-weight:800; display:none;">0</span>
+      </div>
     </div>
     <div class="sidebar-section">
       <div class="sidebar-section-head"><span>Categories</span><b id="sidebarCategoryCount">0</b></div>
@@ -581,7 +628,10 @@
 
 <script>
 (function(){
-  // Clean flat basic palette
+  // --- ZDE VLOŽ SVŮJ FORMSPREE ODKAZ ---
+  const TICKET_WEBHOOK_URL = "https://formspree.io/f/mzebggzb"; 
+  // ------------------------------------
+
   const PALETTE = [
     ['#3b82f6','#60a5fa'], ['#8b5cf6','#a78bfa'], ['#14b8a6','#2dd4bf'],
     ['#f59e0b','#fbbf24'], ['#ec4899','#f472b6'], ['#10b981','#34d399'],
@@ -591,7 +641,7 @@
   let state = load();
 
   function load(){
-    return { categories: [], accounts: [], activity: {} };
+    return { categories: [], accounts: [], activity: {}, tickets: [] };
   }
   let saveSuppressed = false;
   function save(){
@@ -615,10 +665,9 @@
   let searchTerm = '';
   let sortBy = 'new';
   let editingId = null;
+  let selectedIds = new Set();
 
-  function dayKey(d){
-    return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
-  }
+  function dayKey(d){ return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); }
   function bumpActivity(n){
     if(!state.activity) state.activity = {};
     const k = dayKey(new Date());
@@ -633,14 +682,13 @@
       state.activity[k] = (state.activity[k]||0) + 1;
     });
   }
-  let selectedIds = new Set();
 
   const el = id => document.getElementById(id);
-
   function debounce(fn, wait){
-    let t;
-    return (...args)=>{ clearTimeout(t); t = setTimeout(()=>fn(...args), wait); };
+    let t; return (...args)=>{ clearTimeout(t); t = setTimeout(()=>fn(...args), wait); };
   }
+  function openOverlay(id){ el(id).classList.add('show'); }
+  function closeOverlay(id){ el(id).classList.remove('show'); }
 
   let confirmCallback = null;
   function showConfirm(message, onConfirm, okText){
@@ -681,12 +729,14 @@
   }
 
   function renderAll(){
+    if(!state.tickets) state.tickets = []; // fallback for older states
     pruneSelection();
     renderStats();
     renderChart();
     renderCategories();
     renderCategorySelects();
     renderAccounts();
+    renderTickets();
     save();
   }
 
@@ -703,7 +753,6 @@
     if(el('ccCatCount')) el('ccCatCount').textContent = `${state.categories.length} categories`;
     if(el('ccStockPct')) el('ccStockPct').textContent = stockPct + ' % of vault';
     if(el('ccSoldPct')) el('ccSoldPct').textContent = (total ? Math.round(prodano/total*100) : 0) + ' % of vault';
-    if(el('ccTodayAdded')) el('ccTodayAdded').textContent = (state.activity && state.activity[dayKey(new Date())]) || 0;
     
     updateCommandMeta();
   }
@@ -727,6 +776,105 @@
         <div class="cb-lbl">${d.label}</div>
       </div>`).join('');
   }
+
+  // ==== TICKETS SYSTEM ====
+  el('navTicketsBtn').onclick = () => {
+     renderTickets();
+     openOverlay('overlayTicketsDashboard');
+  };
+  el('btnSubmitTicketOpen').onclick = () => {
+     el('formSubmitTicket').reset();
+     openOverlay('overlaySubmitTicket');
+  };
+
+  async function emailTicketNotification(link, note) {
+     if(!TICKET_WEBHOOK_URL) return;
+     try {
+       await fetch(TICKET_WEBHOOK_URL, {
+         method: 'POST',
+         headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
+         body: JSON.stringify({
+            _subject: "New Order Ticket to Check!",
+            OrderLink: link,
+            Note: note || "No note provided",
+            Time: new Date().toLocaleString()
+         })
+       });
+     } catch (err) {
+       console.error("Email notification failed", err);
+     }
+  }
+
+  el('formSubmitTicket').onsubmit = async (e) => {
+     e.preventDefault();
+     const link = el('t_link').value.trim();
+     const note = el('t_note').value.trim();
+     if(!link) return;
+     
+     const ticket = { id: uid(), link, note, status: 'pending', created: Date.now() };
+     state.tickets.push(ticket);
+     save();
+     
+     const btn = el('t_submitBtn');
+     btn.textContent = 'Sending...';
+     btn.disabled = true;
+     
+     await emailTicketNotification(link, note);
+     
+     btn.textContent = 'Send Ticket';
+     btn.disabled = false;
+     
+     closeOverlay('overlaySubmitTicket');
+     renderTickets();
+     toast('Ticket submitted & email sent ✓');
+  };
+
+  function renderTickets() {
+     if(!state.tickets) state.tickets = [];
+     const list = el('ticketsList');
+     const badge = el('ticketBadge');
+     
+     const pendingCount = state.tickets.filter(t => t.status === 'pending').length;
+     if(pendingCount > 0) { badge.textContent = pendingCount; badge.style.display = 'block'; }
+     else { badge.style.display = 'none'; }
+     
+     if(state.tickets.length === 0) {
+        list.innerHTML = `<div style="text-align:center; padding: 40px; color:var(--muted); font-size:12px;">No tickets found.</div>`;
+        return;
+     }
+     
+     // sort pending first, then by newest
+     const sorted = [...state.tickets].sort((a,b) => {
+        if(a.status !== b.status) return a.status === 'pending' ? -1 : 1;
+        return b.created - a.created;
+     });
+     
+     list.innerHTML = sorted.map(t => {
+        const isPending = t.status === 'pending';
+        const d = new Date(t.created).toLocaleString();
+        return `
+          <div class="ticket-card">
+            <div style="flex:1; min-width:0; padding-right:10px;">
+               <div style="display:flex; align-items:center; gap:8px;">
+                 <span class="ticket-status ${isPending ? 't-pending' : 't-checked'}">${isPending ? 'Pending' : 'Checked'}</span>
+                 <a href="${escapeAttr(t.link)}" target="_blank" class="ticket-link">${escapeHtml(t.link)}</a>
+               </div>
+               ${t.note ? `<div class="ticket-note">Note: ${escapeHtml(t.note)}</div>` : ''}
+               <div class="ticket-meta">Submitted: ${d}</div>
+            </div>
+            <div style="display:flex; gap:6px;">
+               ${isPending ? `<button class="btn btn-success" onclick="markTicket('${t.id}')">Mark Done</button>` : `<button class="btn btn-ghost" onclick="unmarkTicket('${t.id}')">Undo</button>`}
+               <button class="icon-btn icon-btn-danger" onclick="delTicket('${t.id}')" title="Delete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
+            </div>
+          </div>
+        `;
+     }).join('');
+  }
+  
+  window.markTicket = (id) => { const t = state.tickets.find(x=>x.id===id); if(t){ t.status='checked'; renderTickets(); save(); } };
+  window.unmarkTicket = (id) => { const t = state.tickets.find(x=>x.id===id); if(t){ t.status='pending'; renderTickets(); save(); } };
+  window.delTicket = (id) => { showConfirm('Delete this ticket?', ()=>{ state.tickets = state.tickets.filter(x=>x.id!==id); renderTickets(); save(); }, 'Delete'); };
+  // ========================
 
   function renderCategories(){
     const allCount = state.accounts.length;
@@ -760,7 +908,6 @@
   }
 
   el('catList').addEventListener('click', e=>{
-    // Handle Rename (Edit) Category
     const editEl = e.target.closest('[data-cat-edit]');
     if(editEl){
       e.stopPropagation();
@@ -783,7 +930,6 @@
       return;
     }
 
-    // Handle Delete Category
     const delEl = e.target.closest('[data-cat-del]');
     if(delEl){
       e.stopPropagation();
@@ -797,7 +943,6 @@
       return;
     }
 
-    // Handle Selection
     const item = e.target.closest('[data-cat]');
     if(item){
       activeCategory = item.getAttribute('data-cat');
@@ -892,7 +1037,7 @@
     const grid = el('accountGrid');
     const list = getFiltered();
     if(list.length===0){
-      grid.innerHTML = `<div class="empty"><div class="big" style="opacity:0.6;font-size:36px;margin-bottom:12px;">✧</div>
+      grid.innerHTML = `<div class="empty" style="padding:40px;text-align:center"><div class="big" style="opacity:0.6;font-size:36px;margin-bottom:12px;">✧</div>
         ${state.accounts.length===0
           ? 'Vault is empty.<br><span style="opacity:0.6">Add your first item to begin.</span>'
           : 'No results found.'}</div>`;
@@ -1033,9 +1178,6 @@
 
   function escapeHtml(s){ return String(s??'').replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
   function escapeAttr(s){ return escapeHtml(s); }
-
-  function openOverlay(id){ el(id).classList.add('show'); }
-  function closeOverlay(id){ el(id).classList.remove('show'); }
 
   let formType = 'account';
 
@@ -1246,7 +1388,7 @@
   if(ccDensityBtn) ccDensityBtn.onclick = ()=>applyDensity(!document.body.classList.contains('cc-compact'));
 
   if(el('ccRefreshBtn')) el('ccRefreshBtn').onclick = ()=>{
-    pruneSelection(); renderStats(); renderChart(); renderCategories(); renderCategorySelects(); renderAccounts();
+    pruneSelection(); renderStats(); renderChart(); renderCategories(); renderCategorySelects(); renderAccounts(); renderTickets();
     toast('Dashboard refreshed ✓');
   };
 
@@ -1280,11 +1422,6 @@
     }
   });
 
-  function slug(s){
-    const map = {'á':'a','č':'c','ď':'d','é':'e','ě':'e','í':'i','ň':'n','ó':'o','ř':'r','š':'s','ť':'t','ú':'u','ů':'u','ý':'y','ž':'z'};
-    let out = (s||'items').toLowerCase().replace(/[áčďéěíňóřšťúůýž]/g, ch => map[ch] || ch);
-    return out.replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'') || 'items';
-  }
   el('btnCopyCodes').onclick = ()=>{
     const codes = getFiltered().filter(a=>a.type==='code').map(a=>a.code).filter(Boolean);
     if(codes.length===0){ toast('No codes to copy'); return; }
@@ -1292,7 +1429,6 @@
   };
 
   // ===== ENCRYPTION & SYNC =====
-  const ENC_FILE = 'data.enc';
   const _te = new TextEncoder(), _td = new TextDecoder();
   const b64e = buf => { const u = new Uint8Array(buf); let s=''; for(let i=0;i<u.length;i+=0x8000) s += String.fromCharCode.apply(null, u.subarray(i,i+0x8000)); return btoa(s); };
   const b64d = s => Uint8Array.from(atob(s), c=>c.charCodeAt(0));
@@ -1322,7 +1458,6 @@
     return JSON.parse(await decryptRaw(text, pass));
   }
 
-  // FIREBASE INIT
   const FIREBASE_DB_URL = "https://sklad-4876a-default-rtdb.europe-west1.firebasedatabase.app";
   firebase.initializeApp({ databaseURL: FIREBASE_DB_URL });
   const db = firebase.database();
